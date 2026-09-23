@@ -1969,8 +1969,8 @@ var R=[
 
 {c:"douceurs",n:"Financiers Chocolat Cèpes",chef:true,col:"#5A3A28",foam:"#B8906A",
  sum:"Un financier de chef, entre sucré et sous-bois.",
- story:"Le financier classique, poussé par une couverture chocolat aux cèpes. Une association surprenante, ronde et terreuse, qui se cuit dans des moules à donuts.",
- spec:[["QUANTITÉ","4 moules donuts"],["DURÉE","40 min"],["FOUR","180 °C"]],
+ story:"Le financier classique, poussé par une couverture chocolat aux cèpes. Une association surprenante, ronde et terreuse, cuite dans des moules peu profonds.",
+ spec:[["QUANTITÉ","4 financiers"],["DURÉE","40 min"],["FOUR","180 °C"]],
  ing:[["Sucre glace","50 g"],["Poudre d'amande","26 g"],["Farine","15 g"],["Blancs d'œufs","45 g"],["Beurre","42 g"],["Couverture chocolat aux cèpes","22 g"]],
  tip:"L'ordre du chef ne se discute pas : les poudres, puis les blancs, puis le chocolat, et le beurre noisette en dernier. Les matières grasses arrivent à la fin pour ne pas alourdir la pâte.",
  st:[
@@ -1980,7 +1980,7 @@ var R=[
   {d:"<b>2.</b> Ajoute les blancs, sans les monter, et mélange jusqu'à ce que ce soit homogène.",n:"Des blancs simplement liquides, pas mousseux : c'est ce qui donne la mie serrée du financier."},
   {d:"<b>3.</b> Incorpore la couverture fondue."},
   {d:"<b>4.</b> Termine par le beurre noisette tiède."},
-  {d:"Remplis les moules à donuts beurrés et fais cuire.",s:720,n:"Ils sont prêts quand les bords se décollent légèrement du moule."}
+  {d:"Remplis les moules beurrés et fais cuire.",s:720,n:"Ils sont prêts quand les bords se décollent légèrement du moule."}
  ],
  ok:["Bords croustillants, cœur fondant.","Le cèpe se devine en fin de bouche sans masquer le chocolat.","Ils se démoulent entiers."]},
 
@@ -2242,7 +2242,7 @@ var IMG={
     "Flat White Caramel Salé":    "https://images.unsplash.com/photo-1553292218-4892c2e7e1ae?auto=format&fit=crop&w=1400&q=70",
     "Latte":                      "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
     "Latte Vanille":              "https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?auto=format&fit=crop&w=1400&q=70",
-    "Latte Épicé":                "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=1400&q=70",
+    "Latte Épicé":  "Latte%20%C3%89pic%C3%A9.png",
     "Latte Lavande":              "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1400&q=70",
     "Latte Macchiato":            "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
     "Caramel Macchiato":          "https://images.unsplash.com/photo-1610889556528-9a770e32642f?auto=format&fit=crop&w=1400&q=70",
@@ -2253,14 +2253,14 @@ var IMG={
     "Chocolat Chaud Crémeux":     "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=70",
     "Chocolat Chaud Italien":     "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?auto=format&fit=crop&w=1400&q=70",
     "Chocolat Viennois":          "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
-    "Mocha":                      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1400&q=70",
+    "Mocha":  "Mocha.png",
     "Mocha Blanc":                "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=70",
     "Chocolat Épicé":             "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?auto=format&fit=crop&w=1400&q=70",
     "Macchiato Spéculoos":        "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
 
     /* --- THÉS & LATTES --- */
     "Matcha Latte":               "https://images.unsplash.com/photo-1624893578106-a98840591afc?auto=format&fit=crop&w=1400&q=70",
-    "Chai Latte":                 "https://images.unsplash.com/photo-1624893578106-a98840591afc?auto=format&fit=crop&w=1400&q=70",
+    "Chai Latte":  "Chai%20Latte.png",
     "Earl Grey Latte":            "https://images.unsplash.com/photo-1566373049939-704ea187ef98?auto=format&fit=crop&w=1400&q=70",
     "Hojicha Latte":              "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1400&q=70",
     "Dirty Matcha":               "https://images.unsplash.com/photo-1631308491952-040f80133535?auto=format&fit=crop&w=1400&q=70",
@@ -2702,28 +2702,28 @@ function timeOfDay(){
 
 /* =================== USTENSILES =================== */
 var USTS=[
- {n:"Moulin à meules",u:"La priorité, avant la machine",ph:"1497935586351-b67a49e012bf",
+ {n:"Moulin à meules",u:"La priorité, avant la machine",ph:"ustensile-moulin-a-meules.png",
   d:"Le café commence à perdre ses arômes quinze minutes après la mouture. Un moulin à meules donne une mouture régulière et réglable, ce qu'aucun moulin à lames ne sait faire. C'est l'achat qui change le plus le goût."},
- {n:"Bouilloire à température réglable",u:"Thés & infusions",ph:"1536256263959-770b48d82b0a",
+ {n:"Bouilloire à température réglable",u:"Thés & infusions",ph:"Bouilloire.png",
   d:"Le sencha veut 70 °C, le matcha 80 °C, le rooibos 100 °C. Sans réglage, on brûle les thés délicats. Un col de cygne aide aussi à verser en filet précis."},
- {n:"Tasseur et aiguille de répartition",u:"Les deux gestes de l'espresso",ph:"1553292218-4892c2e7e1ae",
+ {n:"Tasseur et aiguille de répartition",u:"Les deux gestes de l'espresso",ph:"ustensile-tasseur-et-aiguille-de-repartition.png",
   d:"L'aiguille casse les mottes de mouture jusqu'au fond du panier, le tasseur compacte la galette bien à plat. Ensemble, ils évitent que l'eau se creuse un passage."},
- {n:"Shaker",u:"Boissons glacées",ph:"1717398804998-ad2d48822518",
+ {n:"Shaker",u:"Boissons glacées",ph:"ustensile-shaker.png",
   d:"C'est l'agitation qui crée la mousse dense du frappé, pas la glace. Un shaker en inox refroidit en quelques secondes sans diluer."},
- {n:"Passoire fine et filtres papier",u:"Cold brew, sirops, infusions",ph:"1511920170033-f8396924c348",
+ {n:"Passoire fine et filtres papier",u:"Cold brew, sirops, infusions",ph:"ustensile-passoire-fine-et-filtres-papier.png",
   d:"La passoire retient les feuilles et la pulpe, le filtre papier fait le reste. Le double filtrage est ce qui sépare un cold brew limpide d'un jus trouble."},
 
- {n:"Balance au 0,1 g",u:"Indispensable",ph:"1553292218-4892c2e7e1ae",
+ {n:"Balance au 0,1 g",u:"Indispensable",ph:"ustensile-balance-au-0-1-g.png",
   d:"Le seul achat qui change tout. Elle permet de peser la dose de café et ce qui tombe dans la tasse. Sans elle, tu ne peux ni corriger ni refaire deux fois la même boisson."},
- {n:"Pichet à lait en inox",u:"Pour toutes les boissons lactées",ph:"1583165278997-0250ea5d72e2",
+ {n:"Pichet à lait en inox",u:"Pour toutes les boissons lactées",ph:"ustensile-pichet-a-lait-en-inox.png",
   d:"350 à 500 ml, bec pointu. Sorti du congélateur, il te laisse plus de temps pour texturer avant d atteindre 65 °C. Le bec fin est ce qui permet de dessiner."},
- {n:"Mousseur à lait manuel",u:"Si tu n as pas de buse vapeur",ph:"1510591509098-f4fdc6d0ff04",
+ {n:"Mousseur à lait manuel",u:"Si tu n as pas de buse vapeur",ph:"ustensile-mousseur-a-lait-manuel.png",
   d:"Un piston dans un bocal, ou un mousseur électrique à main. La mousse est plus grosse qu à la vapeur, mais parfaitement suffisante pour un latte ou un chocolat chaud."},
- {n:"Presse française",u:"Café sans machine",ph:"1595434091143-b375ced5fe5c",
+ {n:"Presse française",u:"Café sans machine",ph:"ustensile-presse-francaise.png",
   d:"Mouture grossière, quatre minutes d infusion, on pousse lentement. C est aussi le meilleur outil pour filtrer un cold brew avant le passage au papier."},
- {n:"Fouet à matcha (chasen)",u:"Thés & lattes gourmands",ph:"1589698272390-0501a07619bb",
+ {n:"Fouet à matcha (chasen)",u:"Thés & lattes gourmands",ph:"ustensile-fouet-a-matcha-chasen.png",
   d:"Les cent brins de bambou cassent les grumeaux qu aucun fouet métallique n atteint. On fouette en W, poignet souple, jamais en rond."},
- {n:"Thermomètre de cuisine",u:"Pour arrêter de deviner",ph:"1616388761741-a5936c6f61f6",
+ {n:"Thermomètre de cuisine",u:"Pour arrêter de deviner",ph:"ustensile-thermometre-de-cuisine.png",
   d:"Un thermomètre à sonde coûte quinze dollars et t évite de cuire le lait. 62 à 65 °C pour le lait, 70 à 95 °C selon les thés, 92 °C pour un americano."}
 ];
 (function(){
@@ -2797,37 +2797,37 @@ function paintStarFav(){
 
 /* =================== TASSES & VERRES =================== */
 var CUPS=[
- {n:"Tasse à espresso",v:"60–90 ml",ph:"ustensile-tasse-a-espresso.png",
+ {n:"Tasse à espresso",v:"60–90 ml",ph:"Tasse%20%C3%A0%20espresso.png",
   d:"Petite, à parois épaisses. La porcelaine garde la chaleur et la taille garde la crema intacte. Toujours préchauffée.",
   r:["Espresso","Ristretto","Lungo","Macchiato","Affogato"]},
- {n:"Verre Gibraltar",v:"120 ml",ph:"1579992357154-faf4bde95b3d",
+ {n:"Verre Gibraltar",v:"120 ml",ph:"ustensile-verre-gibraltar.png",
   d:"Un petit verre droit à fond épais. Le volume impose la proportion moitié café, moitié lait, sans place pour tricher.",
   r:["Cortado","Cortado Miel"]},
- {n:"Tasse à cappuccino",v:"150–180 ml",ph:"1512568400610-62da28bc8a13",
+ {n:"Tasse à cappuccino",v:"150–180 ml",ph:"ustensile-tasse-a-cappuccino.png",
   d:"Large, avec un fond arrondi. La forme en bol aide le lait à tourner pendant le versement et fait monter la mousse au centre.",
   r:["Cappuccino","Cappuccino Noisette"]},
- {n:"Tasse à flat white",v:"160–180 ml",ph:"1485808191679-5f86510681a2",
+ {n:"Tasse à flat white",v:"160–180 ml",ph:"ustensile-tasse-a-flat-white.png",
   d:"Un peu plus basse et plus évasée. La grande surface laisse la place au dessin, la microfoam reste fine.",
   r:["Flat White","Flat White Caramel Salé"]},
- {n:"Mug ou tasse à latte",v:"240–300 ml",ph:"1572286258217-40142c1c6a70",
+ {n:"Mug ou tasse à latte",v:"240–300 ml",ph:"ustensile-mug-ou-tasse-a-latte.png",
   d:"Pour les boissons généreuses. Choisis-le épais : un mug fin perd sa chaleur avant la moitié de la tasse.",
   r:["Latte","Latte Vanille","Latte Épicé","Latte Lavande","Americano","Mocha","Chai Latte","Matcha Latte","Earl Grey Latte","Hojicha Latte","Chocolat Chaud Crémeux","Chocolat Viennois"]},
- {n:"Petite tasse à chocolat",v:"150–180 ml",ph:"1510591509098-f4fdc6d0ff04",
+ {n:"Petite tasse à chocolat",v:"150–180 ml",ph:"ustensile-petite-tasse-a-chocolat.png",
   d:"Pour les chocolats épais qui se mangent presque. Une grande tasse donnerait trop à boire et refroidirait avant la fin.",
   r:["Chocolat Chaud Italien","Mocha Blanc","Macchiato Spéculoos"]},
- {n:"Verre haut à latte macchiato",v:"300 ml",ph:"1559496417-e7f25cb247f3",
+ {n:"Verre haut à latte macchiato",v:"300 ml",ph:"ustensile-verre-haut-a-latte-macchiato.png",
   d:"Transparent et étroit. C'est la hauteur qui permet aux trois couches de se former et de rester visibles.",
   r:["Latte Macchiato","Caramel Macchiato","Dirty Matcha"]},
- {n:"Grand verre à boissons glacées",v:"350–400 ml",ph:"1717603545758-88cc454db69b",
+ {n:"Grand verre à boissons glacées",v:"350–400 ml",ph:"ustensile-grand-verre-a-boissons-glacees.png",
   d:"Assez grand pour être rempli de glaçons jusqu'en haut. Un verre à moitié plein de glace fait fondre la boisson deux fois plus vite.",
   r:["Iced Caramel Latte","Espresso Tonic","Iced Matcha","Iced Chai","Frappé Maison","Cold Brew Avoine","Smoothie Mangue","Milkshake Vanille"]},
- {n:"Bol à matcha (chawan)",v:"350–400 ml de volume",ph:"1589698272390-0501a07619bb",
+ {n:"Bol à matcha (chawan)",v:"350–400 ml de volume",ph:"ustensile-bol-a-matcha-chawan.png",
   d:"Large et plat au fond, pour que le fouet bambou puisse travailler en W. On y fouette le matcha, on le boit ailleurs si on veut.",
   r:["Matcha Latte","Iced Matcha","Dirty Matcha"]},
- {n:"Théière et tasse à thé",v:"250 ml",ph:"1536256263959-770b48d82b0a",
+ {n:"Théière et tasse à thé",v:"250 ml",ph:"ustensile-theiere-et-tasse-a-the.png",
   d:"Une théière avec un filtre large, pour que les feuilles s'ouvrent. La tasse fine laisse sentir les arômes délicats.",
   r:["Thé Vert Sencha","Thé Blanc Jasmin","Camomille Miel","Verveine Menthe","Infusion Fruits Rouges","Rooibos Vanille","Camomille Lavande","Gingembre Citron Miel"]},
- {n:"Carafe ou bocal de 1 L",v:"1 L",ph:"1553292218-4892c2e7e1ae",
+ {n:"Carafe ou bocal de 1 L",v:"1 L",ph:"ustensile-carafe-ou-bocal-de-1-l.png",
   d:"Pour les infusions à froid qui se préparent la veille. En verre, jamais en plastique qui garde les odeurs.",
   r:["Cold Brew","Iced Tea Citron Basilic","Iced Tea Pêche","Iced Tea Vert Concombre","Sun Tea Jasmin","Iced Tea Hibiscus Gingembre"]}
 ];
@@ -2854,15 +2854,15 @@ var CUPS=[
 
 /* =================== MATÉRIEL DOUCEURS =================== */
 var BAKE=[
- {n:"Moules à madeleines",v:"12 empreintes",ph:"1542372147193-a7aca54189cd",
+ {n:"Moules à madeleines",v:"12 empreintes",ph:"ustensile-moules-a-madeleines.png",
   d:"En métal plutôt qu'en silicone : le métal chauffe vite et fait monter la bosse. Beurrés et passés au congélateur avant de les remplir.",r:["Madeleines"]},
- {n:"Moules à donuts",v:"4 à 6 empreintes",ph:"1511920170033-f8396924c348",
-  d:"La forme en anneau cuit le financier uniformément, avec plus de bords croustillants qu'un moule classique.",r:["Financiers Chocolat Cèpes"]},
- {n:"Cercles à pâtisserie",v:"6 à 8 cm",ph:"1497935586351-b67a49e012bf",
+ {n:"Moules à financiers",v:"4 à 6 empreintes",ph:"ustensile-moules-a-financiers.png",
+  d:"Rectangulaires ou en anneau, peu importe : ce qui compte, c'est un moule peu profond. Plus de bords en contact, donc plus de croustillant autour d'un cœur fondant.",r:["Financiers Chocolat Cèpes"]},
+ {n:"Cercles à pâtisserie",v:"6 à 8 cm",ph:"ustensile-cercles-a-patisserie.png",
   d:"Ils empêchent les sablés bretons de s'étaler à la cuisson et leur donnent leurs bords bien droits.",r:["Sablés Bretons"]},
- {n:"Poche à douille",v:"douille unie 10 mm",ph:"1542372147193-a7aca54189cd",
+ {n:"Poche à douille",v:"douille unie 10 mm",ph:"ustensile-poche-a-douille.png",
   d:"Pour pocher des coques de macaron toutes identiques, et déposer une crème proprement sur une boisson.",r:["Macarons Café","Crème Fouettée","Mousse Froide Salée"]},
- {n:"Gaufrier",v:"plaques épaisses",ph:"1511920170033-f8396924c348",
+ {n:"Gaufrier",v:"plaques épaisses",ph:"ustensile-gaufrier.png",
   d:"Des plaques épaisses gardent la chaleur et donnent des gaufres croustillantes dehors, moelleuses dedans.",r:["Gaufres au Beurre Noisette"]}
 ];
 (function(){
