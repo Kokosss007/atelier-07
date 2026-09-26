@@ -2209,19 +2209,11 @@ R.forEach(function(r){ if(NOTES[r.n]) r.note=NOTES[r.n]; });
 var IMG={
 
   /* --- 1. LES DEUX GRANDES IMAGES --- */
-  banner: "https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?auto=format&fit=crop&w=1400&q=70",
+  banner: "",
   story:  "portrait-corentin.jpg",
 
   /* --- 2. UNE PHOTO PAR CATÉGORIE (utilisée par défaut) --- */
-  cat:{
-    cafes:     "https://images.unsplash.com/photo-1616388761741-a5936c6f61f6?auto=format&fit=crop&w=1400&q=70",
-    chocolats: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=70",
-    thes:      "https://images.unsplash.com/photo-1589698272390-0501a07619bb?auto=format&fit=crop&w=1400&q=70",
-    tisanes:   "https://images.unsplash.com/photo-1582785513054-8d1bf9d69c1a?auto=format&fit=crop&w=1400&q=70",
-    glacees:   "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1400&q=70",
-    douceurs:  "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
-    sirops:    "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=70"
-  },
+  cat:{ cafes:"", chocolats:"", thes:"", tisanes:"", glacees:"", sirops:"", douceurs:"" },
 
   /* --- 3. PHOTO SPÉCIFIQUE À UNE RECETTE (prioritaire) ---
      La clé doit être le nom EXACT de la recette.
@@ -2230,97 +2222,97 @@ var IMG={
     /* Une ligne par recette. Pour tes photos : "Cappuccino": "cappuccino.png" */
     /* --- CAFÉS --- */
     "Espresso": "espresso.png",
-    "Ristretto":                  "https://images.unsplash.com/photo-1583165278997-0250ea5d72e2?auto=format&fit=crop&w=1400&q=70",
-    "Lungo":                      "https://images.unsplash.com/photo-1583165278997-0250ea5d72e2?auto=format&fit=crop&w=1400&q=70",
+    "Ristretto":                  "",
+    "Lungo":                      "",
     "Americano": "americano.png",
-    "Macchiato":                  "https://images.unsplash.com/photo-1512568400610-62da28bc8a13?auto=format&fit=crop&w=1400&q=70",
-    "Cortado":                    "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?auto=format&fit=crop&w=1400&q=70",
-    "Cortado Miel":               "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
+    "Macchiato":                  "",
+    "Cortado":                    "",
+    "Cortado Miel":               "",
     "Cappuccino": "cappuccino.png",
-    "Cappuccino Noisette":        "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
-    "Flat White":                 "https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=1400&q=70",
-    "Flat White Caramel Salé":    "https://images.unsplash.com/photo-1553292218-4892c2e7e1ae?auto=format&fit=crop&w=1400&q=70",
-    "Latte":                      "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
-    "Latte Vanille":              "https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?auto=format&fit=crop&w=1400&q=70",
+    "Cappuccino Noisette":        "",
+    "Flat White":                 "",
+    "Flat White Caramel Salé":    "",
+    "Latte":                      "",
+    "Latte Vanille":              "",
     "Latte Épicé":  "Latte%20%C3%89pic%C3%A9.png",
-    "Latte Lavande":              "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1400&q=70",
-    "Latte Macchiato":            "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
-    "Caramel Macchiato":          "https://images.unsplash.com/photo-1610889556528-9a770e32642f?auto=format&fit=crop&w=1400&q=70",
-    "Affogato":                   "https://images.unsplash.com/photo-1583165278997-0250ea5d72e2?auto=format&fit=crop&w=1400&q=70",
-    "Affogato Caramel":           "https://images.unsplash.com/photo-1595434091143-b375ced5fe5c?auto=format&fit=crop&w=1400&q=70",
+    "Latte Lavande":              "",
+    "Latte Macchiato":            "",
+    "Caramel Macchiato":          "",
+    "Affogato":                   "",
+    "Affogato Caramel":           "",
 
     /* --- CHOCOLATS CHAUDS --- */
-    "Chocolat Chaud Crémeux":     "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=70",
-    "Chocolat Chaud Italien":     "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?auto=format&fit=crop&w=1400&q=70",
-    "Chocolat Viennois":          "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
+    "Chocolat Chaud Crémeux":     "",
+    "Chocolat Chaud Italien":     "",
+    "Chocolat Viennois":          "",
     "Mocha":  "Mocha.png",
-    "Mocha Blanc":                "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=70",
-    "Chocolat Épicé":             "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?auto=format&fit=crop&w=1400&q=70",
-    "Macchiato Spéculoos":        "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
+    "Mocha Blanc":                "",
+    "Chocolat Épicé":             "",
+    "Macchiato Spéculoos":        "",
 
     /* --- THÉS & LATTES --- */
-    "Matcha Latte":               "https://images.unsplash.com/photo-1624893578106-a98840591afc?auto=format&fit=crop&w=1400&q=70",
+    "Matcha Latte":               "",
     "Chai Latte":  "Chai%20Latte.png",
-    "Earl Grey Latte":            "https://images.unsplash.com/photo-1566373049939-704ea187ef98?auto=format&fit=crop&w=1400&q=70",
-    "Hojicha Latte":              "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1400&q=70",
-    "Dirty Matcha":               "https://images.unsplash.com/photo-1631308491952-040f80133535?auto=format&fit=crop&w=1400&q=70",
-    "Thé Vert Sencha":            "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1400&q=70",
-    "Thé Blanc Jasmin":           "https://images.unsplash.com/photo-1708573106073-e27e43ec7fda?auto=format&fit=crop&w=1400&q=70",
+    "Earl Grey Latte":            "",
+    "Hojicha Latte":              "",
+    "Dirty Matcha":               "",
+    "Thé Vert Sencha":            "",
+    "Thé Blanc Jasmin":           "",
 
     /* --- TISANES --- */
-    "Camomille Miel":             "https://images.unsplash.com/photo-1582785513054-8d1bf9d69c1a?auto=format&fit=crop&w=1400&q=70",
-    "Verveine Menthe":            "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1400&q=70",
-    "Infusion Fruits Rouges":     "https://images.unsplash.com/photo-1565117661210-fd54898de423?auto=format&fit=crop&w=1400&q=70",
+    "Camomille Miel":             "",
+    "Verveine Menthe":            "",
+    "Infusion Fruits Rouges":     "",
     "Rooibos Vanille": "rooibos-vanille.png",
-    "Gingembre Citron Miel":      "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1400&q=70",
-    "Camomille Lavande":          "https://images.unsplash.com/photo-1565117661210-fd54898de423?auto=format&fit=crop&w=1400&q=70",
+    "Gingembre Citron Miel":      "",
+    "Camomille Lavande":          "",
 
     /* --- BOISSONS GLACÉES --- */
-    "Iced Caramel Latte":         "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1400&q=70",
-    "Cold Brew":                  "https://images.unsplash.com/photo-1553292218-4892c2e7e1ae?auto=format&fit=crop&w=1400&q=70",
-    "Cold Brew Avoine":           "https://images.unsplash.com/photo-1717398804998-ad2d48822518?auto=format&fit=crop&w=1400&q=70",
-    "Espresso Tonic":             "https://images.unsplash.com/photo-1717398804885-a6c22b3e5c2f?auto=format&fit=crop&w=1400&q=70",
-    "Iced Matcha":                "https://images.unsplash.com/photo-1717603545758-88cc454db69b?auto=format&fit=crop&w=1400&q=70",
-    "Iced Chai":                  "https://images.unsplash.com/photo-1704079698754-5e621edb610b?auto=format&fit=crop&w=1400&q=70",
-    "Frappé Maison":              "https://images.unsplash.com/photo-1717398804998-ad2d48822518?auto=format&fit=crop&w=1400&q=70",
-    "Iced Tea Citron Basilic":    "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1400&q=70",
-    "Iced Tea Pêche":             "https://images.unsplash.com/photo-1717603545758-88cc454db69b?auto=format&fit=crop&w=1400&q=70",
-    "Iced Tea Hibiscus Gingembre":"https://images.unsplash.com/photo-1717398804998-ad2d48822518?auto=format&fit=crop&w=1400&q=70",
-    "Iced Tea Vert Concombre":    "https://images.unsplash.com/photo-1717398804885-a6c22b3e5c2f?auto=format&fit=crop&w=1400&q=70",
-    "Iced Tea Pétillant Citron":  "https://images.unsplash.com/photo-1749280447307-31a68eb38673?auto=format&fit=crop&w=1400&q=70",
-    "Sun Tea Jasmin":             "https://images.unsplash.com/photo-1704079698754-5e621edb610b?auto=format&fit=crop&w=1400&q=70",
-    "Smoothie Mangue":            "https://images.unsplash.com/photo-1631308491952-040f80133535?auto=format&fit=crop&w=1400&q=70",
-    "Milkshake Vanille":          "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1400&q=70",
+    "Iced Caramel Latte":         "",
+    "Cold Brew":                  "",
+    "Cold Brew Avoine":           "",
+    "Espresso Tonic":             "",
+    "Iced Matcha":                "",
+    "Iced Chai":                  "",
+    "Frappé Maison":              "",
+    "Iced Tea Citron Basilic":    "",
+    "Iced Tea Pêche":             "",
+    "Iced Tea Hibiscus Gingembre":"",
+    "Iced Tea Vert Concombre":    "",
+    "Iced Tea Pétillant Citron":  "",
+    "Sun Tea Jasmin":             "",
+    "Smoothie Mangue":            "",
+    "Milkshake Vanille":          "",
 
     /* --- SIROPS & PRÉPARATIONS --- */
-    "Sirop de Base 1:1":          "https://images.unsplash.com/photo-1566373049939-704ea187ef98?auto=format&fit=crop&w=1400&q=70",
-    "Caramel au Beurre Salé":     "https://images.unsplash.com/photo-1566373049939-704ea187ef98?auto=format&fit=crop&w=1400&q=70",
-    "Sauce Chocolat":             "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=1400&q=70",
-    "Crème Fouettée":             "https://images.unsplash.com/photo-1708573106073-e27e43ec7fda?auto=format&fit=crop&w=1400&q=70",
-    "Concentré de Chai":          "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=70",
-    "Mousse Froide Salée":        "https://images.unsplash.com/photo-1566373049939-704ea187ef98?auto=format&fit=crop&w=1400&q=70",
-    "Sirop de Fruits Rouges":     "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=1400&q=70",
+    "Sirop de Base 1:1":          "",
+    "Caramel au Beurre Salé":     "",
+    "Sauce Chocolat":             "",
+    "Crème Fouettée":             "",
+    "Concentré de Chai":          "",
+    "Mousse Froide Salée":        "",
+    "Sirop de Fruits Rouges":     "",
 
     /* --- DOUCEURS --- */
-    "Cantuccini":                 "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
-    "Cookies Fleur de Sel":       "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=70",
+    "Cantuccini":                 "",
+    "Cookies Fleur de Sel":       "",
     "Cinnamon Rolls": "cinnamon-rolls.png",
-    "Madeleines":                 "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
+    "Madeleines":                 "",
     /* --- RECETTES DU CHEF --- */
-    "Gaufres au Beurre Noisette": "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
+    "Gaufres au Beurre Noisette": "",
     "Financiers Chocolat Cèpes": "financiers-chocolat-cepes.png",
-    "Macarons Café":              "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=1400&q=70",
-    "Brownies":                   "https://images.unsplash.com/photo-1542372147193-a7aca54189cd?auto=format&fit=crop&w=1400&q=70",
-    "Sablés Bretons":             "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=70",
+    "Macarons Café":              "",
+    "Brownies":                   "",
+    "Sablés Bretons":             "",
     /* --- SAISONS --- */
-    "Latte à l'Érable":           "https://images.unsplash.com/photo-1572286258217-40142c1c6a70?auto=format&fit=crop&w=1400&q=70",
+    "Latte à l'Érable":           "",
     "Latte Citrouille Épicée": "latte-citrouille-epicee.png",
-    "Latte Irlandais":            "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?auto=format&fit=crop&w=1400&q=70",
-    "Latte Lait de Poule":        "https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&w=1400&q=70",
-    "Chocolat Chaud Menthe":      "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1400&q=70",
+    "Latte Irlandais":            "",
+    "Latte Lait de Poule":        "",
+    "Chocolat Chaud Menthe":      "",
     "Limonade Maison": "limonade-maison.png",
-    "Crêpes du Dimanche":         "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=70",
-    "Tire d'Érable":              "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=1400&q=70"
+    "Crêpes du Dimanche":         "",
+    "Tire d'Érable":              ""
   }
 };
 
@@ -2424,7 +2416,7 @@ function variantes(r){ return VARR[r.n] || VARC[r.c] || []; }
 
 function srcOf(ph){ return /^(data:|https?:|images\/)/.test(ph) ? ph : UB+ph+UQ; }
 function photoFor(r){
-  return (IMG.recipe && IMG.recipe[r.n]) || poolPhoto(r) || IMG.cat[r.c] || "";
+  return (IMG.recipe && IMG.recipe[r.n]) || "";
 }
 
 /* =================== VISUEL =================== */
