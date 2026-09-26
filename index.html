@@ -2414,7 +2414,7 @@ var VARR={
 };
 function variantes(r){ return VARR[r.n] || VARC[r.c] || []; }
 
-function srcOf(ph){ return /^(data:|https?:|images\/)/.test(ph) ? ph : UB+ph+UQ; }
+function srcOf(ph){ return /^\d{8,}-/.test(ph) ? UB+ph+UQ : ph; }
 function photoFor(r){
   return (IMG.recipe && IMG.recipe[r.n]) || "";
 }
