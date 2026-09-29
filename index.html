@@ -668,6 +668,12 @@ body::after{content:"";position:fixed;inset:0;z-index:4;pointer-events:none;
 .d-ticks path{fill:none;stroke:rgba(196,138,90,.5);stroke-width:.8;}
 .d-coord{font-family:"Inter Tight",sans-serif;font-size:8px;letter-spacing:.22em;fill:rgba(231,214,193,.45);}
 
+.fam{display:inline-flex;align-items:center;gap:7px;margin-top:9px;align-self:flex-start;
+  font-size:12px;letter-spacing:.04em;color:var(--caramel);background:rgba(196,138,90,.1);
+  border:1px solid rgba(196,138,90,.42);border-radius:999px;padding:5px 13px;}
+.fam::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--caramel);}
+.fam.big{margin-top:12px;font-size:13px;padding:6px 15px;}
+
 /* ---------- pages ---------- */
 .page{display:none;}
 .page.on{display:block;}
@@ -2158,6 +2164,22 @@ var R=[
   {d:"Attends quelques secondes, puis enroule chaque bande sur un bâtonnet.",s:10}
  ],
  ok:["La tire se fige sur la neige sans couler.","Elle s'enroule sur le bâton sans casser.","Molle et collante sous la dent, pas dure."]}
+,
+{c:"douceurs",n:"Brownies au Chocolat",fam:"Magali",col:"#3A241B",foam:"#6B4A3A",
+ sum:"Très peu de farine, beaucoup de fondant.",
+ story:"La recette de famille, écrite à la main sur une feuille qui a bien vécu. Très peu de farine pour beaucoup de chocolat : un brownie fondant, presque un fondant au chocolat.",
+ spec:[["MOULE","20 × 20 cm"],["DURÉE","45 min"],["FOUR","th. 7"]],
+ ing:[["Sucre","150 g"],["Sucre vanillé","1 sachet"],["Œufs","4"],["Chocolat pâtissier","1 tablette (200 g)"],["Beurre","150 g"],["Farine","30 g"],["Noix en petits morceaux","1 poignée"]],
+ tip:"Une pincée de sel dans le chocolat fondu fait ressortir le cacao. Et sors le moule quand le centre tremble encore : il finit de prendre en refroidissant, c'est ce qui le garde fondant.",
+ st:[
+  {d:"Mélange le sucre, le sucre vanillé et les œufs, et <b>bats bien</b>.",s:180,n:"Bien battre, c'est ce qui donne la fine croûte brillante sur le dessus."},
+  {d:"Fais fondre le chocolat avec le beurre, doucement."},
+  {d:"Mélange les deux préparations, puis ajoute la farine et les noix."},
+  {d:"Verse dans un moule rectangulaire ou carré, beurré, pour pouvoir couper le gâteau en petits carrés."},
+  {d:"Cuis 30 à 35 min à th. 7, comme sur la recette d'origine.",s:1800,n:"Avec un four récent, 180 °C pendant 22 à 25 min suffit souvent. Surveille : le centre doit encore trembler légèrement."},
+  {d:"Laisse tiédir avant de couper en carrés.",s:900}
+ ],
+ ok:["Une fine croûte brillante sur le dessus.","Un cœur fondant, presque coulant.","Des morceaux de noix dans chaque carré."]}
 
 ];
 
@@ -2219,6 +2241,7 @@ var IMG={
      La clé doit être le nom EXACT de la recette.
      Pour tes propres photos : "Cappuccino":"images/mon-cappuccino.jpg"  */
   recipe:{
+    "Brownies au Chocolat":  "brownies-au-chocolat.png",
     /* Une ligne par recette. Pour tes photos : "Cappuccino": "cappuccino.png" */
     /* --- CAFÉS --- */
     "Espresso": "espresso.png",
@@ -2528,7 +2551,7 @@ function cardFor(r){
       '<svg viewBox="0 0 24 24"><path d="M12 20.5 4.7 13.4a4.6 4.6 0 1 1 6.5-6.5l.8.8.8-.8a4.6 4.6 0 1 1 6.5 6.5Z"/></svg></button>'+
     '<div class="art">'+frame(photoFor(r),'<div class="ghost"></div>',r.n)+'</div>'+
     '<div class="no">N° '+num(i)+'</div>'+
-    '<h3>'+r.n+'</h3>'+(r.chef?'<p class="byline" style="margin-top:6px">Recette du chef</p>':'')+(r.note?'<p class="note">'+r.note+'</p>':'<p>'+r.sum+'</p>')+
+    '<h3>'+r.n+'</h3>'+(r.fam?'<span class="fam">La recette de '+r.fam+'</span>':'')+(r.chef?'<p class="byline" style="margin-top:6px">Recette du chef</p>':'')+(r.note?'<p class="note">'+r.note+'</p>':'<p>'+r.sum+'</p>')+
     (myNote(r.n)?'<p class="mine">Ta note : '+escHTML(myNote(r.n))+'</p>':'')+
     '<div class="chips">'+r.spec.map(function(x){return '<span class="chip">'+x[1]+'</span>';}).join("")+'</div>'+
     '<span class="disc">Découvrir la recette</span>';
@@ -3084,7 +3107,7 @@ function recipeHTML(r,i,forPrint){
   var vr=variantes(r).map(function(x){return '<li>'+x+'</li>';}).join("");
   return '<div class="hero-photo">'+frame(photoFor(r),'<div class="ghost"></div>',r.n)+'</div>'+
     '<div class="fhead"><div class="no">RECETTE N° '+num(i)+'</div>'+
-    '<h2>'+r.n+'</h2>'+(r.chef?'<p class="byline">Recette du chef · carnet de stage</p>':(r.by?'<p class="byline">Recette partagée par '+r.by+'</p>':''))+(r.note?'<div class="fnote"><p class="note">'+r.note+'</p><span>LA NOTE DE CORENTIN</span></div>':'')+
+    '<h2>'+r.n+'</h2>'+(r.fam?'<span class="fam big">La recette de '+r.fam+'</span>':'')+(r.chef?'<p class="byline">Recette du chef · carnet de stage</p>':(r.by?'<p class="byline">Recette partagée par '+r.by+'</p>':''))+(r.note?'<div class="fnote"><p class="note">'+r.note+'</p><span>LA NOTE DE CORENTIN</span></div>':'')+
     '<p class="story">'+r.story+'</p>'+
     '<div class="spec">'+spec+'</div></div>'+
     (forPrint?'':'<p class="lab">PORTIONS</p><div class="port"><span class="lbl">DOSES POUR</span>'+
