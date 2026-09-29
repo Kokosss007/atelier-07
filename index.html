@@ -2022,7 +2022,7 @@ var R=[
  ],
  ok:["Une bosse bien marquée.","Bords dorés, cœur moelleux.","Elles se démoulent sans accrocher."]},
 
-{c:"douceurs",n:"Brownies",chef:true,col:"#3E2A21",foam:"#6B4A3A",
+{c:"douceurs",n:"Brownies en Plaque",chef:true,col:"#3E2A21",foam:"#6B4A3A",
  sum:"Une plaque entière, dense et fondante.",
  story:"Autant de chocolat que de beurre, peu de farine : un brownie fondant, à couper en carrés pour toute la famille.",
  spec:[["QUANTITÉ","1 plaque"],["DURÉE","45 min"],["FOUR","180 °C"]],
@@ -2165,7 +2165,7 @@ var R=[
  ],
  ok:["La tire se fige sur la neige sans couler.","Elle s'enroule sur le bâton sans casser.","Molle et collante sous la dent, pas dure."]}
 ,
-{c:"douceurs",n:"Brownies au Chocolat",fam:"Magali",col:"#3A241B",foam:"#6B4A3A",
+{c:"douceurs",n:"Brownie Fondant",fam:"Magali",col:"#3A241B",foam:"#6B4A3A",
  sum:"Très peu de farine, beaucoup de fondant.",
  story:"La recette de famille, écrite à la main sur une feuille qui a bien vécu. Très peu de farine pour beaucoup de chocolat : un brownie fondant, presque un fondant au chocolat.",
  spec:[["MOULE","20 × 20 cm"],["DURÉE","45 min"],["FOUR","th. 7"]],
@@ -2241,7 +2241,7 @@ var IMG={
      La clé doit être le nom EXACT de la recette.
      Pour tes propres photos : "Cappuccino":"images/mon-cappuccino.jpg"  */
   recipe:{
-    "Brownies au Chocolat":  "brownies-au-chocolat.png",
+    "Brownie Fondant":  "brownie-fondant.png",
     /* Une ligne par recette. Pour tes photos : "Cappuccino": "cappuccino.png" */
     /* --- CAFÉS --- */
     "Espresso": "espresso.png",
@@ -2325,7 +2325,7 @@ var IMG={
     "Gaufres au Beurre Noisette": "",
     "Financiers Chocolat Cèpes": "financiers-chocolat-cepes.png",
     "Macarons Café":              "",
-    "Brownies":                   "",
+    "Brownies en Plaque":         "",
     "Sablés Bretons":             "",
     /* --- SAISONS --- */
     "Latte à l'Érable":           "",
@@ -2512,6 +2512,13 @@ try{MYNOTES=JSON.parse(localStorage.getItem("atelier07mynotes")||"{}")||{};}catc
 var FAVS=[];
 try{FAVS=JSON.parse(localStorage.getItem("atelier07favs")||"[]");}catch(e){FAVS=[];}
 if(!FAVS||!FAVS.length&&!Array.isArray(FAVS))FAVS=[];
+/* Recettes renommées : on reporte favoris et notes déjà enregistrés sur le nouveau nom */
+(function(){
+  var ren={"Brownies":"Brownies en Plaque","Brownies au Chocolat":"Brownie Fondant"}, ch=false;
+  if(Array.isArray(FAVS))FAVS=FAVS.map(function(n){if(ren[n]){ch=true;return ren[n];}return n;});
+  Object.keys(ren).forEach(function(o){if(MYNOTES[o]!=null&&MYNOTES[ren[o]]==null){MYNOTES[ren[o]]=MYNOTES[o];delete MYNOTES[o];ch=true;}});
+  if(ch)try{localStorage.setItem("atelier07favs",JSON.stringify(FAVS));localStorage.setItem("atelier07mynotes",JSON.stringify(MYNOTES));}catch(e){}
+})();
 function isFav(n){return Array.isArray(FAVS)&&FAVS.indexOf(n)>-1;}
 
 var tabsEl=document.getElementById("tabs"), gridEl=document.getElementById("grid"),
@@ -2674,15 +2681,15 @@ function currentMoment(){
   var dayMs=86400000, diff=Math.round((d-E)/dayMs);
   var EV=[
     [inRange(d,12,1,12,25),{t:"Les boissons de Noël",r:["Latte Lait de Poule","Chocolat Chaud Menthe","Chocolat Épicé","Latte Épicé","Chocolat Viennois","Cinnamon Rolls"]}],
-    [inRange(d,12,26,12,31)||inRange(d,1,1,1,2),{t:"Pour finir l'année en douceur",r:["Espresso Tonic","Affogato Caramel","Chocolat Chaud Italien","Mocha","Macarons Café","Brownies"]}],
+    [inRange(d,12,26,12,31)||inRange(d,1,1,1,2),{t:"Pour finir l'année en douceur",r:["Espresso Tonic","Affogato Caramel","Chocolat Chaud Italien","Mocha","Macarons Café","Brownies en Plaque"]}],
     [inRange(d,1,28,2,2),{t:"C'est la Chandeleur",r:["Crêpes du Dimanche","Gaufres au Beurre Noisette","Chocolat Chaud Crémeux","Latte à l'Érable","Caramel au Beurre Salé","Sauce Chocolat"]}],
-    [inRange(d,2,8,2,14),{t:"À partager à deux",r:["Mocha","Chocolat Viennois","Macarons Café","Latte Lavande","Chocolat Chaud Italien","Brownies"]}],
+    [inRange(d,2,8,2,14),{t:"À partager à deux",r:["Mocha","Chocolat Viennois","Macarons Café","Latte Lavande","Chocolat Chaud Italien","Brownies en Plaque"]}],
     [inRange(d,3,10,3,17),{t:"Tout en vert pour la Saint-Patrick",r:["Latte Irlandais","Matcha Latte","Iced Matcha","Dirty Matcha","Verveine Menthe","Chocolat Chaud Menthe"]}],
-    [diff>=-7&&diff<=1,{t:"Le brunch de Pâques",r:["Chocolat Chaud Crémeux","Cappuccino","Crêpes du Dimanche","Brownies","Madeleines","Latte Vanille"]}],
+    [diff>=-7&&diff<=1,{t:"Le brunch de Pâques",r:["Chocolat Chaud Crémeux","Cappuccino","Crêpes du Dimanche","Brownies en Plaque","Madeleines","Latte Vanille"]}],
     [inRange(d,3,1,4,30),{t:"Le temps des sucres",r:["Latte à l'Érable","Tire d'Érable","Cortado Miel","Crêpes du Dimanche","Gaufres au Beurre Noisette","Chai Latte"]}],
     [inRange(d,6,17,6,24),{t:"Bonne Saint-Jean",r:["Limonade Maison","Iced Tea Pêche","Cold Brew","Iced Tea Citron Basilic","Espresso Tonic","Smoothie Mangue"]}],
     [inRange(d,9,1,9,15),{t:"Le café de la rentrée",r:["Cappuccino","Flat White","Latte","Cortado","Cookies Fleur de Sel","Cantuccini"]}],
-    [inRange(d,10,24,10,31),{t:"Ce soir, c'est Halloween",r:["Latte Citrouille Épicée","Mocha","Chocolat Épicé","Chai Latte","Brownies","Cookies Fleur de Sel"]}]
+    [inRange(d,10,24,10,31),{t:"Ce soir, c'est Halloween",r:["Latte Citrouille Épicée","Mocha","Chocolat Épicé","Chai Latte","Brownies en Plaque","Cookies Fleur de Sel"]}]
   ];
   for(var i=0;i<EV.length;i++) if(EV[i][0]) return EV[i][1];
   var mo=d.getMonth()+1;
