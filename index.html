@@ -6,7 +6,7 @@
 <title>L'Atelier 07 — Carnet de recettes chaudes &amp; glacées</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&family=IBM+Plex+Mono:wght@400&family=Newsreader:opsz,wght@6..72,200&family=Inter+Tight:wght@300&family=Italianno&display=swap" rel="stylesheet">
 <style>
 /* =====================================================================
    L'Atelier 07 — refonte « magazine culinaire »
@@ -374,22 +374,44 @@ header.hero{position:sticky;top:0;z-index:40;background:var(--bg);margin:0 calc(
 .btn.solid{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .btn.solid:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}
 
-/* ---------- lettre des nouveautés ---------- */
-.news{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--sp-6);margin-top:var(--sp-24);padding-top:var(--sp-16);border-top:1px solid var(--rule)}
-.news > *{grid-column:1/-1;min-width:0}
-.news h2{margin:var(--sp-6) 0 0;max-width:14ch;font:400 clamp(3rem,6vw,4.5rem)/.95 var(--serif);letter-spacing:-.02em}
-.news h2 em{font-style:italic;color:var(--acc)}
-.news .txt{margin:var(--sp-6) 0 0;max-width:44ch;color:var(--ink2)}
-.news .n-r{margin-top:var(--sp-8)}
-.pill{display:flex;align-items:center;gap:var(--sp-4);max-width:560px;margin-top:var(--sp-2);border-bottom:1px solid var(--rule2);transition:border-color var(--m150) var(--out)}
-.pill:focus-within{border-color:var(--acc)}
-.pill input{flex:1;min-width:0;min-height:56px;padding:0;background:none;border:0;outline:none;color:var(--ink);font:300 1.125rem/1.4 var(--sans)}
-.pill input::placeholder{color:var(--mute);opacity:.7}
-.pill button{flex:0 0 auto;min-height:44px;padding:0;background:none;border:0;cursor:pointer;font:500 .9375rem/1 var(--sans);color:var(--acc);transition:color var(--m150) var(--out)}
-.pill button:hover{color:var(--ink)}
-.news .nmsg{min-height:1.5em;margin:var(--sp-3) 0 0;font-size:.875rem;color:var(--acc)}
-.news .fine{margin:var(--sp-1) 0 0;font:400 .75rem/1.4 var(--mono);letter-spacing:.08em;color:var(--mute)}
-@media(min-width:1000px){.news{margin-top:var(--sp-40)}.news .n-l{grid-column:1/7}.news .n-r{grid-column:8/13;margin-top:0;align-self:end}}
+/* ---------- lettre des nouveautés : section d'origine, conservée telle quelle ----------
+   Mise en page, image et styles repris de la version précédente du site.
+   Les anciennes couleurs et polices sont rétablies ici seulement. */
+.news{--caramel:#C48A5A;--cream:#FAF6F0;--latte:#E7D6C1;--edge:#CEC4B4;
+  font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:300;font-size:16.5px;line-height:1.6;color:var(--cream)}
+@media(min-width:900px){.news{max-width:1052px;margin-left:auto;margin-right:auto}}
+.news .hand{display:block;font-family:"Italianno",cursive;font-size:40px;font-weight:400;letter-spacing:normal;text-transform:none;color:var(--caramel);line-height:1;}
+.news .hand::before{content:none}
+.news{margin-top:70px;position:relative;border-radius:34px;background:#1F1714;
+  border:1px solid rgba(231,214,193,.12);box-shadow:0 44px 90px -50px rgba(0,0,0,1);
+  display:grid;gap:30px;align-items:center;padding:40px 26px 0;overflow:hidden;}
+@media(min-width:900px){.news{grid-template-columns:minmax(0,6fr) minmax(0,5fr);padding:58px 0 58px 58px;gap:20px;overflow:visible;}}
+.news .hand{font-size:40px;margin:0;}
+.news h2{font-family:"Newsreader",serif;font-weight:200;font-size:clamp(30px,4.4vw,48px);
+  letter-spacing:-.02em;line-height:1.02;margin:6px 0 0;max-width:15ch;}
+.news .txt{color:var(--latte);margin:18px 0 0;max-width:42ch;font-size:15.5px;}
+.pill{display:flex;align-items:center;gap:6px;margin-top:28px;max-width:440px;
+  background:var(--cream);border-radius:999px;padding:6px 6px 6px 22px;
+  border:2px solid var(--cream);transition:border-color .25s;}
+.pill:focus-within{border-color:var(--caramel);}
+.pill input{flex:1;min-width:0;background:none;border:0;outline:none;color:#120F0E;
+  font:inherit;font-size:15px;padding:10px 0;}
+.pill input::placeholder{color:rgba(18,15,14,.45);}
+.pill button{flex:0 0 auto;background:#120F0E;color:var(--cream);border:0;border-radius:999px;
+  padding:13px 24px;font:inherit;font-size:14px;cursor:pointer;transition:background .25s;}
+.pill button:hover{background:var(--caramel);color:#120F0E;}
+.news .nmsg{font-size:13.5px;color:var(--caramel);margin:12px 0 0;min-height:1.4em;}
+.news .fine{font-size:12px;color:var(--edge);opacity:.7;margin:6px 0 0;}
+.news::before{content:"";position:absolute;left:-10%;top:-30%;width:60%;height:120%;pointer-events:none;
+  background:radial-gradient(ellipse at 30% 40%, rgba(196,138,90,.16), transparent 65%);filter:blur(30px);}
+.news > *{position:relative;min-width:0;}
+@media(max-width:899px){.news{grid-template-columns:minmax(0,1fr);margin-left:-2px;margin-right:-2px}}
+.news > div:first-child{z-index:2;}
+.macwrap{position:relative;display:flex;justify-content:center;align-items:center;padding:10px 0 30px;}
+.macwrap::before{content:"";position:absolute;left:10%;right:10%;top:10%;bottom:20%;border-radius:50%;
+  background:radial-gradient(ellipse at 40% 40%,rgba(196,138,90,.20),transparent 65%);filter:blur(30px);pointer-events:none;}
+.macshot{position:relative;width:100%;max-width:470px;height:auto;display:block;filter:drop-shadow(0 38px 40px rgba(0,0,0,.55)) drop-shadow(0 0 60px rgba(196,138,90,.12));}
+@media(min-width:900px){.news{padding:62px 62px 62px 62px;}.macwrap{padding:0;}.macshot{max-width:440px;}}
 
 /* ---------- pied de page ---------- */
 .foot{margin-top:var(--sp-24);border-top:1px solid var(--rule)}
@@ -844,22 +866,23 @@ header.hero{position:sticky;top:0;z-index:40;background:var(--bg);margin:0 calc(
   <div class="grid" id="favgrid"></div>
 </section>
 
-<section class="news" id="newsletter" aria-labelledby="newsTitle">
-  <div class="n-l">
-    <p class="hand">05 — Les nouveautés</p>
-    <h2 id="newsTitle">Reçois les nouvelles recettes <em>en premier</em></h2>
+<section class="news" id="newsletter">
+  <div>
+    <p class="hand">Les nouveautés</p>
+    <h2>Reçois les nouvelles recettes en premier</h2>
     <p class="txt">Une nouvelle boisson, une astuce de saison, une recette envoyée par un proche. Un petit courriel seulement quand il y a du nouveau dans le carnet.</p>
-  </div>
-  <div class="n-r">
-    <label class="lbl-m" for="n-mail">Ton adresse courriel</label>
     <form class="pill" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="site" id="nform">
       <input type="hidden" name="form-name" value="newsletter">
       <input type="text" name="site" style="display:none" tabindex="-1" autocomplete="off">
-      <input id="n-mail" type="email" name="courriel" required placeholder="toi@exemple.com" autocomplete="email">
-      <button type="submit">S'abonner →</button>
+      <input type="email" name="courriel" required placeholder="Ton adresse courriel" aria-label="Ton adresse courriel">
+      <button type="submit">S'abonner</button>
     </form>
     <p class="nmsg" id="nmsg" role="status"></p>
     <p class="fine">Aucune pub, jamais revendu. Désinscription en un clic.</p>
+  </div>
+  <div class="macwrap">
+    <!-- Mockup MacBook : PNG transparent intégré. Pour le remplacer par ton fichier : src="images/macbook.png" -->
+    <img class="macshot" src="macbook.webp" alt="Aperçu de L'Atelier 07 sur un MacBook Pro" width="1227" height="1300">
   </div>
 </section>
 
