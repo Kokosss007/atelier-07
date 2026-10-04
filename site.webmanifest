@@ -1,0 +1,15 @@
+{
+  "name": "L'Atelier 07",
+  "short_name": "Atelier 07",
+  "description": "Un carnet de recettes à boire et à manger, fait maison, à Montréal.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#120F0E",
+  "theme_color": "#120F0E",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
