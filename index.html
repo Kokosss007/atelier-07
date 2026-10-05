@@ -1452,11 +1452,12 @@ var CATS=[
 /* ---------------------------------------------------------------
    CRÉDIT DE CHAQUE RECETTE (sous le grand titre) : deux champs, rien d'autre à toucher.
      auteur:"Chef Ludo", origine:"Carnet de stage"   → s'affiche « CHEF LUDO · CARNET DE STAGE »
-   Pour un nouvel auteur, écrire simplement ses deux champs dans la recette. Les quatre en usage :
-     auteur:"Mamie Marie-France", origine:"Carnet de famille"
-     auteur:"Chef Ludo",          origine:"Carnet de stage"
-     auteur:"D'après Paul Bocuse", origine:"Les grands classiques"
-     auteur:"Corentin",           origine:"Maison"            (valeur par défaut si les champs manquent)
+   L'origine dépend du type d'auteur :
+     famille (maman, grands-mères…)   origine:"Carnet de famille"     ex. « MAMIE MARIE-FRANCE · CARNET DE FAMILLE », « MAMAN · CARNET DE FAMILLE »
+     chef chez qui j'ai fait un stage origine:"Carnet de stage"      ex. « CHEF LUDO · CARNET DE STAGE »
+     grand chef publié                auteur:"D'après Paul Bocuse", origine:"Les grands classiques"
+     mes recettes                     auteur:"Corentin", origine:"Maison"   (valeur par défaut si les champs manquent)
+   Un nouvel auteur : écrire simplement ses deux champs. Si l'origine sort de cette liste, la console le signale.
 ---------------------------------------------------------------- */
 /* ---------------------------------------------------------------
    Champs propres aux familles Cocktails et Softs (facultatifs) :
@@ -3023,6 +3024,12 @@ function creditOf(r){
   var a=String(r.auteur||"").trim()||"Corentin", o=String(r.origine||"").trim()||"Maison";
   return esc(a)+" · "+esc(o);
 }
+/* garde-fou : signale dans la console une origine qui ne suit pas la règle (voir le commentaire au-dessus de R) */
+var ORIGINES=["Carnet de famille","Carnet de stage","Les grands classiques","Maison"];
+R.forEach(function(r){
+  if(r.origine&&ORIGINES.indexOf(r.origine)<0) console.warn("Recette « "+r.n+" » : origine « "+r.origine+" » hors règle (attendu : "+ORIGINES.join(", ")+").");
+  if(r.origine==="Les grands classiques"&&!/^d'après /i.test(r.auteur||"")) console.warn("Recette « "+r.n+" » : un grand chef publié s'écrit « D'après [Nom] ».");
+});
 function famsIn(pool){
   var seen={}, out=[];
   pool.forEach(function(r){ var f=famOf(r); if(f&&!seen[f.toLowerCase()]){ seen[f.toLowerCase()]=1; out.push(f); } });
