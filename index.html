@@ -3892,6 +3892,7 @@ function adrMapTheme(){
   adrMap.setPaintProperty("adr-cluster-halo","circle-color",adrRgba(c,.22));
   adrMap.setPaintProperty("adr-cluster","circle-stroke-color",c);
   adrMap.setPaintProperty("adr-count","text-color",c);
+  adrMap.setPaintProperty("nom-miennes","text-color",c);
   adrMap.setPaintProperty("adr-pt","circle-color",c);
 }
 document.addEventListener("carnetchange",adrMapTheme);
@@ -3940,6 +3941,17 @@ function adrStyle(base){
       paint:{"line-color":cream(alpha),"line-width":["interpolate",["linear"],["zoom"],z0,w0,z1,w1]}};
   };
   var Z=function(a,b,c,d,e,f){ return ["interpolate",["linear"],["zoom"],a,b,c,d,e,f]; };
+  /* noms de lieux : IBM Plex Mono (celle des petites lignes du site), capitales espacées, très discrets */
+  var nm=["coalesce",["get","name:fr"],["get","name:latin"],["get","name"]];
+  var label=function(id,filter,o){
+    var l={id:id,type:"symbol",source:"om","source-layer":"place",filter:filter,
+      layout:{"text-field":nm,"text-font":["IBM Plex Mono Regular"],"text-size":o.size,"text-transform":"uppercase",
+        "text-letter-spacing":o.ls,"text-max-width":o.mw||6,"text-padding":o.pad||6,"symbol-sort-key":["coalesce",["get","rank"],99]},
+      paint:{"text-color":o.color,"text-opacity":o.opacity,"text-halo-color":LAND,"text-halo-width":1.1}};
+    if(o.min!==undefined) l.minzoom=o.min;
+    if(o.max!==undefined) l.maxzoom=o.max;
+    return l;
+  };
   var layers=[
     {id:"terre",type:"background",paint:{"background-color":LAND}},
     {id:"eau",type:"fill",source:"om","source-layer":"water",paint:{"fill-color":SEA}},
@@ -3954,6 +3966,26 @@ function adrStyle(base){
       filter:["all",["==",["get","admin_level"],2],["==",["get","maritime"],0]],
       paint:{"line-color":cream(.06),"line-width":.5}},
     /* halo doux : un cercle flou autour des points et des clusters */
+    /* noms de lieux, un niveau à la fois : pays (monde, continent) → grandes villes → mes villes → quartiers. Pas de rues, d'océans ni de lieux. */
+    label("nom-pays",["all",["==",["get","class"],"country"],[">",["get","rank"],2]],{min:1.8,max:6.5,size:Z(0,8.5,5,9.5,6,9.5),ls:.18,mw:7,pad:4,
+      color:cream(.34),opacity:["interpolate",["linear"],["zoom"],1.8,0,2.4,1,4.2,1,6.2,0]}),
+    label("nom-pays-majeurs",["all",["==",["get","class"],"country"],["<=",["get","rank"],2]],{max:6.5,size:Z(0,8.5,5,9.5,6,9.5),ls:.18,mw:7,pad:4,
+      color:cream(.34),opacity:["interpolate",["linear"],["zoom"],4.2,1,6.2,0]}),
+    label("nom-villes",["all",["==",["get","class"],"city"],["!",["in",nm,["literal",adrVillesNoms()]]]],{min:3,size:Z(3,10,9,11,13,12),ls:.12,
+      color:cream(.55),opacity:["interpolate",["linear"],["zoom"],3,0,3.8,1]}),
+    label("nom-quartiers",is("class",["suburb","quarter","neighbourhood"]),{min:12,size:9,ls:.14,mw:8,
+      color:cream(.4),opacity:["interpolate",["linear"],["zoom"],12,0,12.8,1]}),
+    {id:"nom-miennes",type:"symbol",source:"villes",minzoom:2,
+      layout:{"text-field":["get","n"],"text-font":["IBM Plex Mono Medium"],"text-size":Z(2,10.5,9,12,13,13),"text-transform":"uppercase","text-letter-spacing":.16,
+        "text-max-width":9,"text-padding":6,"text-variable-anchor":["left","right","top","bottom"],
+        "text-radial-offset":["step",["zoom"],["case",[">=",["get","k"],2],3.2,1.6],13,1.6]},
+      paint:{"text-color":ACC,"text-opacity":["interpolate",["linear"],["zoom"],2,0,2.8,1],"text-halo-color":LAND,"text-halo-width":1.1}},
+    /* réserve la place des marqueurs et des clusters : aucun nom ne passe dessous (icône invisible, posée avant les textes) */
+    {id:"adr-boite",type:"symbol",source:"adresses",
+      layout:{"icon-image":"vide","icon-allow-overlap":true,"icon-padding":3,
+        "icon-size":["case",["has","point_count"],["step",["get","point_count"],40,8,46,25,56],22]}},
+    {id:"ecran-boite",type:"symbol",source:"ecran",
+      layout:{"icon-image":"vide","icon-allow-overlap":true,"icon-padding":2,"icon-size":["get","s"]}},
     {id:"adr-halo",type:"circle",source:"adresses",filter:["!",["has","point_count"]],
       paint:{"circle-radius":17,"circle-blur":1,"circle-color":adrRgba(ACC,.3)}},
     {id:"adr-cluster-halo",type:"circle",source:"adresses",filter:["has","point_count"],
@@ -3973,8 +4005,39 @@ function adrStyle(base){
     sources:{
       om:{type:"vector",url:"https://tiles.openfreemap.org/planet",
         attribution:'<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> Données <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'},
-      adresses:{type:"geojson",data:adrGeo(),cluster:true,clusterRadius:46,clusterMaxZoom:12}
+      adresses:{type:"geojson",data:adrGeo(),cluster:true,clusterRadius:46,clusterMaxZoom:12},
+      villes:{type:"geojson",data:adrVillesGeo()},
+      ecran:{type:"geojson",data:{type:"FeatureCollection",features:[]}}
     },layers:layers};
+}
+/* mes villes : celles de la colonne « region » d'adresses.csv (la même que le filtre de la liste), au centre de leurs adresses ;
+   si elle porte le nom du pays (Malte, Maroc), le nom du pays suffit */
+function adrVillesListe(){
+  var g={};
+  ADRESSES.filter(adrPos).forEach(function(a){
+    var v=adrVille(a); if(!v||v===a.p) return;
+    var o=g[v]||(g[v]={n:v,k:0,la:0,ln:0}); o.k++; o.la+=a.lat; o.ln+=a.lng;
+  });
+  return Object.keys(g).map(function(v){ var o=g[v]; return {n:o.n,k:o.k,lat:o.la/o.k,lng:o.ln/o.k}; });
+}
+function adrVillesNoms(){ return adrVillesListe().map(function(v){ return v.n; }); }
+function adrVillesGeo(){
+  return {type:"FeatureCollection",features:adrVillesListe().map(function(v){
+    return {type:"Feature",properties:{n:v.n,k:v.k},geometry:{type:"Point",coordinates:[v.lng,v.lat]}};
+  })};
+}
+/* les boutons de zoom et les crédits sont posés sur la carte : on leur réserve la place, comme aux marqueurs, pour qu'aucun nom ne passe dessous */
+function adrEcran(){
+  if(!adrMap||adrMapSt!=="ready") return;
+  var c=adrMap.getContainer(), cr=c.getBoundingClientRect(), f=[];
+  var add=function(x,y,s){ var l=adrMap.unproject([x,y]); f.push({type:"Feature",properties:{s:s},geometry:{type:"Point",coordinates:[l.lng,l.lat]}}); };
+  Array.prototype.forEach.call(c.querySelectorAll(".maplibregl-ctrl-zoom-in,.maplibregl-ctrl-zoom-out"),function(b){
+    var r=b.getBoundingClientRect(); if(r.width) add(r.left-cr.left+r.width/2,r.top-cr.top+r.height/2,r.width+6);
+  });
+  var a=c.querySelector(".maplibregl-ctrl-attrib");
+  if(a){ var r=a.getBoundingClientRect(), n=Math.max(1,Math.ceil(r.width/22)), m=Math.max(1,Math.ceil(r.height/22));
+    for(var i=0;i<n;i++) for(var j=0;j<m;j++) add(r.left-cr.left+(i+.5)*r.width/n,r.top-cr.top+(j+.5)*r.height/m,r.height/m+10); }
+  adrMap.getSource("ecran").setData({type:"FeatureCollection",features:f});
 }
 function adrGeo(){
   ADRESSES.forEach(function(a,i){ a._i=i; });
@@ -4029,6 +4092,7 @@ function adrMapBuild(){
       }
     });
   }catch(e){ console.error("Carte des adresses :",e); adrMapSt="erreur"; adrMapMsg("La carte n'a pas pu se charger. La liste ci-dessous reste complète."); return; }
+  adrMap.on("styleimagemissing",function(e){ if(e.id==="vide") adrMap.addImage("vide",{width:1,height:1,data:new Uint8Array(4)}); });
   adrMap.touchZoomRotate.disableRotation();
   adrMap.addControl(new maplibregl.NavigationControl({showCompass:false}),"top-right");
   adrMap.addControl(new maplibregl.AttributionControl({compact:false}),"bottom-right");
@@ -4039,6 +4103,9 @@ function adrMapBuild(){
     adrMap.setMinZoom(adrMinZoom());
     adrMapFit(true);
     adrMap.on("moveend",adrClamp);
+    adrMap.on("moveend",adrEcran);
+    adrMap.on("resize",adrEcran);
+    adrEcran();
     if(adrLit!==null) adrMapSelect(ADRESSES[adrLit],"liste");
   });
   adrMap.on("resize",function(){ adrMap.setMinZoom(adrMinZoom()); });
@@ -4098,7 +4165,7 @@ function adrMapSelect(a,src){
     }
     if(out.length){
       ADRESSES=out; adrLit=null; adrRender();
-      if(adrMap&&adrMapSt==="ready"){ adrMap.getSource("adresses").setData(adrGeo()); adrMapSelect(null); adrMapFit(false); }
+      if(adrMap&&adrMapSt==="ready"){ adrMap.getSource("adresses").setData(adrGeo()); adrMap.getSource("villes").setData(adrVillesGeo()); adrMap.setFilter("nom-villes",["all",["==",["get","class"],"city"],["!",["in",["coalesce",["get","name:fr"],["get","name:latin"],["get","name"]],["literal",adrVillesNoms()]]]]); adrMapSelect(null); adrMapFit(false); }
     }
   }).catch(function(){});
 })();
