@@ -638,13 +638,16 @@ html[data-news="compact"] .news .nmsg:empty{display:none}
 .rnd.back{padding-left:0}
 #sheetBody{max-width:1600px;margin:0 auto;padding:0 var(--pad)}
 
-.f-hero{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--sp-6);padding-top:var(--sp-10)}
+.f-hero{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--sp-6);padding-top:var(--sp-10);--ft:clamp(4rem,19vw,9.5rem)}
 .f-hero > *{grid-column:1/-1;min-width:0}
 .f-crumb{display:flex;gap:var(--sp-3);margin:0;font:400 .75rem/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
-.f-title{margin:var(--sp-8) 0 0;font:400 clamp(4rem,19vw,9.5rem)/.88 var(--serif);letter-spacing:-.035em;hyphens:manual}
+.f-title{margin:var(--sp-8) 0 0;font:400 var(--ft)/.88 var(--serif);letter-spacing:-.035em;hyphens:manual}
 .f-title em{font-style:italic;color:var(--acc)}
 .f-sum{margin:var(--sp-6) 0 0;font:italic 400 clamp(1.5rem,2.4vw,1.875rem)/1.2 var(--serif);color:var(--acc)}
 .fhead-by{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-3)}
+/* le titre (interligne .88) laisse descendre ses jambages p, g, j, q, y : l'espace sous lui suit sa taille */
+.f-head .fhead-by{margin-top:calc(var(--sp-3) + .06 * var(--ft) + 14px)}
+.f-head .fhead-by .byline,.f-head .fhead-by .fam.big{margin:0}
 .f-story{margin:var(--sp-6) 0 0;max-width:30rem;font:300 1.0625rem/1.65 var(--sans);color:var(--ink2)}
 .fnote{margin:var(--sp-6) 0 0;padding-left:var(--sp-4);border-left:1px solid var(--acc)}
 .fnote .note{margin:0;font-size:1.5rem}
@@ -1447,6 +1450,15 @@ var CATS=[
 ];
 
 /* ---------------------------------------------------------------
+   CRÉDIT DE CHAQUE RECETTE (sous le grand titre) : deux champs, rien d'autre à toucher.
+     auteur:"Chef Ludo", origine:"Carnet de stage"   → s'affiche « CHEF LUDO · CARNET DE STAGE »
+   Pour un nouvel auteur, écrire simplement ses deux champs dans la recette. Les quatre en usage :
+     auteur:"Mamie Marie-France", origine:"Carnet de famille"
+     auteur:"Chef Ludo",          origine:"Carnet de stage"
+     auteur:"D'après Paul Bocuse", origine:"Les grands classiques"
+     auteur:"Corentin",           origine:"Maison"            (valeur par défaut si les champs manquent)
+---------------------------------------------------------------- */
+/* ---------------------------------------------------------------
    Champs propres aux familles Cocktails et Softs (facultatifs) :
    sa:{sum:"…", ing:[["Ingrédient","quantité"],…], st:[{d:"étape"},…]}
       → bloc « Version sans alcool », avec ses propres quantités
@@ -1456,7 +1468,7 @@ var CATS=[
 ---------------------------------------------------------------- */
 var R=[
 /* ---------------- CAFÉS ---------------- */
-{c:"cafes",n:"Espresso",col:"#2B1D17",foam:"#C48A5A",
+{c:"cafes",n:"Espresso",auteur:"Corentin",origine:"Maison",col:"#2B1D17",foam:"#C48A5A",
  sum:"Dix-huit grammes qui sortent en trente-six.",
  story:"Tout le carnet repose sur ces trois chiffres. Si l'espresso est raté, aucune quantité de lait ne le rattrapera.",
  spec:[["TASSE","60–90 ml"],["DURÉE","2 min"],["DOSE","18 g → 36 g"]],
@@ -1471,7 +1483,7 @@ var R=[
  ],
  ok:["Le filet reste brun-roux, sans jamais blondir.","Crema épaisse qui tient une bonne minute.","Sucré en attaque, aucune amertume qui s'installe."]},
 
-{c:"cafes",n:"Ristretto",col:"#231713",foam:"#B0793F",
+{c:"cafes",n:"Ristretto",auteur:"Corentin",origine:"Maison",col:"#231713",foam:"#B0793F",
  sum:"Le même café, coupé plus tôt.",
  story:"On ne resserre pas la mouture pour aller plus vite. On coupe à vingt-sept grammes, c'est tout. Plus sirupeux, moins acide.",
  spec:[["TASSE","60 ml"],["DURÉE","2 min"],["DOSE","18 g → 27 g"]],
@@ -1484,7 +1496,7 @@ var R=[
  ],
  ok:["Texture sirupeuse qui nappe la langue.","Plus sucré et moins acide que ton espresso habituel."]},
 
-{c:"cafes",n:"Lungo",col:"#4A3227",foam:"#C48A5A",
+{c:"cafes",n:"Lungo",auteur:"Corentin",origine:"Maison",col:"#4A3227",foam:"#C48A5A",
  sum:"Cinquante-quatre grammes, toute l'eau traverse.",
  story:"À ne pas confondre avec un americano. Ici c'est l'eau de percolation qui traverse la galette, donc chaque défaut d'extraction ressort.",
  spec:[["TASSE","90–120 ml"],["DURÉE","2 min"],["DOSE","18 g → 54 g"]],
@@ -1497,7 +1509,7 @@ var R=[
  ],
  ok:["Amertume présente mais qui ne reste pas.","Aucune sensation de bouche sèche après la dernière gorgée."]},
 
-{c:"cafes",n:"Americano",col:"#3E2A21",foam:"#C9A070",
+{c:"cafes",n:"Americano",auteur:"Corentin",origine:"Maison",col:"#3E2A21",foam:"#C9A070",
  sum:"L eau d'abord, l'espresso par-dessus.",
  story:"L ordre fait toute la recette. Espresso en dernier, la crema reste intacte. L inverse la casse et la tasse goûte plat.",
  spec:[["MUG","200 ml"],["DURÉE","3 min"],["EAU","92 °C"]],
@@ -1510,7 +1522,7 @@ var R=[
  ],
  ok:["Une crema tachetée flotte encore à la surface.","Ça goûte le café, pas l'eau chaude teintée."]},
 
-{c:"cafes",n:"Macchiato",col:"#2B1D17",foam:"#FAF6F0",
+{c:"cafes",n:"Macchiato",auteur:"Corentin",origine:"Maison",col:"#2B1D17",foam:"#FAF6F0",
  sum:"Un espresso, une cuillère de mousse.",
  story:"Quarante millilitres de lait seulement, montés très épais. Juste de quoi arrondir l'acidité sans noyer le café.",
  spec:[["TASSE","90 ml"],["DURÉE","4 min"],["LAIT","40 ml"]],
@@ -1523,7 +1535,7 @@ var R=[
  ],
  ok:["La mousse tient sur le dessus sans couler.","L espresso reste dominant."]},
 
-{c:"cafes",n:"Cortado",col:"#7A5540",foam:"#F1E4D2",
+{c:"cafes",n:"Cortado",auteur:"Corentin",origine:"Maison",col:"#7A5540",foam:"#F1E4D2",
  sum:"Moitié café, moitié lait, presque pas de mousse.",
  story:"La boisson la plus honnête du comptoir. Rien ne masque l'espresso, donc rien ne pardonne une erreur de réglage.",
  spec:[["VERRE","120 ml"],["DURÉE","4 min"],["MOUSSE","3–5 mm"]],
@@ -1536,7 +1548,7 @@ var R=[
  ],
  ok:["Verre plein à ras, ligne de mousse à peine visible.","Café et lait arrivent ensemble dès la première gorgée."]},
 
-{c:"cafes",n:"Cortado Miel",col:"#8A6338",foam:"#EBD9A8",
+{c:"cafes",n:"Cortado Miel",auteur:"Corentin",origine:"Maison",col:"#8A6338",foam:"#EBD9A8",
  sum:"Le miel dissous avant le lait, jamais après.",
  story:"Un filet de miel dans un cortado fonctionne parce que le volume est petit. Dans un latte, il disparaît sans laisser de trace.",
  spec:[["VERRE","120 ml"],["DURÉE","4 min"],["MIEL","1 c. à thé"]],
@@ -1549,7 +1561,7 @@ var R=[
  ],
  ok:["Aucun dépôt collant au fond.","Le miel se devine, il ne sucre pas franchement."]},
 
-{c:"cafes",n:"Cappuccino",col:"#6B4A3A",foam:"#FAF6F0",
+{c:"cafes",n:"Cappuccino",auteur:"Corentin",origine:"Maison",col:"#6B4A3A",foam:"#FAF6F0",
  sum:"Un tiers café, un tiers lait, un tiers mousse.",
  story:"La seule boisson où la mousse est un ingrédient à part entière, et non une finition posée par-dessus.",
  spec:[["TASSE","150–180 ml"],["DURÉE","7 min"],["PHASE AIR","4–5 s"]],
@@ -1564,7 +1576,7 @@ var R=[
  ],
  ok:["Surface brillante et uniforme, sans bulle visible.","Une pincée de cacao tient deux à trois secondes.","Encore chaud après quatre minutes."]},
 
-{c:"cafes",n:"Cappuccino Noisette",col:"#7A5233",foam:"#F1E4D2",
+{c:"cafes",n:"Cappuccino Noisette",auteur:"Corentin",origine:"Maison",col:"#7A5233",foam:"#F1E4D2",
  sum:"Une pompe et demie, pas plus.",
  story:"La noisette supporte mal l'excès. Au-delà de quinze millilitres sur cent quatre-vingts, elle couvre complètement le café.",
  spec:[["TASSE","180 ml"],["DURÉE","7 min"],["SIROP","15 ml"]],
@@ -1577,7 +1589,7 @@ var R=[
  ],
  ok:["Mousse d'un centimètre.","La noisette se sent sans couvrir le café."]},
 
-{c:"cafes",n:"Flat White",col:"#5A3C2E",foam:"#F1E4D2",
+{c:"cafes",n:"Flat White",auteur:"Corentin",origine:"Maison",col:"#5A3C2E",foam:"#F1E4D2",
  sum:"Le même café, deux secondes d'air en moins.",
  story:"Microfoam la plus fine du carnet. C est ici que le dessin sort le plus net et que le café reste le plus présent.",
  spec:[["TASSE","160–180 ml"],["DURÉE","5 min"],["PHASE AIR","2 s"]],
@@ -1591,7 +1603,7 @@ var R=[
  ],
  ok:["Mousse de cinq millimètres, pas davantage.","Bords du dessin nets, pas flous.","Aucune bulle visible à l'œil."]},
 
-{c:"cafes",n:"Flat White Caramel Salé",col:"#8A5F3A",foam:"#F1E4D2",
+{c:"cafes",n:"Flat White Caramel Salé",auteur:"Corentin",origine:"Maison",col:"#8A5F3A",foam:"#F1E4D2",
  sum:"Le sel dans la tasse, jamais sur la mousse.",
  story:"Sur le dessus, le sel pique. Dissous dans le caramel et l'espresso, il relève et allonge le goût en fin de bouche.",
  spec:[["TASSE","180 ml"],["DURÉE","5 min"],["CARAMEL","20 ml"]],
@@ -1604,7 +1616,7 @@ var R=[
  ],
  ok:["Rien ne reste au fond.","Le sel se devine sans se goûter."]},
 
-{c:"cafes",n:"Latte",col:"#8A6349",foam:"#FAF6F0",
+{c:"cafes",n:"Latte",auteur:"Corentin",origine:"Maison",col:"#8A6349",foam:"#FAF6F0",
  sum:"Deux cents millilitres de lait, et le café survit.",
  story:"La seule façon que le café tienne face à ce volume, c'est de monter la dose. Pas de rallonger l'extraction.",
  spec:[["VERRE","240–300 ml"],["DURÉE","5 min"],["DOSE","20 g → 40 g"]],
@@ -1617,7 +1629,7 @@ var R=[
  ],
  ok:["Le café reste identifiable malgré les 200 ml de lait.","Mousse de cinq à dix millimètres."]},
 
-{c:"cafes",n:"Latte Vanille",col:"#9C7350",foam:"#FAF6F0",
+{c:"cafes",n:"Latte Vanille",auteur:"Corentin",origine:"Maison",col:"#9C7350",foam:"#FAF6F0",
  sum:"Deux pompes, jamais trois.",
  story:"La vanille est le parfum qui se marie le mieux à l'espresso, à condition de rester derrière lui et pas devant.",
  spec:[["VERRE","300 ml"],["DURÉE","5 min"],["SIROP","20 ml"]],
@@ -1630,7 +1642,7 @@ var R=[
  ],
  ok:["La vanille arrive en fin de gorgée, pas au début.","Aucun dépôt sucré au fond."]},
 
-{c:"cafes",n:"Latte Épicé",col:"#A0714A",foam:"#E7D6C1",
+{c:"cafes",n:"Latte Épicé",auteur:"Corentin",origine:"Maison",col:"#A0714A",foam:"#E7D6C1",
  sum:"Muscade râpée à la minute.",
  story:"Le sirop d'épices porte la base, mais c'est la muscade fraîche sur la mousse qui fait la différence à l'odeur.",
  spec:[["VERRE","300 ml"],["DURÉE","5 min"],["SIROP","20 ml"]],
@@ -1643,7 +1655,7 @@ var R=[
  ],
  ok:["Les épices se sentent avant la première gorgée.","Aucune amertume de clou de girofle."]},
 
-{c:"cafes",n:"Latte Lavande",col:"#8D7B92",foam:"#F1E4D2",
+{c:"cafes",n:"Latte Lavande",auteur:"Corentin",origine:"Maison",col:"#8D7B92",foam:"#F1E4D2",
  sum:"Une seule pompe. Vraiment une.",
  story:"La lavande passe du floral au savon en dix millilitres. C est le parfum le moins tolérant du carnet.",
  spec:[["VERRE","300 ml"],["DURÉE","5 min"],["SIROP","15 ml"]],
@@ -1656,7 +1668,7 @@ var R=[
  ],
  ok:["Le floral reste en arrière-plan.","Rien qui rappelle un produit ménager."]},
 
-{c:"cafes",n:"Latte Macchiato",col:"#A88663",foam:"#FAF6F0",
+{c:"cafes",n:"Latte Macchiato",auteur:"Corentin",origine:"Maison",col:"#A88663",foam:"#FAF6F0",
  sum:"Trois couches, et l'espresso au milieu.",
  story:"Le lait d'abord, l'espresso versé très lentement ensuite. Il se glisse entre le lait et la mousse au lieu de tout mélanger.",
  spec:[["VERRE","300 ml"],["DURÉE","5 min"],["REPOS","30 s"]],
@@ -1669,7 +1681,7 @@ var R=[
  ],
  ok:["Trois couches nettes à travers le verre.","La couche de café est au milieu, pas au fond."]},
 
-{c:"cafes",n:"Caramel Macchiato",col:"#B07C4A",foam:"#FAF6F0",
+{c:"cafes",n:"Caramel Macchiato",auteur:"Corentin",origine:"Maison",col:"#B07C4A",foam:"#FAF6F0",
  sum:"Vanille en bas, caramel en haut.",
  story:"Un montage inversé : le sirop au fond, le lait, le café, et la sauce seulement à la toute fin sur la mousse.",
  spec:[["VERRE","300 ml"],["DURÉE","6 min"],["MONTAGE","inversé"]],
@@ -1683,7 +1695,7 @@ var R=[
  ],
  ok:["Trois couches visibles.","Le quadrillage tient sans s'enfoncer."]},
 
-{c:"cafes",n:"Affogato",col:"#3E2A21",foam:"#FAF6F0",
+{c:"cafes",n:"Affogato",auteur:"Corentin",origine:"Maison",col:"#3E2A21",foam:"#FAF6F0",
  sum:"Un espresso brûlant sur une boule glacée.",
  story:"Dessert, pas café. C est la seule recette du carnet où l'improvisation est permise.",
  spec:[["VERRE","150 ml"],["DURÉE","2 min"],["SERVICE","immédiat"]],
@@ -1695,7 +1707,7 @@ var R=[
  ],
  ok:["La glace fond sur les bords et garde un cœur ferme.","Ça se mange à la cuillère."]},
 
-{c:"cafes",n:"Affogato Caramel",col:"#B5763E",foam:"#FAF6F0",
+{c:"cafes",n:"Affogato Caramel",auteur:"Corentin",origine:"Maison",col:"#B5763E",foam:"#FAF6F0",
  sum:"Le caramel dessous, jamais sur la glace.",
  story:"Sur la glace, la sauce fige en plaque dure et se décolle en un bloc. Au fond, elle remonte à la cuillère.",
  spec:[["VERRE","150 ml"],["DURÉE","2 min"],["SERVICE","immédiat"]],
@@ -1708,7 +1720,7 @@ var R=[
  ],
  ok:["Le caramel remonte à la cuillère.","La glace garde un cœur ferme."]},
 /* ---------------- CHOCOLATS ---------------- */
-{c:"chocolats",n:"Chocolat Chaud Crémeux",col:"#3E2A21",foam:"#8A5F3F",
+{c:"chocolats",n:"Chocolat Chaud Crémeux",auteur:"Corentin",origine:"Maison",col:"#3E2A21",foam:"#8A5F3F",
  sum:"Du chocolat de pâtisserie, jamais de poudre.",
  story:"Une pincée de sel fait tout le travail : elle coupe le sucre et fait remonter le cacao. Sans elle, c'est plat.",
  spec:[["TASSE","250 ml"],["DURÉE","5 min"],["VAPEUR","sans air"]],
@@ -1723,7 +1735,7 @@ var R=[
  ],
  ok:["Aucun dépôt au fond à la dernière gorgée.","Ça nappe à peine la cuillère.","Le cacao arrive avant le sucre."]},
 
-{c:"chocolats",n:"Chocolat Chaud Italien",col:"#2F1F19",foam:"#6B4A3A",
+{c:"chocolats",n:"Chocolat Chaud Italien",auteur:"Corentin",origine:"Maison",col:"#2F1F19",foam:"#6B4A3A",
  sum:"Si épais qu'il tient sur une cuillère.",
  story:"La cioccolata calda des bars de Turin. Elle se sert dans une petite tasse, parce que cent quatre-vingts millilitres suffisent.",
  spec:[["TASSE","180 ml"],["DURÉE","8 min"],["TEXTURE","nappante"]],
@@ -1737,7 +1749,7 @@ var R=[
  ],
  ok:["Une cuillère plantée au centre tient deux secondes.","Aucun goût de farine en fin de bouche."]},
 
-{c:"chocolats",n:"Chocolat Viennois",col:"#4A3227",foam:"#FAF6F0",
+{c:"chocolats",n:"Chocolat Viennois",auteur:"Corentin",origine:"Maison",col:"#4A3227",foam:"#FAF6F0",
  sum:"Une crème à peine montée, qui fond dedans.",
  story:"Le crémeux, surmonté d'une crème souple qui descend au fil des gorgées au lieu de flotter en bloc.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["CRÈME","peu montée"]],
@@ -1750,7 +1762,7 @@ var R=[
  ],
  ok:["La crème descend doucement au fil des gorgées.","Elle ne reste pas en bloc sur le dessus."]},
 
-{c:"chocolats",n:"Mocha",col:"#43291F",foam:"#C48A5A",
+{c:"chocolats",n:"Mocha",auteur:"Corentin",origine:"Maison",col:"#43291F",foam:"#C48A5A",
  sum:"Le chocolat fond dans l'espresso, jamais dans le lait.",
  story:"C est la seule différence entre un mocha et un chocolat chaud vaguement caféiné. L ordre des opérations fait la recette.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["CHOCOLAT","25 g"]],
@@ -1764,7 +1776,7 @@ var R=[
  ],
  ok:["Aucun grumeau au fond.","Le café se sent encore derrière le chocolat."]},
 
-{c:"chocolats",n:"Mocha Blanc",col:"#C9AE87",foam:"#FAF6F0",
+{c:"chocolats",n:"Mocha Blanc",auteur:"Corentin",origine:"Maison",col:"#C9AE87",foam:"#FAF6F0",
  sum:"Trente-cinq grammes, pas vingt-cinq.",
  story:"Le chocolat blanc est bien plus sucré et bien moins présent que le noir. Il faut en mettre plus pour qu'il existe.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["CHOCOLAT","35 g"]],
@@ -1777,7 +1789,7 @@ var R=[
  ],
  ok:["Aucun grumeau au fond.","L amertume du café passe encore."]},
 
-{c:"chocolats",n:"Chocolat Épicé",col:"#4A2A1F",foam:"#B5662E",
+{c:"chocolats",n:"Chocolat Épicé",auteur:"Corentin",origine:"Maison",col:"#4A2A1F",foam:"#B5662E",
  sum:"Piment et cannelle, à la mexicaine.",
  story:"Le piment ne pique pas vraiment, il chauffe en fin de gorgée et rallonge le cacao pendant plusieurs secondes.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["PIMENT","1 pincée"]],
@@ -1790,7 +1802,7 @@ var R=[
  ],
  ok:["La chaleur arrive après le cacao, pas avant.","Aucune poudre non dissoute en suspension."]},
 
-{c:"chocolats",n:"Macchiato Spéculoos",col:"#A87445",foam:"#F1E4D2",
+{c:"chocolats",n:"Macchiato Spéculoos",auteur:"Corentin",origine:"Maison",col:"#A87445",foam:"#F1E4D2",
  sum:"La pâte dissoute dans l'espresso chaud.",
  story:"Le spéculoos apporte de la cassonade et de la cannelle en même temps. Une seule cuillère suffit largement.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["PÂTE","20 g"]],
@@ -1805,7 +1817,7 @@ var R=[
  ok:["Aucune pâte collée au fond.","Le biscuit reste croquant une minute."]},
 
 /* ---------------- THÉS ---------------- */
-{c:"thes",n:"Matcha Latte",col:"#7C8A62",foam:"#C9D4AE",
+{c:"thes",n:"Matcha Latte",auteur:"Corentin",origine:"Maison",col:"#7C8A62",foam:"#C9D4AE",
  sum:"Tamisé, fouetté, jamais bouilli.",
  story:"Le matcha est une poudre en suspension, pas une infusion. Toute la réussite tient à casser les grumeaux avant l'eau.",
  spec:[["TASSE","250 ml"],["DURÉE","4 min"],["EAU","75–80 °C"]],
@@ -1819,7 +1831,7 @@ var R=[
  ],
  ok:["Aucun grumeau au fond du bol.","Vert franc, pas kaki.","Amertume végétale présente mais pas astringente."]},
 
-{c:"thes",n:"Chai Latte",col:"#A0714A",foam:"#E7D6C1",
+{c:"thes",n:"Chai Latte",auteur:"Corentin",origine:"Maison",col:"#A0714A",foam:"#E7D6C1",
  aManger:["Velouté de courge rôtie"],
  sum:"Les épices mijotent, le thé infuse après.",
  story:"Un vrai chai se cuit. Les épices entières demandent du temps, le thé ne supporte pas plus de trois minutes.",
@@ -1834,7 +1846,7 @@ var R=[
  ],
  ok:["Les épices se sentent avant la première gorgée.","Aucune amertume sèche de thé trop infusé."]},
 
-{c:"thes",n:"Earl Grey Latte",col:"#8C5A32",foam:"#F1E4D2",
+{c:"thes",n:"Earl Grey Latte",auteur:"Corentin",origine:"Maison",col:"#8C5A32",foam:"#F1E4D2",
  sum:"Le London Fog, en plus concentré.",
  story:"Le lait dilue tout. On infuse deux fois plus serré que pour une tasse nature, sans allonger le temps.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["EAU","95 °C"]],
@@ -1848,7 +1860,7 @@ var R=[
  ],
  ok:["La bergamote passe au-dessus du lait.","Aucune astringence qui assèche la langue."]},
 
-{c:"thes",n:"Hojicha Latte",col:"#8A5A3A",foam:"#E7D6C1",
+{c:"thes",n:"Hojicha Latte",auteur:"Corentin",origine:"Maison",col:"#8A5A3A",foam:"#E7D6C1",
  sum:"Le thé vert torréfié, presque sans théine.",
  story:"Torréfié à haute température, il perd son amertume et prend un goût de noisette grillée. Parfait le soir.",
  spec:[["TASSE","250 ml"],["DURÉE","5 min"],["EAU","95 °C"]],
@@ -1861,7 +1873,7 @@ var R=[
  ],
  ok:["Brun-roux, pas vert.","Goût de noisette grillée, aucune astringence."]},
 
-{c:"thes",n:"Dirty Matcha",col:"#6E7A52",foam:"#C9D4AE",
+{c:"thes",n:"Dirty Matcha",auteur:"Corentin",origine:"Maison",col:"#6E7A52",foam:"#C9D4AE",
  sum:"Un espresso versé sur le matcha.",
  story:"Deux amertumes opposées, la végétale et la torréfiée. Elles ne se mélangent pas, elles se superposent.",
  spec:[["VERRE","300 ml"],["DURÉE","5 min"],["COUCHES","3"]],
@@ -1874,7 +1886,7 @@ var R=[
  ],
  ok:["Une couche verte visible sous la couche brune.","Le matcha se goûte encore après le café."]},
 
-{c:"thes",n:"Thé Vert Sencha",col:"#8FA25E",foam:"#D8E0C4",
+{c:"thes",n:"Thé Vert Sencha",auteur:"Corentin",origine:"Maison",col:"#8FA25E",foam:"#D8E0C4",
  sum:"Soixante-dix degrés, une minute.",
  story:"Le sencha est le thé le plus sensible du carnet. Dix degrés de trop et il devient amer et râpeux.",
  spec:[["TASSE","200 ml"],["DURÉE","3 min"],["EAU","70 °C"]],
@@ -1888,7 +1900,7 @@ var R=[
  ],
  ok:["Vert clair, légèrement trouble.","Végétal et iodé, sans amertume qui pique."]},
 
-{c:"thes",n:"Thé Blanc Jasmin",col:"#D8C79E",foam:"#F5EEDC",
+{c:"thes",n:"Thé Blanc Jasmin",auteur:"Corentin",origine:"Maison",col:"#D8C79E",foam:"#F5EEDC",
  sum:"Le plus délicat, le moins chaud.",
  story:"Les aiguilles d'argent parfumées aux fleurs fraîches demandent une eau presque tiède et beaucoup de patience.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["EAU","80 °C"]],
@@ -1901,7 +1913,7 @@ var R=[
  ],
  ok:["Très pâle, presque incolore.","Floral en attaque, sucré en fin de bouche."]},
 /* ---------------- TISANES ---------------- */
-{c:"tisanes",n:"Camomille Miel",col:"#D9B35C",foam:"#F1E4D2",
+{c:"tisanes",n:"Camomille Miel",auteur:"Corentin",origine:"Maison",col:"#D9B35C",foam:"#F1E4D2",
  sum:"Le miel après l'infusion, jamais pendant.",
  story:"Les fleurs entières demandent plus de temps qu'un sachet, mais donnent une tisane ronde au lieu d'un goût de foin.",
  spec:[["TASSE","250 ml"],["DURÉE","6 min"],["EAU","95 °C"]],
@@ -1915,7 +1927,7 @@ var R=[
  ],
  ok:["Jaune doré, pas trouble.","Rond en bouche, aucune amertume."]},
 
-{c:"tisanes",n:"Verveine Menthe",col:"#8FA277",foam:"#D8E0C4",
+{c:"tisanes",n:"Verveine Menthe",auteur:"Corentin",origine:"Maison",col:"#8FA277",foam:"#D8E0C4",
  sum:"Quatre minutes, pas une de plus.",
  story:"Deux plantes fragiles. Trop d'eau chaude ou trop de temps, et le mentholé bascule dans l'amertume.",
  spec:[["TASSE","250 ml"],["DURÉE","5 min"],["EAU","90 °C"]],
@@ -1929,7 +1941,7 @@ var R=[
  ],
  ok:["Parfum citronné net dès l'ouverture.","Fraîcheur mentholée en fin de gorgée."]},
 
-{c:"tisanes",n:"Infusion Fruits Rouges",col:"#9E4A4A",foam:"#E0A0A0",
+{c:"tisanes",n:"Infusion Fruits Rouges",auteur:"Corentin",origine:"Maison",col:"#9E4A4A",foam:"#E0A0A0",
  sum:"Hibiscus, acidulée, sans sucre.",
  story:"L hibiscus supporte l'eau bouillante et les longues infusions, contrairement aux plantes fragiles. Il en a même besoin.",
  spec:[["TASSE","250 ml"],["DURÉE","10 min"],["EAU","100 °C"]],
@@ -1943,7 +1955,7 @@ var R=[
  ],
  ok:["Rouge profond, presque encre.","Acidité franche qui réveille la bouche."]},
 
-{c:"tisanes",n:"Rooibos Vanille",col:"#B0663C",foam:"#E7D6C1",
+{c:"tisanes",n:"Rooibos Vanille",auteur:"Corentin",origine:"Maison",col:"#B0663C",foam:"#E7D6C1",
  sum:"Aucune théine, aucune amertume possible.",
  story:"Le rooibos ne contient pas de tanins. Tu peux l'oublier vingt minutes dans la tasse sans conséquence.",
  spec:[["TASSE","250 ml"],["DURÉE","8 min"],["EAU","100 °C"]],
@@ -1956,7 +1968,7 @@ var R=[
  ],
  ok:["Roux profond.","Vanille présente sans sucre ajouté."]},
 
-{c:"tisanes",n:"Gingembre Citron Miel",col:"#D9A24A",foam:"#F5EEDC",
+{c:"tisanes",n:"Gingembre Citron Miel",auteur:"Corentin",origine:"Maison",col:"#D9A24A",foam:"#F5EEDC",
  sum:"Le gingembre bout, le citron arrive après.",
  story:"Le gingembre frais a besoin de vraiment bouillir pour libérer son piquant. Le citron, lui, ne supporte pas la chaleur.",
  spec:[["TASSE","300 ml"],["DURÉE","12 min"],["EAU","bouillante"]],
@@ -1970,7 +1982,7 @@ var R=[
  ],
  ok:["Le piquant chauffe la gorge en fin de gorgée.","Le citron reste vif, pas cuit."]},
 
-{c:"tisanes",n:"Camomille Lavande",col:"#C0A9C4",foam:"#EEE4EE",
+{c:"tisanes",n:"Camomille Lavande",auteur:"Corentin",origine:"Maison",col:"#C0A9C4",foam:"#EEE4EE",
  sum:"Deux fleurs, une seule qui domine.",
  story:"Une tisane du soir. La lavande est là en soutien, jamais en tête, sinon la tasse devient parfumée au lieu d'être apaisante.",
  spec:[["TASSE","250 ml"],["DURÉE","7 min"],["EAU","95 °C"]],
@@ -1985,7 +1997,7 @@ var R=[
  ok:["La camomille domine, la lavande se devine.","Aucun arrière-goût savonneux."]},
 
 /* ---------------- GLACÉES ---------------- */
-{c:"glacees",n:"Iced Caramel Latte",col:"#C48A5A",foam:"#FAF6F0",
+{c:"glacees",n:"Iced Caramel Latte",auteur:"Corentin",origine:"Maison",col:"#C48A5A",foam:"#FAF6F0",
  sum:"L espresso en dernier, sur le dos d'une cuillère.",
  story:"Les couches ne sont pas un effet de style. Elles prouvent que rien n'a été versé trop vite et que la glace n'a pas tout dilué.",
  spec:[["VERRE","400 ml"],["DURÉE","4 min"],["GLACE","pleine"]],
@@ -1999,7 +2011,7 @@ var R=[
  ],
  ok:["Trois couches visibles avant de remuer.","Aucune trace de caramel figée au fond."]},
 
-{c:"glacees",n:"Cold Brew",col:"#4A3227",foam:"#8A5F3F",
+{c:"glacees",n:"Cold Brew",auteur:"Corentin",origine:"Maison",col:"#4A3227",foam:"#8A5F3F",
  sum:"Dix-huit heures à froid, aucune amertume.",
  story:"L eau froide n'extrait pas les composés amers. C est pour ça qu'un cold brew reste doux là où un espresso allongé devient agressif.",
  spec:[["RENDEMENT","1 L"],["DURÉE","18 h"],["MOUTURE","très grossière"]],
@@ -2014,7 +2026,7 @@ var R=[
  ],
  ok:["Limpide, sans dépôt en suspension.","Sucré et chocolaté, aucune acidité piquante."]},
 
-{c:"glacees",n:"Cold Brew Avoine",col:"#8A6A4A",foam:"#EADFC8",
+{c:"glacees",n:"Cold Brew Avoine",auteur:"Corentin",origine:"Maison",col:"#8A6A4A",foam:"#EADFC8",
  sum:"Avoine barista, jamais nature.",
  story:"L avoine standard tranche au contact du café froid et acide. La version barista contient les stabilisants qui l'évitent.",
  spec:[["VERRE","350 ml"],["DURÉE","2 min"],["GLACE","pleine"]],
@@ -2027,7 +2039,7 @@ var R=[
  ],
  ok:["Aucun grain ni caillot visible.","Le café reste au premier plan."]},
 
-{c:"glacees",n:"Espresso Tonic",col:"#B5763E",foam:"#F5EEDC",
+{c:"glacees",n:"Espresso Tonic",auteur:"Corentin",origine:"Maison",col:"#B5763E",foam:"#F5EEDC",
  sum:"Le tonic d'abord, le café ensuite.",
  story:"L amertume du quinquina et celle du café se répondent. Le sucre du tonic fait le pont entre les deux.",
  spec:[["VERRE","300 ml"],["DURÉE","3 min"],["TONIC","150 ml"]],
@@ -2040,7 +2052,7 @@ var R=[
  ],
  ok:["Les bulles tiennent plusieurs minutes.","Deux couches nettes avant de remuer."]},
 
-{c:"glacees",n:"Iced Matcha",col:"#7C9455",foam:"#C9D4AE",
+{c:"glacees",n:"Iced Matcha",auteur:"Corentin",origine:"Maison",col:"#7C9455",foam:"#C9D4AE",
  sum:"Fouetté chaud, versé sur la glace.",
  story:"Le matcha ne se dissout pas dans l'eau froide. Il faut l'émulsionner tiède, puis le refroidir d'un coup.",
  spec:[["VERRE","350 ml"],["DURÉE","4 min"],["EAU","75 °C"]],
@@ -2053,7 +2065,7 @@ var R=[
  ],
  ok:["Aucune poudre au fond après cinq minutes.","Vert vif, pas terne."]},
 
-{c:"glacees",n:"Iced Chai",col:"#B0794A",foam:"#EADFC8",
+{c:"glacees",n:"Iced Chai",auteur:"Corentin",origine:"Maison",col:"#B0794A",foam:"#EADFC8",
  sum:"Le concentré préparé la veille.",
  story:"Un chai glacé improvisé est toujours fade. Il faut un concentré cuit, refroidi, qui tient une semaine au frigo.",
  spec:[["VERRE","350 ml"],["DURÉE","3 min"],["BASE","concentré"]],
@@ -2066,7 +2078,7 @@ var R=[
  ],
  ok:["Les épices tiennent malgré la dilution.","Aucun dépôt au fond du verre."]},
 
-{c:"glacees",n:"Frappé Maison",col:"#A07850",foam:"#F5EEDC",
+{c:"glacees",n:"Frappé Maison",auteur:"Corentin",origine:"Maison",col:"#A07850",foam:"#F5EEDC",
  sum:"Au shaker, pas au mixeur.",
  story:"Le shaker donne une mousse dense et stable. Le mixeur casse la glace et transforme tout en soupe grise en deux minutes.",
  spec:[["VERRE","400 ml"],["DURÉE","3 min"],["OUTIL","shaker"]],
@@ -2080,7 +2092,7 @@ var R=[
  ],
  ok:["Une mousse beige de deux centimètres sur le dessus.","Elle tient au moins une minute."]},
 
-{c:"glacees",n:"Iced Tea Citron Basilic",col:"#B58A3C",foam:"#E7D6C1",
+{c:"glacees",n:"Iced Tea Citron Basilic",auteur:"Corentin",origine:"Maison",col:"#B58A3C",foam:"#E7D6C1",
  sum:"Infusé à froid, jamais refroidi après coup.",
  story:"Un thé infusé chaud puis glacé devient trouble et amer. À froid, il reste limpide et garde ses arômes fins.",
  spec:[["RENDEMENT","1 L"],["DURÉE","12 h"],["EAU","froide"]],
@@ -2094,7 +2106,7 @@ var R=[
  ],
  ok:["Limpide, ambré clair.","Aucune astringence en fin de bouche."]},
 
-{c:"glacees",n:"Iced Tea Pêche",col:"#D99A5C",foam:"#F5DFC0",
+{c:"glacees",n:"Iced Tea Pêche",auteur:"Corentin",origine:"Maison",col:"#D99A5C",foam:"#F5DFC0",
  sum:"De la vraie pêche, pas du sirop.",
  story:"Une pêche mûre écrasée dans le thé froid donne un fruité que n'approche aucun sirop industriel, et beaucoup moins de sucre.",
  spec:[["RENDEMENT","1 L"],["DURÉE","12 h"],["SUCRE","optionnel"]],
@@ -2108,7 +2120,7 @@ var R=[
  ],
  ok:["Le fruit se sent à l'odeur avant la première gorgée.","Limpide malgré le fruit."]},
 
-{c:"glacees",n:"Iced Tea Hibiscus Gingembre",col:"#B03E4A",foam:"#E0A0A0",
+{c:"glacees",n:"Iced Tea Hibiscus Gingembre",auteur:"Corentin",origine:"Maison",col:"#B03E4A",foam:"#E0A0A0",
  sum:"Le seul qui s'infuse chaud.",
  story:"L hibiscus et le gingembre sont trop robustes pour l'infusion à froid. Ici on infuse serré et on refroidit vite.",
  spec:[["RENDEMENT","1 L"],["DURÉE","30 min"],["EAU","bouillante"]],
@@ -2122,7 +2134,7 @@ var R=[
  ],
  ok:["Rouge éclatant, translucide.","Le gingembre chauffe la gorge malgré le froid."]},
 
-{c:"glacees",n:"Iced Tea Vert Concombre",col:"#9DB07A",foam:"#DCE6C8",
+{c:"glacees",n:"Iced Tea Vert Concombre",auteur:"Corentin",origine:"Maison",col:"#9DB07A",foam:"#DCE6C8",
  sum:"Le plus désaltérant du carnet.",
  story:"Un thé vert froid, du concombre et de la menthe. Presque aucun sucre, et pourtant ça ne goûte pas l'eau.",
  spec:[["RENDEMENT","1 L"],["DURÉE","8 h"],["SUCRE","aucun"]],
@@ -2136,7 +2148,7 @@ var R=[
  ],
  ok:["Très pâle, presque transparent.","Le concombre se sent sans dominer."]},
 
-{c:"glacees",n:"Iced Tea Pétillant Citron",col:"#C9A94A",foam:"#F5EEDC",
+{c:"glacees",n:"Iced Tea Pétillant Citron",auteur:"Corentin",origine:"Maison",col:"#C9A94A",foam:"#F5EEDC",
  sum:"Le thé concentré, l'eau pétillante au service.",
  story:"On n'infuse jamais dans de l'eau gazeuse. On prépare un concentré et on l'allonge à la dernière seconde.",
  spec:[["VERRE","400 ml"],["DURÉE","10 min"],["BULLES","au service"]],
@@ -2150,7 +2162,7 @@ var R=[
  ],
  ok:["Les bulles tiennent plusieurs minutes.","Aucune amertume malgré la concentration."]},
 
-{c:"glacees",n:"Sun Tea Jasmin",col:"#D8C79E",foam:"#F5EEDC",
+{c:"glacees",n:"Sun Tea Jasmin",auteur:"Corentin",origine:"Maison",col:"#D8C79E",foam:"#F5EEDC",
  sum:"Le soleil fait le travail, en quatre heures.",
  story:"Une méthode ancienne : un bocal en plein soleil, une eau qui monte doucement à trente degrés. L extraction est très douce.",
  spec:[["RENDEMENT","1 L"],["DURÉE","4 h"],["SOLEIL","direct"]],
@@ -2164,7 +2176,7 @@ var R=[
  ],
  ok:["Jaune très pâle.","Floral et rond, aucune amertume."]},
 
-{c:"glacees",n:"Smoothie Mangue",col:"#D9A24A",foam:"#F5DFC0",
+{c:"glacees",n:"Smoothie Mangue",auteur:"Corentin",origine:"Maison",col:"#D9A24A",foam:"#F5DFC0",
  sum:"Trois ingrédients, rien d'autre.",
  story:"Un smoothie rate presque toujours parce qu'il contient trop de choses. Un fruit, un yogourt, une acidité.",
  spec:[["VERRE","400 ml"],["DURÉE","3 min"],["FRUIT","congelé"]],
@@ -2177,7 +2189,7 @@ var R=[
  ],
  ok:["Assez épais pour tenir la cuillère debout.","Le fruit domine, pas le yogourt."]},
 
-{c:"glacees",n:"Milkshake Vanille",col:"#E7D6C1",foam:"#FAF6F0",
+{c:"glacees",n:"Milkshake Vanille",auteur:"Corentin",origine:"Maison",col:"#E7D6C1",foam:"#FAF6F0",
  sum:"Cinq minutes hors du congélateur.",
  story:"Une glace trop dure ne se mixe pas, elle se pulvérise. Tempérée, elle donne une texture épaisse et brillante.",
  spec:[["VERRE","400 ml"],["DURÉE","8 min"],["GLACE","tempérée"]],
@@ -2191,7 +2203,7 @@ var R=[
  ok:["La paille tient presque debout.","Aucun cristal de glace sous la dent."]},
 
 /* ---------------- SIROPS ---------------- */
-{c:"sirops",n:"Sirop de Base 1:1",col:"#D9C08A",foam:"#F5EEDC",
+{c:"sirops",n:"Sirop de Base 1:1",auteur:"Corentin",origine:"Maison",col:"#D9C08A",foam:"#F5EEDC",
  sum:"Sucre et eau à parts égales, le reste n'est qu'infusion.",
  story:"Une seule base, six parfums. C est la préparation la plus rentable du carnet : cinq minutes pour un mois de lattes parfumés.",
  spec:[["RENDEMENT","500 ml"],["DURÉE","20 min"],["CONSERVE","1 mois"]],
@@ -2209,7 +2221,7 @@ var R=[
  ],
  ok:["Limpide, sans cristaux au fond.","Le parfum arrive avant le sucre.","Ça coule comme de l'huile, pas comme de l'eau."]},
 
-{c:"sirops",n:"Caramel au Beurre Salé",col:"#B5763E",foam:"#EADFC8",
+{c:"sirops",n:"Caramel au Beurre Salé",auteur:"Corentin",origine:"Maison",col:"#B5763E",foam:"#EADFC8",
  sum:"Caramel à sec, crème chaude, bras tendus.",
  story:"Le sucre fond seul, sans eau et sans être remué. C est la seule méthode qui donne une couleur franche sans cristalliser.",
  spec:[["RENDEMENT","300 ml"],["DURÉE","15 min"],["CONSERVE","3 semaines"]],
@@ -2224,7 +2236,7 @@ var R=[
  ],
  ok:["Brillante, sans grain sous la cuillère.","Amertume légère qui équilibre le sucre."]},
 
-{c:"sirops",n:"Sauce Chocolat",col:"#3E2A21",foam:"#8A5F3F",
+{c:"sirops",n:"Sauce Chocolat",auteur:"Corentin",origine:"Maison",col:"#3E2A21",foam:"#8A5F3F",
  sum:"À l'eau, pas à la crème.",
  story:"Une sauce à l'eau garde un goût de cacao net. À la crème, elle devient une ganache liquide qui étouffe le café.",
  spec:[["RENDEMENT","250 ml"],["DURÉE","10 min"],["CONSERVE","2 semaines"]],
@@ -2238,7 +2250,7 @@ var R=[
  ],
  ok:["Brillante comme une ganache, pas mate.","Aucun grain sur la langue."]},
 
-{c:"sirops",n:"Crème Fouettée",col:"#FAF6F0",foam:"#F1E4D2",
+{c:"sirops",n:"Crème Fouettée",auteur:"Corentin",origine:"Maison",col:"#FAF6F0",foam:"#F1E4D2",
  sum:"Bol froid, crème froide, arrêt anticipé.",
  story:"Pour une boisson, la crème doit rester souple. Une chantilly ferme reste posée en bloc et ne se mélange jamais.",
  spec:[["RENDEMENT","150 ml"],["DURÉE","5 min"],["CRÈME","35 % min"]],
@@ -2251,7 +2263,7 @@ var R=[
  ],
  ok:["Souple et brillante, jamais granuleuse.","Elle fond doucement dans la boisson chaude."]},
 
-{c:"sirops",n:"Concentré de Chai",col:"#A0714A",foam:"#E7D6C1",
+{c:"sirops",n:"Concentré de Chai",auteur:"Corentin",origine:"Maison",col:"#A0714A",foam:"#E7D6C1",
  sum:"Deux fois plus fort que ce que tu bois.",
  story:"Préparé d'avance, il transforme un chai latte en affaire de trente secondes, chaud comme glacé.",
  spec:[["RENDEMENT","400 ml"],["DURÉE","25 min"],["CONSERVE","1 semaine"]],
@@ -2265,7 +2277,7 @@ var R=[
  ],
  ok:["Trop fort à boire pur, parfait dilué.","Les épices tiennent après une semaine au frigo."]},
 
-{c:"sirops",n:"Mousse Froide Salée",col:"#EADFC8",foam:"#FAF6F0",
+{c:"sirops",n:"Mousse Froide Salée",auteur:"Corentin",origine:"Maison",col:"#EADFC8",foam:"#FAF6F0",
  sum:"La cold foam des cafés, en trente secondes.",
  story:"Une mousse froide, légèrement salée, qui flotte sur un café glacé et descend lentement à chaque gorgée.",
  spec:[["RENDEMENT","1 verre"],["DURÉE","2 min"],["OUTIL","mousseur"]],
@@ -2278,7 +2290,7 @@ var R=[
  ],
  ok:["Elle flotte sans s'enfoncer.","Elle descend doucement à chaque gorgée."]},
 
-{c:"sirops",n:"Sirop de Fruits Rouges",col:"#9E4A4A",foam:"#E0A0A0",
+{c:"sirops",n:"Sirop de Fruits Rouges",auteur:"Corentin",origine:"Maison",col:"#9E4A4A",foam:"#E0A0A0",
  sum:"Pour les thés glacés, sans colorant.",
  story:"Un sirop de fruit maison garde l'acidité du fruit. Les versions industrielles n'ont que le sucre et la couleur.",
  spec:[["RENDEMENT","350 ml"],["DURÉE","25 min"],["CONSERVE","3 semaines"]],
@@ -2293,7 +2305,7 @@ var R=[
  ok:["Rouge translucide, pas opaque.","Acidulé, le fruit se reconnaît."]}
 
 ,
-{c:"douceurs",n:"Cantuccini",col:"#C9A06A",foam:"#EADFC8",
+{c:"douceurs",n:"Cantuccini",auteur:"Corentin",origine:"Maison",col:"#C9A06A",foam:"#EADFC8",
  sum:"Deux cuissons, pour qu'ils cassent net.",
  story:"Les biscuits toscans qu'on trempe dans le café. On cuit le boudin entier, on le tranche, puis on recuit les tranches : c'est ce deuxième passage qui donne le croquant.",
  spec:[["QUANTITÉ","30 biscuits"],["DURÉE","55 min"],["FOUR","160 °C"]],
@@ -2308,7 +2320,7 @@ var R=[
  ],
  ok:["Ils cassent net, sans plier.","Les amandes sont dorées à cœur.","Ils tiennent trois semaines en boîte hermétique."]},
 
-{c:"douceurs",n:"Cookies Fleur de Sel",col:"#A9743F",foam:"#E2C69C",
+{c:"douceurs",n:"Cookies Fleur de Sel",auteur:"Corentin",origine:"Maison",col:"#A9743F",foam:"#E2C69C",
  sum:"Pâte reposée 24 h, sel posé à la sortie.",
  story:"Le repos au froid n'est pas une lubie. Il hydrate la farine et concentre le goût : le même cookie cuit tout de suite est nettement plus fade.",
  spec:[["QUANTITÉ","12 cookies"],["DURÉE","24 h + 12 min"],["FOUR","180 °C"]],
@@ -2323,7 +2335,7 @@ var R=[
  ],
  ok:["Bords croquants, centre qui plie sans casser.","Des coulées de chocolat visibles.","Le sel croque par endroits sans saler l'ensemble."]},
 
-{c:"douceurs",n:"Cinnamon Rolls",col:"#B5763E",foam:"#F1E4D2",
+{c:"douceurs",n:"Cinnamon Rolls",auteur:"Corentin",origine:"Maison",col:"#B5763E",foam:"#F1E4D2",
  sum:"Une pâte levée deux fois, sans se presser.",
  story:"Le secret n'est pas dans la garniture mais dans la patience. Une pâte pressée donne des brioches denses, quelle que soit la quantité de cannelle.",
  spec:[["QUANTITÉ","9 rouleaux"],["DURÉE","3 h"],["FOUR","180 °C"]],
@@ -2339,7 +2351,7 @@ var R=[
  ],
  ok:["La mie se déroule en spirale sans se déchirer.","Le centre est cuit mais encore moelleux.","Le glaçage fond légèrement sans couler au fond du plat."]}
 ,
-{c:"douceurs",n:"Gaufres au Beurre Noisette",chef:true,col:"#C9934A",foam:"#EADFC8",
+{c:"douceurs",n:"Gaufres au Beurre Noisette",auteur:"Corentin",origine:"Maison",chef:true,col:"#C9934A",foam:"#EADFC8",
  sum:"Le beurre noisette fait toute la différence.",
  story:"Une pâte à gaufre simple, relevée par un beurre cuit jusqu'à la noisette et une pointe de quatre-épices. Croustillant dehors, fondant dedans.",
  spec:[["QUANTITÉ","≈ 8 gaufres"],["DURÉE","1 h 15"],["CUISSON","gaufrier"]],
@@ -2355,7 +2367,7 @@ var R=[
  ],
  ok:["Croustillante dehors, moelleuse à cœur.","Le parfum de noisette se sent dès l'ouverture du gaufrier.","Elle se détache seule, sans accrocher."]},
 
-{c:"douceurs",n:"Financiers Chocolat Cèpes",chef:true,col:"#5A3A28",foam:"#B8906A",
+{c:"douceurs",n:"Financiers Chocolat Cèpes",auteur:"Chef Ludo",origine:"Carnet de stage",chef:true,col:"#5A3A28",foam:"#B8906A",
  sum:"Un financier de chef, entre sucré et sous-bois.",
  story:"Le financier classique, poussé par une couverture chocolat aux cèpes. Une association surprenante, ronde et terreuse, cuite dans des moules peu profonds.",
  spec:[["QUANTITÉ","4 financiers"],["DURÉE","40 min"],["FOUR","180 °C"]],
@@ -2372,7 +2384,7 @@ var R=[
  ],
  ok:["Bords croustillants, cœur fondant.","Le cèpe se devine en fin de bouche sans masquer le chocolat.","Ils se démoulent entiers."]},
 
-{c:"douceurs",n:"Macarons Café",chef:true,col:"#8A6349",foam:"#D9C4A8",
+{c:"douceurs",n:"Macarons Café",auteur:"Corentin",origine:"Maison",chef:true,col:"#8A6349",foam:"#D9C4A8",
  sum:"Coques au café, 140 °C pendant 15 minutes.",
  story:"Des coques de macaron parfumées à la poudre de café, cuites basse température pour rester lisses et bien pleines.",
  spec:[["QUANTITÉ","≈ 50 macarons"],["DURÉE","2 h"],["FOUR","140 °C · 15 min"]],
@@ -2389,7 +2401,7 @@ var R=[
  ],
  ok:["Surface lisse, sans craquelure.","Une collerette régulière à la base.","Les coques se décollent sans laisser de cœur sur la plaque."]},
 
-{c:"douceurs",n:"Madeleines",chef:true,col:"#D9B35C",foam:"#F5EEDC",
+{c:"douceurs",n:"Madeleines",auteur:"Corentin",origine:"Maison",chef:true,col:"#D9B35C",foam:"#F5EEDC",
  sum:"9 minutes à 170 °C, la recette du chef.",
  story:"Des madeleines simples et moelleuses, avec une cuisson courte qui garde le cœur tendre. La recette se multiplie facilement pour une grande tablée.",
  spec:[["QUANTITÉ","1 fournée"],["DURÉE","1 h 30"],["FOUR","170 °C · 9 min"]],
@@ -2404,7 +2416,7 @@ var R=[
  ],
  ok:["Une bosse bien marquée.","Bords dorés, cœur moelleux.","Elles se démoulent sans accrocher."]},
 
-{c:"douceurs",n:"Brownies en Plaque",chef:true,col:"#3E2A21",foam:"#6B4A3A",
+{c:"douceurs",n:"Brownies en Plaque",auteur:"Corentin",origine:"Maison",chef:true,col:"#3E2A21",foam:"#6B4A3A",
  sum:"Une plaque entière, dense et fondante.",
  story:"Autant de chocolat que de beurre, peu de farine : un brownie fondant, à couper en carrés pour toute la famille.",
  spec:[["QUANTITÉ","1 plaque"],["DURÉE","45 min"],["FOUR","180 °C"]],
@@ -2419,7 +2431,7 @@ var R=[
  ],
  ok:["Une fine croûte brillante sur le dessus.","Un cœur dense et fondant, pas sec.","Des carrés qui se coupent net une fois froids."]},
 
-{c:"douceurs",n:"Sablés Bretons",chef:true,col:"#C9A06A",foam:"#EADFC8",
+{c:"douceurs",n:"Sablés Bretons",auteur:"Corentin",origine:"Maison",chef:true,col:"#C9A06A",foam:"#EADFC8",
  sum:"Vingt palets épais, friables et beurrés.",
  story:"Le sablé breton épais, riche en beurre et en jaunes, qui s'effrite dès la première bouchée.",
  spec:[["QUANTITÉ","20 palets"],["DURÉE","1 h 45"],["FOUR","170 °C"]],
@@ -2433,7 +2445,7 @@ var R=[
   {d:"Détaille des palets, place-les dans des cercles beurrés et cuis à 170 °C.",s:900}
  ],
  ok:["Dorés sur le dessus, blonds sur les côtés.","Ils s'effritent à la première bouchée.","Un goût de beurre franc, à peine salé."]},
-{c:"cafes",n:"Latte à l'Érable",col:"#A8703A",foam:"#F1E4D2",
+{c:"cafes",n:"Latte à l'Érable",auteur:"Corentin",origine:"Maison",col:"#A8703A",foam:"#F1E4D2",
  sum:"Le latte du temps des sucres.",
  story:"Du vrai sirop d'érable à la place du sirop de sucre. Il apporte un goût boisé et caramélisé que rien d'autre ne remplace, et c'est le plus québécois des lattes.",
  spec:[["VERRE","300 ml"],["DURÉE","5 min"],["ÉRABLE","20 ml"]],
@@ -2447,7 +2459,7 @@ var R=[
  ],
  ok:["L'érable se sent sans écraser le café.","Pas de goût de sucre plat.","Le filet sur la mousse ne coule pas immédiatement."]},
 
-{c:"cafes",n:"Latte Citrouille Épicée",col:"#C27A3A",foam:"#F1E4D2",
+{c:"cafes",n:"Latte Citrouille Épicée",auteur:"Corentin",origine:"Maison",col:"#C27A3A",foam:"#F1E4D2",
  sum:"La vraie courge, pas le sirop.",
  story:"Le latte d'automne fait avec de la purée de citrouille et de vraies épices. Plus rond et moins sucré que les versions de café, avec une texture veloutée.",
  spec:[["VERRE","300 ml"],["DURÉE","8 min"],["ÉPICES","maison"]],
@@ -2461,7 +2473,7 @@ var R=[
  ],
  ok:["Texture veloutée, aucun grain de purée.","Les épices se sentent sans piquer.","Le café reste présent derrière la courge."]},
 
-{c:"cafes",n:"Latte Irlandais",col:"#6B4A3A",foam:"#FAF6F0",
+{c:"cafes",n:"Latte Irlandais",auteur:"Corentin",origine:"Maison",col:"#6B4A3A",foam:"#FAF6F0",
  sum:"L'esprit de l'Irish coffee, sans alcool.",
  story:"Café, sucre roux et crème à peine montée posée sur le dessus. Toute la gourmandise de l'Irish coffee, dans une version que tout le monde peut boire.",
  spec:[["VERRE","250 ml"],["DURÉE","6 min"],["ALCOOL","aucun"]],
@@ -2475,7 +2487,7 @@ var R=[
  ],
  ok:["Une couche de crème blanche bien nette sur le café.","Café chaud, crème froide, les deux à chaque gorgée."]},
 
-{c:"cafes",n:"Latte Lait de Poule",col:"#D9B87A",foam:"#FAF6F0",
+{c:"cafes",n:"Latte Lait de Poule",auteur:"Corentin",origine:"Maison",col:"#D9B87A",foam:"#FAF6F0",
  sum:"Le lait de poule des fêtes, avec un espresso.",
  story:"Une crème aux jaunes d'œufs cuite doucement, parfumée à la muscade et à la vanille, allongée d'un espresso. La boisson des soirées de décembre, sans alcool.",
  spec:[["TASSE","250 ml"],["DURÉE","15 min"],["CUISSON","71 °C"]],
@@ -2490,7 +2502,7 @@ var R=[
  ],
  ok:["Texture crémeuse, sans aucun grain d'œuf cuit.","La muscade se sent à l'odeur.","Le café équilibre le sucre."]},
 
-{c:"chocolats",n:"Chocolat Chaud Menthe",col:"#3E2A21",foam:"#B8C9A8",
+{c:"chocolats",n:"Chocolat Chaud Menthe",auteur:"Corentin",origine:"Maison",col:"#3E2A21",foam:"#B8C9A8",
  sum:"Menthe fraîche infusée, pas d'arôme.",
  story:"Le chocolat crémeux dans lequel on fait infuser de vraies feuilles de menthe. Un goût frais et net, loin des bonbons à la menthe.",
  spec:[["TASSE","250 ml"],["DURÉE","15 min"],["INFUSION","10 min"]],
@@ -2504,7 +2516,7 @@ var R=[
  ],
  ok:["Fraîcheur mentholée franche, sans goût de dentifrice.","Aucun dépôt au fond de la tasse."]},
 
-{c:"softs",n:"Limonade Maison",col:"#E3C85C",foam:"#F5EEDC",
+{c:"softs",n:"Limonade Maison",auteur:"Corentin",origine:"Maison",col:"#E3C85C",foam:"#F5EEDC",
  sum:"Des citrons pressés et un sirop, rien d'autre.",
  story:"La limonade des après-midis d'été : jus de citron frais, sirop de sucre et eau très froide, plate ou pétillante.",
  spec:[["RENDEMENT","1 L"],["DURÉE","10 min"],["SUCRE","ajustable"]],
@@ -2518,7 +2530,7 @@ var R=[
  ],
  ok:["Acidité vive, équilibrée par le sucre.","Aucun sucre au fond de la carafe."]},
 
-{c:"douceurs",n:"Crêpes du Dimanche",col:"#E0B878",foam:"#F5EEDC",
+{c:"douceurs",n:"Crêpes du Dimanche",auteur:"Corentin",origine:"Maison",col:"#E0B878",foam:"#F5EEDC",
  sum:"La pâte reposée, la poêle très chaude.",
  story:"Les crêpes fines de la Chandeleur et des dimanches matin. Une pâte simple qui repose une heure, et une poêle bien chaude.",
  spec:[["QUANTITÉ","≈ 15 crêpes"],["DURÉE","1 h 30"],["CUISSON","poêle"]],
@@ -2533,7 +2545,7 @@ var R=[
  ],
  ok:["Fines et souples, elles se plient sans casser.","Dorées en dentelle, pas uniformément brunes.","La première ratée ne compte pas."]},
 
-{c:"douceurs",n:"Tire d'Érable",col:"#B5763E",foam:"#EADFC8",
+{c:"douceurs",n:"Tire d'Érable",auteur:"Corentin",origine:"Maison",col:"#B5763E",foam:"#EADFC8",
  sum:"Du sirop bouillant sur la neige.",
  story:"La tradition des cabanes à sucre : du sirop d'érable cuit, versé sur la neige, qu'on enroule sur un bâton avant qu'il ne durcisse. Sans neige, de la glace pilée fait l'affaire.",
  spec:[["QUANTITÉ","≈ 10 bâtonnets"],["DURÉE","20 min"],["CUISSON","112–115 °C"]],
@@ -2547,7 +2559,7 @@ var R=[
  ],
  ok:["La tire se fige sur la neige sans couler.","Elle s'enroule sur le bâton sans casser.","Molle et collante sous la dent, pas dure."]}
 ,
-{c:"douceurs",n:"Brownie Fondant",fam:"Magali",col:"#3A241B",foam:"#6B4A3A",
+{c:"douceurs",n:"Brownie Fondant",auteur:"Corentin",origine:"Maison",fam:"Magali",col:"#3A241B",foam:"#6B4A3A",
  sum:"Très peu de farine, beaucoup de fondant.",
  story:"La recette de famille, écrite à la main sur une feuille qui a bien vécu. Très peu de farine pour beaucoup de chocolat : un brownie fondant, presque un fondant au chocolat.",
  spec:[["MOULE","20 × 20 cm"],["DURÉE","45 min"],["FOUR","th. 7"]],
@@ -2563,7 +2575,7 @@ var R=[
  ],
  ok:["Une fine croûte brillante sur le dessus.","Un cœur fondant, presque coulant.","Des morceaux de noix dans chaque carré."]},
 
-{c:"douceurs",n:"Forêt Noire",fam:"Magali",col:"#2E1B1B",foam:"#7A3B3F",unit:"part",base:8,noAlt:true,
+{c:"douceurs",n:"Forêt Noire",auteur:"Corentin",origine:"Maison",fam:"Magali",col:"#2E1B1B",foam:"#7A3B3F",unit:"part",base:8,noAlt:true,
  sum:"La génoise d'autrefois, montée avec de l'eau froide.",
  story:"",
  spec:[["MOULE","Moule à manqué"],["DURÉE","1 h 30"],["FOUR","th. 4"]],
@@ -2591,7 +2603,7 @@ var R=[
                                           si la boisson porte aManger:["Nom de la recette"])
    saison:"automne"       → la recette passe en vitrine de l'accueil Manger à cette saison
    mat:[]                 → matériel : liste vide = rien d'affiché                       */
-{c:"entrees",n:"Velouté de courge rôtie",unit:"bol",base:4,saison:"automne",mat:[],aBoire:["Chai Latte"],
+{c:"entrees",n:"Velouté de courge rôtie",auteur:"Corentin",origine:"Maison",unit:"bol",base:4,saison:"automne",mat:[],aBoire:["Chai Latte"],
  sum:"La courge rôtie, jamais bouillie.",
  story:"",
  spec:[["QUANTITÉ","4 bols"],["DURÉE","1 h"],["FOUR","200 °C"]],
@@ -3005,6 +3017,12 @@ var FILTERS=[
 ];
 var activeFam="";                          /* prénom choisi dans « Recettes des proches » ; vide = tous */
 function famOf(r){ return String(r.fam||"").trim(); }
+/* « AUTEUR · ORIGINE » sous le titre : les deux champs de la recette, « Corentin · Maison » s'ils manquent */
+function creditOf(r){
+  var esc=function(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
+  var a=String(r.auteur||"").trim()||"Corentin", o=String(r.origine||"").trim()||"Maison";
+  return esc(a)+" · "+esc(o);
+}
 function famsIn(pool){
   var seen={}, out=[];
   pool.forEach(function(r){ var f=famOf(r); if(f&&!seen[f.toLowerCase()]){ seen[f.toLowerCase()]=1; out.push(f); } });
@@ -4488,8 +4506,8 @@ function recipeHTML(r,i,forPrint){
     '<div class="f-head">'+
       '<p class="f-crumb"><span>'+(CATSHORT[r.c]||"")+'</span><span aria-hidden="true">/</span><span>N° '+numOf(r)+'</span></p>'+
       '<h2 class="f-title" id="fTitle">'+r.n.split(" ").map(function(x,j,w){return j===w.length-1&&w.length>1?'<em>'+x+'</em>':x;}).join(" ")+'</h2>'+
-      ((r.fam||r.chef||r.by)?'<div class="fhead-by">'+(r.fam?'<span class="fam big">La recette de '+r.fam+'</span>':'')+
-        (r.chef?'<p class="byline">Recette du chef · carnet de stage</p>':(r.by?'<p class="byline">Recette partagée par '+r.by+'</p>':''))+'</div>':'')+
+      '<div class="fhead-by">'+(r.fam?'<span class="fam big">La recette de '+r.fam+'</span>':'')+
+        '<p class="byline">'+creditOf(r)+'</p></div>'+
       '<p class="f-sum">'+r.sum+'</p>'+
     '</div>'+
     '<figure class="f-fig"><div class="hero-photo">'+frame(photoFor(r),'<div class="ghost"></div>',r.n,null,true)+'</div>'+
