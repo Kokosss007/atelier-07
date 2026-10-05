@@ -350,33 +350,45 @@ button.ar-btn:focus-visible{outline-offset:-1px}
 
 /* carte des adresses : MapLibre GL, chargée seulement sur cette page. Toujours sombre, comme la DA. */
 .adr-map{margin-top:var(--sp-12)}
-.adr-map-canvas{position:relative;height:clamp(300px,calc((100vw - 2 * var(--pad)) * .52),680px);   /* le rapport garde la vue entre 81° N et 56° S : jamais d'Antarctique */
-  background:#1A1412;border:1px solid var(--rule2);overflow:hidden}
-@media(max-width:699px){.adr-map-canvas{height:200px}}   /* téléphone : le monde entier tient dans la largeur, sans l'Antarctique */
+.adr-map-canvas{--f:40px;position:relative;height:clamp(300px,calc((100vw - 2 * var(--pad)) * .52),680px);   /* le rapport garde la vue entre 81° N et 56° S : jamais d'Antarctique */
+  overflow:hidden}
+@media(max-width:699px){.adr-map-canvas{--f:24px;height:200px}}   /* téléphone : le monde entier tient dans la largeur, sans l'Antarctique */
+/* ni cadre ni boîte : la carte s'estompe sur ses quatre bords et se fond dans la page */
+.adr-map-canvas::before{content:"";position:absolute;inset:0;background:#120F0E}
+.adr-map-canvas .maplibregl-canvas-container{position:absolute;inset:0}   /* sans cela il mesure 0 de haut et le masque ne couvre rien */
+.adr-map-canvas::before,.adr-map-canvas .maplibregl-canvas-container{
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent),linear-gradient(to bottom,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent),linear-gradient(to bottom,transparent,#000 var(--f),#000 calc(100% - var(--f)),transparent);
+  mask-composite:intersect}
 .adr-map-msg{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:var(--sp-6);text-align:center;
   font:400 .75rem/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(250,246,240,.6);pointer-events:none}
 .adr-map-fig{margin:var(--sp-3) 0 0}
-.adr-map .maplibregl-ctrl-group{background:transparent;border:1px solid rgba(250,246,240,.36);border-radius:0;box-shadow:none}
-.adr-map .maplibregl-ctrl-group button{width:44px;height:44px;border-radius:0;background:transparent;color:rgba(250,246,240,.86);transition:background var(--m150) var(--out),color var(--m150) var(--out)}
-.adr-map .maplibregl-ctrl-group button+button{border-top:1px solid rgba(250,246,240,.36)}
-.adr-map .maplibregl-ctrl-group button:hover,.adr-map .maplibregl-ctrl-group button:focus-visible{background:rgba(250,246,240,.08);color:#FAF6F0}
-.adr-map .maplibregl-ctrl-group button:focus-visible{outline:1px solid rgba(250,246,240,.7);outline-offset:-3px}
-.adr-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon{background-image:none!important;filter:none;opacity:1;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
-.adr-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon::before{display:block;font:400 22px/1 "IBM Plex Mono",ui-monospace,Menlo,monospace}
-.adr-map .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon::before{content:"+"}
-.adr-map .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon::before{content:"\2212"}
-.adr-map .maplibregl-ctrl.maplibregl-ctrl-attrib,.adr-map .maplibregl-ctrl-attrib.maplibregl-compact{background:rgba(18,15,14,.82);border-radius:0;font:400 10px/1.6 var(--mono);color:rgba(250,246,240,.66)}
-.adr-map .maplibregl-ctrl-attrib a,.adr-map .maplibregl-ctrl-attrib.maplibregl-compact a{color:rgba(250,246,240,.82)}
-.adr-map .maplibregl-ctrl-attrib.maplibregl-compact-show{padding:2px 28px 2px 8px}
-.adr-map .maplibregl-ctrl-attrib-button{filter:invert(1);background-color:transparent}
-.adr-map .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-button:focus-visible{outline:1px solid rgba(250,246,240,.7)}
+/* zoom : deux boutons ronds discrets, rentrés dans la zone nette de la carte */
+.adr-map .maplibregl-ctrl-top-right{top:var(--f);right:var(--f)}
+.adr-map .maplibregl-ctrl-top-right .maplibregl-ctrl{margin:0}
+.adr-map .maplibregl-ctrl-group,.adr-map .maplibregl-ctrl-group:not(:empty){display:flex;flex-direction:column;gap:var(--sp-2);background:transparent;border:0;border-radius:0;box-shadow:none}
+.adr-map .maplibregl-ctrl-group button{width:44px;height:44px;border-radius:50%;background-color:transparent;border:1px solid rgba(250,246,240,.3);opacity:.5;transition:opacity var(--m150) var(--out),border-color var(--m150) var(--out)}
+.adr-map .maplibregl-ctrl-group button+button{border-top:1px solid rgba(250,246,240,.3)}
+.adr-map .maplibregl-ctrl-group button:not(:disabled):hover,.adr-map .maplibregl-ctrl-group button:focus-visible{background-color:transparent;opacity:1;border-color:rgba(250,246,240,.6)}
+.adr-map .maplibregl-ctrl-group button:focus-visible{outline:1px solid rgba(250,246,240,.7);outline-offset:2px}
+.adr-map .maplibregl-ctrl-group button:disabled{opacity:.22}
+.adr-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon{background-repeat:no-repeat;background-position:center;background-size:14px 14px;filter:none;opacity:1}
+.adr-map .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23FAF6F0' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
+.adr-map .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23FAF6F0' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
+/* crédits : petits, en bas à droite, couleur du texte secondaire (celle du carnet Boire : la carte reste sombre) */
+.adr-map .maplibregl-ctrl-bottom-right{bottom:var(--f);right:var(--f)}
+.adr-map .maplibregl-ctrl.maplibregl-ctrl-attrib{margin:0;padding:0;background:transparent;border-radius:0;box-shadow:none;font:400 9px/1.5 var(--mono);letter-spacing:.04em;text-align:right;color:#A89A8B}
+.adr-map .maplibregl-ctrl-attrib a{color:inherit;text-decoration:none}
+.adr-map .maplibregl-ctrl-attrib a:hover,.adr-map .maplibregl-ctrl-attrib a:focus-visible{text-decoration:underline}
 .adr-map .maplibregl-cooperative-gesture-screen{font:400 .8125rem/1.4 var(--mono);letter-spacing:.06em}
 .adr-pop .maplibregl-popup-content{padding:var(--sp-3) var(--sp-4);background:#120F0E;border:1px solid rgba(250,246,240,.28);border-radius:0;box-shadow:none;color:#FAF6F0}
 .adr-pop .maplibregl-popup-tip{display:none}
 .adr-pop .pn{display:block;font:400 1.125rem/1.2 var(--serif)}
 .adr-pop .pt{display:block;margin-top:var(--sp-1);font:400 .6875rem/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#C8915E}
 body.manger .adr-pop .pt{color:#D2694B}
-.adr-map .maplibregl-canvas:focus-visible,.adr-map .maplibregl-canvas-container:focus-visible{outline:1px solid rgba(250,246,240,.7);outline-offset:-3px}
+.adr-map .maplibregl-canvas:focus-visible,.adr-map .maplibregl-canvas-container:focus-visible{outline:0}
+.adr-map-canvas:has(.maplibregl-canvas:focus-visible)::after{content:"";position:absolute;inset:var(--f);outline:1px solid rgba(250,246,240,.7);pointer-events:none}
 @media(min-width:900px){
   .adr-ville{grid-template-columns:3fr 9fr;gap:var(--sp-6)}
   .adr-ville .vh{flex-direction:column;gap:var(--sp-2);position:sticky;top:calc(var(--bar) + 72px);align-self:start}
@@ -3851,11 +3863,11 @@ function adrRgba(hex,a){ var n=parseInt(hex.slice(1),16); return "rgba("+(n>>16&
 function adrMapTheme(){
   if(!adrMap||adrMapSt!=="ready") return;
   var c=adrAcc();
-  adrMap.setPaintProperty("adr-halo","circle-color",adrRgba(c,.16));
+  adrMap.setPaintProperty("adr-halo","circle-color",adrRgba(c,.3));
+  adrMap.setPaintProperty("adr-cluster-halo","circle-color",adrRgba(c,.22));
   adrMap.setPaintProperty("adr-cluster","circle-stroke-color",c);
   adrMap.setPaintProperty("adr-count","text-color",c);
   adrMap.setPaintProperty("adr-pt","circle-color",c);
-  adrMap.setPaintProperty("pays-tint","fill-color",adrRgba(c,.17));
 }
 document.addEventListener("carnetchange",adrMapTheme);
 var MAPLIBRE="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/";
@@ -3894,8 +3906,7 @@ function adrMapInit(){
   adrMapWatch.observe(box);
 }
 function adrStyle(base){
-  var LAND="#241B18", SEA="#120F0E", CR="250,246,240", ACC=adrAcc();   /* terres un cran plus claires que l'eau */
-  var nm=["coalesce",["get","name:fr"],["get","name:latin"],["get","name"]];
+  var LAND="#241B18", SEA="#120F0E", CR="250,246,240", ACC=adrAcc();   /* terre : un seul brun très sombre ; océan : presque noir */
   var cream=function(a){ return "rgba("+CR+","+a+")"; };
   var is=function(k,vals){ return ["match",["get",k],vals,true,false]; };
   var road=function(id,classes,minz,alpha,w0,w1,z0,z1){
@@ -3903,52 +3914,28 @@ function adrStyle(base){
       layout:{"line-cap":"round","line-join":"round"},
       paint:{"line-color":cream(alpha),"line-width":["interpolate",["linear"],["zoom"],z0,w0,z1,w1]}};
   };
-  var txt=function(id,layer,filter,o){
-    return {id:id,type:"symbol",source:"om","source-layer":layer,minzoom:o.min||0,maxzoom:o.max||24,filter:filter,
-      layout:{"text-field":nm,"text-font":[o.font||"IBM Plex Mono Regular"],"text-size":o.size,
-        "text-transform":o.up?"uppercase":"none","text-letter-spacing":o.ls||0,"text-max-width":o.mw||7,
-        "symbol-placement":o.line?"line":"point","symbol-sort-key":["coalesce",["get","rank"],99]},
-      paint:{"text-color":cream(o.a),"text-halo-color":o.halo||LAND,"text-halo-width":1.2}};
-  };
   var Z=function(a,b,c,d,e,f){ return ["interpolate",["linear"],["zoom"],a,b,c,d,e,f]; };
   var layers=[
     {id:"terre",type:"background",paint:{"background-color":LAND}},
-    /* pays où j'ai des adresses : fond teinté de l'accent du carnet (s'efface en zoomant : les contours sont simplifiés) */
-    {id:"pays-tint",type:"fill",source:"pays",filter:["in",["get","n"],["literal",adrPaysListe()]],
-      paint:{"fill-color":adrRgba(ACC,.17),"fill-opacity":["interpolate",["linear"],["zoom"],0,1,5,1,8,0]}},
-    {id:"parc",type:"fill",source:"om","source-layer":"park",minzoom:5,paint:{"fill-color":"#2A201C"}},
     {id:"eau",type:"fill",source:"om","source-layer":"water",paint:{"fill-color":SEA}},
-    /* quadrillage d'atlas, presque invisible */
-    {id:"quadrillage",type:"line",source:"quadrillage",paint:{"line-color":cream(.07),"line-width":.4}},
-    /* côtes : un peu plus marquées que les frontières */
-    {id:"rivage",type:"line",source:"om","source-layer":"water",paint:{"line-color":cream(.5),"line-width":Z(0,.5,6,.7,12,1,16,1.1)}},
     {id:"cours-eau",type:"line",source:"om","source-layer":"waterway",minzoom:8,paint:{"line-color":SEA,"line-width":Z(8,.6,14,2.2,18,6)}},
     {id:"batiments",type:"fill",source:"om","source-layer":"building",minzoom:15,paint:{"fill-color":"#211A16"}},
     road("rues-petites",["minor","service","track","path"],13,.1,.3,.8,13,17),
     road("rues-tertiaires",["tertiary","secondary"],11,.14,.3,1,11,16),
     road("rues-principales",["primary","trunk"],9,.18,.4,1.2,9,16),
     road("autoroutes",["motorway"],7,.24,.4,1.4,7,16),
-    {id:"frontiere-region",type:"line",source:"om","source-layer":"boundary",minzoom:4,
-      filter:["all",["==",["get","admin_level"],4],["==",["get","maritime"],0]],
-      paint:{"line-color":cream(.16),"line-width":.5,"line-dasharray":[3,3]}},
+    /* frontières quasi invisibles */
     {id:"frontiere-pays",type:"line",source:"om","source-layer":"boundary",
       filter:["all",["==",["get","admin_level"],2],["==",["get","maritime"],0]],
-      paint:{"line-color":cream(.35),"line-width":Z(0,.5,6,.8,10,1.1,14,1.2)}},
+      paint:{"line-color":cream(.06),"line-width":.5}},
+    /* halo doux : un cercle flou autour des points et des clusters */
     {id:"adr-halo",type:"circle",source:"adresses",filter:["!",["has","point_count"]],
-      paint:{"circle-radius":11,"circle-color":adrRgba(ACC,.16)}},
+      paint:{"circle-radius":17,"circle-blur":1,"circle-color":adrRgba(ACC,.3)}},
+    {id:"adr-cluster-halo",type:"circle",source:"adresses",filter:["has","point_count"],
+      paint:{"circle-radius":["step",["get","point_count"],28,8,32,25,38],"circle-blur":1,"circle-color":adrRgba(ACC,.22)}},
     {id:"adr-cluster",type:"circle",source:"adresses",filter:["has","point_count"],
       paint:{"circle-radius":["step",["get","point_count"],15,8,19,25,25],"circle-color":"rgba(18,15,14,.3)",
         "circle-stroke-color":ACC,"circle-stroke-width":1.25}},
-    {id:"nom-oceans",type:"symbol",source:"oceans",maxzoom:7,
-      layout:{"text-field":["get","n"],"text-font":["IBM Plex Mono Italic"],"text-size":11,"text-letter-spacing":.2,"text-max-width":14},
-      paint:{"text-color":cream(.3),"text-halo-color":SEA,"text-halo-width":1.2}},
-    txt("nom-rues","transportation_name",["has","name"],{size:9.5,a:.34,min:15,line:true,ls:.04}),
-    txt("nom-quartiers","place",is("class",["suburb","quarter","neighbourhood"]),{size:Z(12,9,16,11,17,12),a:.4,up:true,ls:.14,min:12,mw:9}),
-    txt("nom-villages","place",is("class",["village","hamlet"]),{size:Z(10,10,15,12,16,13),a:.5,min:10}),
-    txt("nom-villes-moyennes","place",["==",["get","class"],"town"],{size:Z(8,10,12,13,16,14),a:.58,min:8}),
-    txt("nom-villes","place",["==",["get","class"],"city"],{size:Z(3,10,8,13,12,16),a:.7,min:3}),
-    txt("nom-regions","place",is("class",["state","province"]),{size:Z(5,9,8,10,9,11),a:.36,up:true,ls:.22,min:5,max:9,mw:9}),
-    txt("nom-pays","place",["==",["get","class"],"country"],{size:Z(0,8.5,5,9.5,8,10.5),a:.55,up:true,ls:.14,min:0,max:10,mw:7}),
     {id:"adr-count",type:"symbol",source:"adresses",filter:["has","point_count"],
       layout:{"text-field":["get","point_count_abbreviated"],"text-font":["IBM Plex Mono Medium"],"text-size":12,"text-allow-overlap":true,"text-ignore-placement":false},
       paint:{"text-color":ACC}},
@@ -3961,31 +3948,8 @@ function adrStyle(base){
     sources:{
       om:{type:"vector",url:"https://tiles.openfreemap.org/planet",
         attribution:'<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> Données <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'},
-      adresses:{type:"geojson",data:adrGeo(),cluster:true,clusterRadius:46,clusterMaxZoom:12},
-      pays:{type:"geojson",data:base+"carte/pays.geojson"},
-      quadrillage:{type:"geojson",data:adrQuadrillage()},
-      oceans:{type:"geojson",data:adrOceans()}
+      adresses:{type:"geojson",data:adrGeo(),cluster:true,clusterRadius:46,clusterMaxZoom:12}
     },layers:layers};
-}
-/* pays où il y a au moins une adresse placée (noms français, comme dans le CSV) */
-function adrPaysListe(){
-  var l=[]; ADRESSES.forEach(function(a){ if(adrPos(a)&&l.indexOf(a.p)<0) l.push(a.p); }); return l;
-}
-function adrMapPays(){
-  if(!adrMap||adrMapSt!=="ready") return;
-  adrMap.setFilter("pays-tint",["in",["get","n"],["literal",adrPaysListe()]]);
-}
-/* les cinq océans (les tuiles n'en donnent que deux) */
-function adrOceans(){
-  var o=[["Océan Pacifique",-124,-14],["Océan Atlantique",-30,22],["Océan Indien",78,-17],["Océan Arctique",92,78],["Océan Austral",60,-52]];
-  return {type:"FeatureCollection",features:o.map(function(x){ return {type:"Feature",properties:{n:x[0]},geometry:{type:"Point",coordinates:[x[1],x[2]]}}; })};
-}
-/* quadrillage de latitudes et de longitudes tous les 10° */
-function adrQuadrillage(){
-  var f=[], i;
-  for(i=-60;i<=80;i+=10) f.push({type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[[-180,i],[0,i],[180,i]]}});
-  for(i=-180;i<=180;i+=10) f.push({type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[[i,-60],[i,0],[i,80]]}});
-  return {type:"FeatureCollection",features:f};
 }
 function adrGeo(){
   ADRESSES.forEach(function(a,i){ a._i=i; });
@@ -4042,7 +4006,7 @@ function adrMapBuild(){
   }catch(e){ console.error("Carte des adresses :",e); adrMapSt="erreur"; adrMapMsg("La carte n'a pas pu se charger. La liste ci-dessous reste complète."); return; }
   adrMap.touchZoomRotate.disableRotation();
   adrMap.addControl(new maplibregl.NavigationControl({showCompass:false}),"top-right");
-  adrMap.addControl(new maplibregl.AttributionControl({compact:true}),"bottom-right");
+  adrMap.addControl(new maplibregl.AttributionControl({compact:false}),"bottom-right");
   var slow=setTimeout(function(){ if(adrMapSt!=="ready"){ adrMapMsg("La carte met du temps à charger. La liste ci-dessous reste complète."); } },12000);
   adrMap.on("load",function(){
     clearTimeout(slow); adrMapSt="ready"; adrMapMsg("");
@@ -4109,7 +4073,7 @@ function adrMapSelect(a,src){
     }
     if(out.length){
       ADRESSES=out; adrLit=null; adrRender();
-      if(adrMap&&adrMapSt==="ready"){ adrMap.getSource("adresses").setData(adrGeo()); adrMapPays(); adrMapSelect(null); adrMapFit(false); }
+      if(adrMap&&adrMapSt==="ready"){ adrMap.getSource("adresses").setData(adrGeo()); adrMapSelect(null); adrMapFit(false); }
     }
   }).catch(function(){});
 })();
