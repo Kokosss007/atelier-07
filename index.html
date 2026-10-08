@@ -100,8 +100,26 @@ header.hero{position:sticky;top:0;z-index:40;background:var(--bg);margin:0 calc(
 .coords{display:none;font:400 .75rem/1 var(--mono);letter-spacing:.14em;color:var(--mute);white-space:nowrap}
 .share{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:44px;min-width:44px;padding:0;background:none;border:0;cursor:pointer;
   font:400 .75rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);transition:color var(--m150) var(--out)}
-.share:hover{color:var(--ink)}
-.share .ico{width:14px;height:14px}
+.share:hover,.share:focus-visible,.share[aria-expanded="true"]{color:var(--ink)}
+.share .ico,.share .ri{width:14px;height:14px}
+/* icônes Reicon : un seul style, en trait fin, couleur du texte */
+.ri{width:16px;height:16px;flex:0 0 16px;display:inline-block;vertical-align:-3px;fill:none;stroke:none;color:inherit;pointer-events:none}
+.sl{display:inline-flex;align-items:center;gap:var(--sp-2);font-style:normal}
+.spec .ri{margin-right:var(--sp-2)}
+.rw-d .ri{width:12px;height:12px;flex-basis:12px;margin-right:var(--sp-1);vertical-align:-2px}
+/* menu Partager */
+.share-wrap{position:relative;display:flex}
+.share-menu{position:absolute;top:calc(100% + var(--sp-2));right:0;z-index:60;width:max-content;min-width:220px;max-width:calc(100vw - 2 * var(--pad));margin:0;padding:var(--sp-1) 0;list-style:none;
+  background:var(--bg);border:1px solid var(--rule2);animation:shIn var(--m150) var(--out)}
+.share-menu[hidden]{display:none}
+@keyframes shIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.share-menu button{display:flex;align-items:center;gap:var(--sp-3);width:100%;min-height:44px;padding:0 var(--sp-4);background:none;border:0;cursor:pointer;text-align:left;
+  font:400 .75rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);transition:color var(--m150) var(--out)}
+.share-menu .ri{color:var(--mute);transition:color var(--m150) var(--out)}
+.share-menu button:hover,.share-menu button:focus-visible{color:var(--ink)}
+.share-menu button:hover .ri,.share-menu button:focus-visible .ri{color:var(--acc)}
+.share-menu button:focus-visible{outline:1px solid var(--acc);outline-offset:-3px}
+.share-menu li+li{border-top:1px solid var(--rule)}
 .menu-b{width:44px;height:44px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:6px;
   background:none;border:0;padding:0;cursor:pointer}
 .menu-b span{display:block;width:22px;height:1px;background:var(--ink);transition:transform var(--m200) var(--out),opacity var(--m150) var(--out)}
@@ -602,6 +620,12 @@ html[data-news="compact"] .news .nmsg:empty{display:none}
 .foot ul{list-style:none;margin:0;padding:0}
 .foot ul:not(.contact) a{display:inline-flex;align-items:center;min-height:44px;font-size:.9375rem;color:var(--ink2);text-decoration:none;transition:color var(--m150) var(--out)}
 .foot ul:not(.contact) a:hover{color:var(--ink)}
+.foot .soc{display:flex;gap:0;margin:var(--sp-6) 0 0 -14px;padding:0;list-style:none}   /* -14 px : le trait de l'icône s'aligne sur le texte au-dessus */
+.foot .soc .soc-b{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;background:none;border:0;cursor:pointer;color:var(--mute);text-decoration:none;transition:color var(--m150) var(--out)}
+.foot .soc .soc-b:hover,.foot .soc .soc-b:focus-visible{color:var(--acc)}
+.foot .soc .soc-b:focus-visible{outline:1px solid var(--acc);outline-offset:-4px}
+.copy a{color:inherit;text-decoration:underline;text-decoration-color:var(--rule2);text-underline-offset:4px}
+.copy a:hover,.copy a:focus-visible{color:var(--ink)}
 .foot .contact{margin-top:var(--sp-6)}
 .foot .contact li{display:flex;align-items:center;gap:var(--sp-3);min-height:44px}
 .foot .contact .ci{display:flex;color:var(--mute)}
@@ -984,6 +1008,25 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
  if(c==="manger") document.body.classList.add("manger");
  document.body.setAttribute("data-page",(c==="manger"&&pg==="accueil")?"manger":pg);})();
 </script>
+<!-- Icônes : un seul style, en trait fin (1,5 px), couleur du texte (currentColor).
+     Reicon, © REICON, licence MIT, https://github.com/dqev/reicon (ses icônes de base reprennent Solar Icons, 480 Design, CC BY 4.0).
+     WhatsApp, Messenger, Facebook : Tabler Icons, © Paweł Kuna, licence MIT (Reicon n'a pas ces logos en trait fin).
+     Textes des licences : licences-icones.txt. Usage : <svg class="ri" aria-hidden="true"><use href="#ri-nom"/></svg> -->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+<symbol id="ri-instagram" viewBox="0 0 24 24"><g fill="none"><path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 15.5C13.933 15.5 15.5 13.933 15.5 12C15.5 10.067 13.933 8.5 12 8.5C10.067 8.5 8.5 10.067 8.5 12C8.5 13.933 10.067 15.5 12 15.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.6361 7H17.6477" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
+<symbol id="ri-partage" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 2.25C14.7051 2.25 13.25 3.70507 13.25 5.5C13.25 5.69591 13.2673 5.88776 13.3006 6.07412L8.56991 9.38558C8.54587 9.4024 8.52312 9.42038 8.50168 9.43939C7.94993 9.00747 7.25503 8.75 6.5 8.75C4.70507 8.75 3.25 10.2051 3.25 12C3.25 13.7949 4.70507 15.25 6.5 15.25C7.25503 15.25 7.94993 14.9925 8.50168 14.5606C8.52312 14.5796 8.54587 14.5976 8.56991 14.6144L13.3006 17.9259C13.2673 18.1122 13.25 18.3041 13.25 18.5C13.25 20.2949 14.7051 21.75 16.5 21.75C18.2949 21.75 19.75 20.2949 19.75 18.5C19.75 16.7051 18.2949 15.25 16.5 15.25C15.4472 15.25 14.5113 15.7506 13.9174 16.5267L9.43806 13.3911C9.63809 12.9694 9.75 12.4978 9.75 12C9.75 11.5022 9.63809 11.0306 9.43806 10.6089L13.9174 7.4733C14.5113 8.24942 15.4472 8.75 16.5 8.75C18.2949 8.75 19.75 7.29493 19.75 5.5C19.75 3.70507 18.2949 2.25 16.5 2.25ZM14.75 5.5C14.75 4.5335 15.5335 3.75 16.5 3.75C17.4665 3.75 18.25 4.5335 18.25 5.5C18.25 6.4665 17.4665 7.25 16.5 7.25C15.5335 7.25 14.75 6.4665 14.75 5.5ZM6.5 10.25C5.5335 10.25 4.75 11.0335 4.75 12C4.75 12.9665 5.5335 13.75 6.5 13.75C7.4665 13.75 8.25 12.9665 8.25 12C8.25 11.0335 7.4665 10.25 6.5 10.25ZM16.5 16.75C15.5335 16.75 14.75 17.5335 14.75 18.5C14.75 19.4665 15.5335 20.25 16.5 20.25C17.4665 20.25 18.25 19.4665 18.25 18.5C18.25 17.5335 17.4665 16.75 16.5 16.75Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-lien" viewBox="0 0 24 24"><g fill="none"><path d="M14.99 17.5H16.5C19.52 17.5 22 15.03 22 12C22 8.98 19.53 6.5 16.5 6.5H14.99" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 6.5H7.5C4.47 6.5 2 8.97 2 12C2 15.02 4.47 17.5 7.5 17.5H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
+<symbol id="ri-mail" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.94358 3.25H14.0564C15.8942 3.24998 17.3498 3.24997 18.489 3.40314C19.6614 3.56076 20.6104 3.89288 21.3588 4.64124C22.1071 5.38961 22.4392 6.33856 22.5969 7.51098C22.75 8.65019 22.75 10.1058 22.75 11.9436V12.0564C22.75 13.8942 22.75 15.3498 22.5969 16.489C22.4392 17.6614 22.1071 18.6104 21.3588 19.3588C20.6104 20.1071 19.6614 20.4392 18.489 20.5969C17.3498 20.75 15.8942 20.75 14.0564 20.75H9.94359C8.10583 20.75 6.65019 20.75 5.51098 20.5969C4.33856 20.4392 3.38961 20.1071 2.64124 19.3588C1.89288 18.6104 1.56076 17.6614 1.40314 16.489C1.24997 15.3498 1.24998 13.8942 1.25 12.0564V11.9436C1.24998 10.1058 1.24997 8.65019 1.40314 7.51098C1.56076 6.33856 1.89288 5.38961 2.64124 4.64124C3.38961 3.89288 4.33856 3.56076 5.51098 3.40314C6.65019 3.24997 8.10582 3.24998 9.94358 3.25ZM5.71085 4.88976C4.70476 5.02502 4.12511 5.27869 3.7019 5.7019C3.27869 6.12511 3.02502 6.70476 2.88976 7.71085C2.75159 8.73851 2.75 10.0932 2.75 12C2.75 13.9068 2.75159 15.2615 2.88976 16.2892C3.02502 17.2952 3.27869 17.8749 3.7019 18.2981C4.12511 18.7213 4.70476 18.975 5.71085 19.1102C6.73851 19.2484 8.09318 19.25 10 19.25H14C15.9068 19.25 17.2615 19.2484 18.2892 19.1102C19.2952 18.975 19.8749 18.7213 20.2981 18.2981C20.7213 17.8749 20.975 17.2952 21.1102 16.2892C21.2484 15.2615 21.25 13.9068 21.25 12C21.25 10.0932 21.2484 8.73851 21.1102 7.71085C20.975 6.70476 20.7213 6.12511 20.2981 5.7019C19.8749 5.27869 19.2952 5.02502 18.2892 4.88976C17.2615 4.75159 15.9068 4.75 14 4.75H10C8.09318 4.75 6.73851 4.75159 5.71085 4.88976ZM5.42383 7.51986C5.68901 7.20165 6.16193 7.15866 6.48014 7.42383L8.63903 9.22291C9.57199 10.0004 10.2197 10.5384 10.7666 10.8901C11.2959 11.2306 11.6549 11.3449 12 11.3449C12.3451 11.3449 12.7041 11.2306 13.2334 10.8901C13.7803 10.5384 14.428 10.0004 15.361 9.22291L17.5199 7.42383C17.8381 7.15866 18.311 7.20165 18.5762 7.51986C18.8413 7.83807 18.7983 8.31099 18.4801 8.57617L16.2836 10.4066C15.3973 11.1452 14.6789 11.7439 14.0448 12.1517C13.3843 12.5765 12.7411 12.8449 12 12.8449C11.2589 12.8449 10.6157 12.5765 9.95518 12.1517C9.32112 11.7439 8.60272 11.1452 7.71636 10.4066L5.51986 8.57617C5.20165 8.31099 5.15866 7.83807 5.42383 7.51986Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-duree" viewBox="0 0 24 24"><g fill="currentColor"><g clip-path="url(#clip0_17007_17133)"> <path d="M12.75 6C12.75 5.58579 12.4142 5.25 12 5.25C11.5858 5.25 11.25 5.58579 11.25 6V12C11.25 12.2586 11.3832 12.4989 11.6025 12.636L15.6025 15.136C15.9538 15.3555 16.4165 15.2488 16.636 14.8975C16.8555 14.5462 16.7488 14.0835 16.3975 13.864L12.75 11.5843V6Z" fill="currentColor"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0.25C5.51065 0.25 0.25 5.51065 0.25 12C0.25 18.4893 5.51065 23.75 12 23.75C18.4893 23.75 23.75 18.4893 23.75 12C23.75 5.51065 18.4893 0.25 12 0.25ZM1.75 12C1.75 6.33908 6.33908 1.75 12 1.75C17.6609 1.75 22.25 6.33908 22.25 12C22.25 17.6609 17.6609 22.25 12 22.25C6.33908 22.25 1.75 17.6609 1.75 12Z" fill="currentColor"/> </g> <defs> <clipPath id="clip0_17007_17133"> <rect width="24" height="24" fill="currentColor"/> </clipPath> </defs></g></symbol>
+<symbol id="ri-volume" viewBox="0 0 24 24"><g fill="currentColor"><path d="M11.7006 6.9571C12.0766 6.78324 12.2404 6.33752 12.0665 5.96157C11.8927 5.58561 11.447 5.42177 11.071 5.59563C9.1061 6.50429 7.59171 8.31108 6.89971 10.4974C6.77471 10.8923 6.99352 11.3138 7.38843 11.4388C7.78333 11.5638 8.20479 11.345 8.32978 10.9501C8.9073 9.12545 10.1551 7.67181 11.7006 6.9571Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.3856 1.72865C12.8568 1.09045 11.1432 1.09045 9.61438 1.72865C5.15333 3.59087 2.25 8.02164 2.25 12.9281V13.1928C2.25 18.4551 6.42548 22.75 11.6115 22.75H12.3885C17.5745 22.75 21.75 18.4551 21.75 13.1928V12.9281C21.75 8.02164 18.8467 3.59087 14.3856 1.72865ZM10.1922 3.11289C11.3513 2.62904 12.6487 2.62904 13.8078 3.11289C17.6962 4.73608 20.25 8.61139 20.25 12.9281V13.1928C20.25 17.6587 16.7145 21.25 12.3885 21.25H11.6115C7.2855 21.25 3.75 17.6587 3.75 13.1928V12.9281C3.75 8.61139 6.30376 4.73608 10.1922 3.11289Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-epices" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.2195 1.64611C10.7841 1.38221 11.3919 1.25 12 1.25C12.6081 1.25 13.2159 1.38221 13.7805 1.64611C15.9556 2.66278 17.6944 4.56688 18.8844 6.75814C20.076 8.95209 20.75 11.4916 20.75 13.8567C20.75 18.7557 16.845 22.75 12 22.75C7.15501 22.75 3.25 18.7557 3.25 13.8567C3.25 11.4916 3.92403 8.95209 5.11556 6.75814C6.30562 4.56688 8.04437 2.66278 10.2195 1.64611ZM11.25 2.85638C11.1157 2.89525 10.9835 2.94478 10.8546 3.005C9.04602 3.85036 7.51624 5.48075 6.4337 7.47402C5.35263 9.46459 4.75 11.7596 4.75 13.8567C4.75 17.6927 7.60821 20.8285 11.25 21.2108V2.85638ZM12.75 2.85638V7.18934L15.378 4.56137C14.6988 3.91209 13.9496 3.38092 13.1454 3.005C13.0165 2.94478 12.8843 2.89525 12.75 2.85638ZM16.3862 5.67443L12.75 9.31066V12.6893L17.7044 7.73496C17.6593 7.64743 17.6132 7.56044 17.5663 7.47402C17.2175 6.83177 16.8223 6.2272 16.3862 5.67443ZM18.3577 9.20294L12.75 14.8107V17.6893L18.9696 11.4697L19.0175 11.5176C18.8669 10.7404 18.6451 9.96116 18.3577 9.20294ZM19.2373 13.3234L12.75 19.8107V21.2108C16.3918 20.8285 19.25 17.6927 19.25 13.8567C19.25 13.6802 19.2457 13.5024 19.2373 13.3234Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-parts" viewBox="0 0 24 24"><g fill="currentColor"><path d="M12.75 3C12.75 2.58579 12.4142 2.25 12 2.25C11.5858 2.25 11.25 2.58579 11.25 3V5C11.25 5.41421 11.5858 5.75 12 5.75C12.4142 5.75 12.75 5.41421 12.75 5V3Z" fill="currentColor"/><path d="M9.0022 4.75093C9.41641 4.74972 9.75121 4.41295 9.75 3.99874C9.74879 3.58452 9.41202 3.24972 8.99781 3.25093C7.45069 3.25546 6.1973 3.28086 5.19112 3.45158C4.16313 3.626 3.31932 3.96316 2.64124 4.64124C1.89288 5.38961 1.56076 6.33856 1.40314 7.51098C1.24997 8.65019 1.24998 10.1058 1.25 11.9436V12.0564C1.24998 13.8942 1.24997 15.3498 1.40314 16.489C1.56076 17.6614 1.89288 18.6104 2.64124 19.3588C3.38961 20.1071 4.33856 20.4392 5.51098 20.5969C6.65017 20.75 8.10577 20.75 9.94348 20.75H14.0565C15.8942 20.75 17.3498 20.75 18.489 20.5969C19.6614 20.4392 20.6104 20.1071 21.3588 19.3588C22.1071 18.6104 22.4392 17.6614 22.5969 16.489C22.75 15.3498 22.75 13.8942 22.75 12.0565V11.9436C22.75 10.1059 22.75 8.65018 22.5969 7.51098C22.4392 6.33856 22.1071 5.38961 21.3588 4.64124C20.6807 3.96316 19.8369 3.626 18.8089 3.45158C17.8027 3.28086 16.5493 3.25546 15.0022 3.25093C14.588 3.24972 14.2512 3.58452 14.25 3.99874C14.2488 4.41295 14.5836 4.74972 14.9978 4.75093C16.565 4.75551 17.6943 4.7839 18.558 4.93044C19.3998 5.07329 19.9131 5.31689 20.2981 5.7019C20.7213 6.12511 20.975 6.70476 21.1102 7.71085C21.2484 8.73851 21.25 10.0932 21.25 12C21.25 13.9068 21.2484 15.2615 21.1102 16.2892C20.975 17.2952 20.7213 17.8749 20.2981 18.2981C19.8749 18.7213 19.2952 18.975 18.2892 19.1102C17.2615 19.2484 15.9068 19.25 14 19.25H10C8.09318 19.25 6.73851 19.2484 5.71085 19.1102C4.70476 18.975 4.12511 18.7213 3.7019 18.2981C3.27869 17.8749 3.02502 17.2952 2.88976 16.2892C2.75159 15.2615 2.75 13.9068 2.75 12C2.75 10.0932 2.75159 8.73851 2.88976 7.71085C3.02502 6.70476 3.27869 6.12511 3.7019 5.7019C4.08692 5.31689 4.60017 5.07329 5.44205 4.93044C6.30574 4.7839 7.435 4.75551 9.0022 4.75093Z" fill="currentColor"/><path d="M7.25 10.5C7.25 10.0858 7.58579 9.75 8 9.75H16C16.4142 9.75 16.75 10.0858 16.75 10.5C16.75 10.9142 16.4142 11.25 16 11.25H8C7.58579 11.25 7.25 10.9142 7.25 10.5Z" fill="currentColor"/><path d="M8 13.25C7.58579 13.25 7.25 13.5858 7.25 14C7.25 14.4142 7.58579 14.75 8 14.75H13.5C13.9142 14.75 14.25 14.4142 14.25 14C14.25 13.5858 13.9142 13.25 13.5 13.25H8Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-four" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25961 3.09856C9.6636 2.08774 10.9948 1.46276 12.0272 2.2492C13.7471 3.55935 15.9044 5.4855 17.6398 7.68865C19.3595 9.87197 20.75 12.4348 20.75 15C20.75 17.2933 20.0398 18.9975 19.0117 20.218C17.9933 21.4269 16.6994 22.1193 15.5816 22.4671C15.0076 22.6457 14.4825 22.3825 14.2275 21.9545C13.9871 21.5512 13.9859 21.0147 14.2863 20.583C15.1436 19.351 16.05 17.5793 16.05 16C16.05 15.2165 15.7123 14.2889 15.1668 13.3372C14.7566 12.6215 14.2539 11.9351 13.7643 11.3465C13.6627 12.7494 13.3578 14.5121 12.412 15.9696C11.9822 16.6319 11.0267 16.706 10.518 16.0627C10.3592 15.8618 10.2023 15.6412 10.0588 15.4393C10.0501 15.4271 10.0415 15.4151 10.033 15.403C9.9545 15.2927 9.87986 15.1882 9.80763 15.09C9.12187 15.773 8.48333 16.5902 8.48333 17.5C8.48333 18.3037 8.88448 19.4025 9.35898 20.3335C9.61561 20.837 9.50832 21.3951 9.1994 21.7606C8.87092 22.1492 8.27312 22.3491 7.70569 22.0206C5.76159 20.8952 3.25 18.4917 3.25 15C3.25 14.0531 3.57109 13.0736 4.0203 12.1168C4.47254 11.1536 5.0858 10.15 5.72984 9.14739C5.95297 8.80004 6.17941 8.45306 6.40546 8.10668C7.51002 6.41411 8.60528 4.73579 9.25961 3.09856ZM10.8983 3.41743C10.7958 3.45292 10.6992 3.53846 10.6525 3.65524C9.93718 5.44504 8.74008 7.27713 7.63532 8.9679C7.41569 9.30403 7.19971 9.63458 6.99189 9.95809C6.35264 10.9532 5.78547 11.8866 5.3781 12.7543C4.96769 13.6284 4.75 14.3737 4.75 15C4.75 17.2945 6.15653 19.0762 7.63307 20.1782C7.27845 19.3371 6.98333 18.367 6.98333 17.5C6.98333 15.7694 8.2827 14.4629 9.00894 13.7752C9.47929 13.3298 10.2914 13.2899 10.7647 13.874C10.9359 14.0853 11.1032 14.3197 11.2553 14.5336L11.2734 14.559C11.3161 14.619 11.3576 14.6774 11.3983 14.7342C12.0671 13.4599 12.2543 11.9056 12.3012 10.6262C12.3204 10.0998 12.6468 9.68344 13.0747 9.50935C13.5118 9.33153 14.0549 9.40987 14.4285 9.82319L13.8721 10.3261L14.4285 9.82319C15.0949 10.5604 15.8626 11.5347 16.4682 12.5913C17.0657 13.6337 17.55 14.8329 17.55 16C17.55 17.6926 16.7822 19.4101 16.0062 20.6885C16.6582 20.3692 17.3159 19.9028 17.8644 19.2516C18.6512 18.3177 19.25 16.9612 19.25 15C19.25 12.9433 18.1125 10.7131 16.4614 8.61679C14.8259 6.54033 12.7696 4.70034 11.1183 3.44243C11.0636 3.40079 10.993 3.38466 10.8983 3.41743Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-chef" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.25285 4.25547C8.09403 2.47951 9.90263 1.25 12 1.25C14.0974 1.25 15.906 2.47951 16.7471 4.25547C16.831 4.25184 16.9153 4.25 17 4.25C20.1756 4.25 22.75 6.82436 22.75 10C22.75 12.1806 21.5363 14.0762 19.75 15.0508L19.75 18.052C19.75 18.9505 19.7501 19.6997 19.6701 20.2945C19.5857 20.9223 19.4 21.4891 18.9445 21.9445C18.4891 22.4 17.9223 22.5857 17.2945 22.6701C16.6997 22.7501 15.9505 22.75 15.052 22.75H8.94801C8.04952 22.75 7.3003 22.7501 6.70552 22.6701C6.07773 22.5857 5.51093 22.4 5.05546 21.9445C4.59999 21.4891 4.41432 20.9223 4.32991 20.2945C4.24994 19.6997 4.24997 18.9505 4.25 18.052L4.25 15.0508C2.46371 14.0762 1.25 12.1806 1.25 10C1.25 6.82436 3.82436 4.25 7 4.25C7.08469 4.25 7.16899 4.25184 7.25285 4.25547ZM6.80262 5.7545C4.54704 5.85762 2.75 7.71895 2.75 10C2.75 11.7416 3.79769 13.2402 5.30028 13.8967C5.57345 14.016 5.75 14.2859 5.75 14.584V17.25H18.25L18.25 14.584C18.25 14.2859 18.4265 14.016 18.6997 13.8967C20.2023 13.2402 21.25 11.7416 21.25 10C21.25 7.71895 19.453 5.85761 17.1974 5.7545C17.2321 5.99825 17.25 6.24718 17.25 6.5V7C17.25 7.41421 16.9142 7.75 16.5 7.75C16.0858 7.75 15.75 7.41421 15.75 7V6.5C15.75 6.07715 15.6803 5.67212 15.5524 5.29486C15.0502 3.81402 13.6484 2.75 12 2.75C10.3516 2.75 8.94981 3.81402 8.44763 5.29486C8.3197 5.67212 8.25 6.07715 8.25 6.5V7C8.25 7.41421 7.91421 7.75 7.5 7.75C7.08579 7.75 6.75 7.41421 6.75 7V6.5C6.75 6.24717 6.76792 5.99825 6.80262 5.7545ZM18.2482 18.75H5.75181C5.75604 19.3194 5.77008 19.7491 5.81654 20.0946C5.87858 20.5561 5.9858 20.7536 6.11612 20.8839C6.24643 21.0142 6.44393 21.1214 6.90539 21.1835C7.38843 21.2484 8.03599 21.25 9 21.25H15C15.964 21.25 16.6116 21.2484 17.0946 21.1835C17.5561 21.1214 17.7536 21.0142 17.8839 20.8839C18.0142 20.7536 18.1214 20.5561 18.1835 20.0946C18.2299 19.7491 18.244 19.3194 18.2482 18.75Z" fill="currentColor"/></g></symbol>
+<symbol id="ri-whatsapp" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"/> <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"/></g></symbol>
+<symbol id="ri-messenger" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1"/> <path d="M8 13l3 -2l2 2l3 -2"/></g></symbol>
+<symbol id="ri-facebook" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"/></g></symbol>
+</svg>
 <a class="skip" id="skip" href="#contenu">Aller au contenu</a>
 
 <div class="wrap" id="top">
@@ -1012,7 +1055,16 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
     </nav>
     <div class="side">
       <span class="coords">MONTRÉAL · 45°30′ N</span>
-      <button class="share" id="shareBtn" type="button" aria-label="Partager le site"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span class="t">Partager</span></button>
+      <div class="share-wrap">
+        <button class="share" id="shareBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="shareMenu" aria-label="Partager cette page"><svg class="ri" aria-hidden="true"><use href="#ri-partage"/></svg><span class="t">Partager</span></button>
+        <ul class="share-menu" id="shareMenu" aria-label="Partager cette page" hidden>
+          <li><button type="button" data-share="whatsapp"><svg class="ri" aria-hidden="true"><use href="#ri-whatsapp"/></svg>WhatsApp</button></li>
+          <li><button type="button" data-share="instagram"><svg class="ri" aria-hidden="true"><use href="#ri-instagram"/></svg>Instagram</button></li>
+          <li><button type="button" data-share="messenger"><svg class="ri" aria-hidden="true"><use href="#ri-messenger"/></svg>Messenger</button></li>
+          <li><button type="button" data-share="facebook"><svg class="ri" aria-hidden="true"><use href="#ri-facebook"/></svg>Facebook</button></li>
+          <li><button type="button" data-share="copier"><svg class="ri" aria-hidden="true"><use href="#ri-lien"/></svg>Copier le lien</button></li>
+        </ul>
+      </div>
       <button class="menu-b" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainnav" aria-label="Ouvrir le menu"><span></span><span></span></button>
     </div>
   </div>
@@ -1362,9 +1414,9 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
     <p class="msg">Des boissons faites maison avec amour, à partager.</p>
     <p class="about">Un petit coin café créé pour ma famille, mes amis, et tous les bons moments autour d’un café.</p>
     <p class="about">Une idée de recette, une suggestion ou une amélioration à proposer ? Écris-moi, je serai ravi de te lire.</p>
-    <ul class="contact">
-      <li><span class="ci"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg></span><a href="mailto:corentinadxpro@gmail.com">corentinadxpro@gmail.com</a></li>
-      <li><span class="ci"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg></span><a href="https://www.instagram.com/corentinadx/" target="_blank" rel="noopener">@corentinadx</a></li>
+    <ul class="soc" aria-label="Mes réseaux">
+      <li><a class="soc-b" href="https://instagram.com/corentinadx" target="_blank" rel="noopener" aria-label="Instagram : @corentinadx" title="Instagram"><svg class="ri" aria-hidden="true"><use href="#ri-instagram"/></svg></a></li>
+      <li><button class="soc-b" type="button" data-mail aria-label="Écrire un mail" title="Mail"><svg class="ri" aria-hidden="true"><use href="#ri-mail"/></svg></button></li>
     </ul>
   </div>
   <div>
@@ -1391,6 +1443,7 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
   <div class="copy">
     <span>© 2026 L'ATELIER 07 · MONTRÉAL</span>
     <span>POUR MA FAMILLE, MES AMIS ET LES BONS MOMENTS</span>
+    <span>ICÔNES : <a href="licences-icones.txt" target="_blank" rel="noopener">REICON (MIT), SOLAR (CC BY 4.0), TABLER (MIT)</a></span>
   </div>
 </footer>
 
@@ -3074,6 +3127,13 @@ function numOf(r){ return num(isManger(r)?MANGER.indexOf(r):R.indexOf(r)); }
 function mangerAvec(r){ return (r.aManger||[]).map(function(n){return MANGER.filter(function(m){return m.n===n;})[0];}).filter(Boolean); }
 function boireAvec(r){ return (r.aBoire||[]).map(function(n){return byName(n);}).filter(Boolean); }
 function unitOf(c,k,unit){ var u=unit||(c==="douceurs"?"fournée":(c==="cocktails"||c==="softs")?"verre":"tasse"); return k>1?u+"s":u; }
+/* petite icône Reicon devant chaque info d'une recette (durée, volume, épices, parts, four) ; « chef » pour tout autre libellé */
+var SPEC_IC={"DURÉE":"duree","CUISSON":"duree","REPOS":"duree","INFUSION":"duree","CONSERVE":"duree",
+  "TASSE":"volume","VERRE":"volume","MUG":"volume","EAU":"volume","LAIT":"volume","SIROP":"volume","MIEL":"volume","CARAMEL":"volume","ALCOOL":"volume","TONIC":"volume","BULLES":"volume","MOUSSE":"volume","CRÈME":"volume","VAPEUR":"volume","GLACE":"volume","ÉRABLE":"volume",
+  "ÉPICES":"epices","PIMENT":"epices","SUCRE":"epices","CHOCOLAT":"epices","FRUIT":"epices","PÂTE":"epices","MOUTURE":"epices",
+  "RENDEMENT":"parts","QUANTITÉ":"parts","DOSE":"parts","COUCHES":"parts","SERVICE":"parts","MONTAGE":"parts",
+  "FOUR":"four"};
+function specIc(label){ return '<svg class="ri" aria-hidden="true"><use href="#ri-'+(SPEC_IC[label]||"chef")+'"/></svg>'; }
 function dureeOf(r){
   var d=r.spec.filter(function(x){return x[0]==="DURÉE";})[0];
   return d?d[1]:"";
@@ -3090,7 +3150,7 @@ function cardFor(r,pos){
     (r.note?'<span class="rw-s note">'+r.note+'</span>':'<span class="rw-s">'+r.sum+'</span>')+
     (myNote(r.n)?'<span class="mine">Ta note : '+escHTML(myNote(r.n))+'</span>':'')+'</span>'+
     '<span class="rw-c">'+(CATSHORT[r.c]||"")+'</span>'+
-    '<span class="rw-d">'+dureeOf(r)+'</span>'+
+    '<span class="rw-d">'+(dureeOf(r)?specIc("DURÉE")+dureeOf(r):"")+'</span>'+
     '<button class="fav'+(isFav(r.n)?" on":"")+'" type="button" data-fav="'+r.n+'" aria-label="'+(isFav(r.n)?"Retirer ":"Ajouter ")+r.n+(isFav(r.n)?" des favoris":" aux favoris")+'">'+
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 4.7 13.4a4.6 4.6 0 1 1 6.5-6.5l.8.8.8-.8a4.6 4.6 0 1 1 6.5 6.5Z"/></svg></button>'+
     '<span class="rw-a" aria-hidden="true">→</span>';
@@ -3387,7 +3447,7 @@ function setStar(n){
   d.textContent=r.story;
   pageTone();
   document.getElementById("vSpec").innerHTML=r.spec.map(function(x){
-    return '<span>'+x[0].charAt(0)+x[0].slice(1).toLowerCase()+'<b>'+x[1]+'</b></span>';}).join("");
+    return '<span><em class="sl">'+specIc(x[0])+x[0].charAt(0)+x[0].slice(1).toLowerCase()+'</em><b>'+x[1]+'</b></span>';}).join("");
   paintStarFav();
   Array.prototype.forEach.call(document.querySelectorAll(".thumb"),function(t){
     t.setAttribute("aria-selected", t.dataset.n===n?"true":"false");
@@ -3694,7 +3754,7 @@ function paintMgFav(){
   document.getElementById("mgVCap").textContent="Fig. 01 — "+(sea==="automne"?"L'automne est là":"De saison");
   document.getElementById("mgVCat").textContent=CATSHORT[r.c]||"";
   document.getElementById("mgVDesc").textContent=r.story||r.sum;
-  document.getElementById("mgVSpec").innerHTML=r.spec.map(function(x){return '<span>'+x[0].charAt(0)+x[0].slice(1).toLowerCase()+'<b>'+x[1]+'</b></span>';}).join("");
+  document.getElementById("mgVSpec").innerHTML=r.spec.map(function(x){return '<span><em class="sl">'+specIc(x[0])+x[0].charAt(0)+x[0].slice(1).toLowerCase()+'</em><b>'+x[1]+'</b></span>';}).join("");
   document.getElementById("mgVOpen").addEventListener("click",function(){ open(R.indexOf(r)); });
   document.getElementById("mgVFav").addEventListener("click",function(){ toggleFav(r.n); paintMgFav(); });
   paintMgFav();
@@ -4531,7 +4591,7 @@ var veil=document.getElementById("veil"), body=document.getElementById("sheetBod
 function recipeHTML(r,i,forPrint){
   var spec=r.spec.map(function(s){
     var h=HELP[s[0]];
-    return '<div><span>'+s[0]+(h?'<button type="button" class="qm" aria-label="Explication">?</button><em class="bub">'+h+'</em>':'')+'</span><b>'+s[1]+'</b></div>';
+    return '<div><span>'+specIc(s[0])+s[0]+(h?'<button type="button" class="qm" aria-label="Explication">?</button><em class="bub">'+h+'</em>':'')+'</span><b>'+s[1]+'</b></div>';
   }).join("");
   var k=(typeof portions==="number"?portions:1);
   var ing=r.ing.map(function(x){
@@ -4683,18 +4743,70 @@ document.getElementById("printOne").addEventListener("click",function(){
 window.addEventListener("afterprint",function(){zone.classList.remove("one");});
 
 /* =================== MINUTEURS =================== */
+/* =================== PARTAGER + RÉSEAUX ===================
+   Le menu partage la page en cours (adresse complète, carnet et recette compris).
+   Instagram et Messenger (ordinateur) n'ont pas d'adresse de partage pour un site : on copie le lien et on ouvre l'application. */
 (function(){
-  var btn=document.getElementById("shareBtn"), toast=document.getElementById("toast");
+  var btn=document.getElementById("shareBtn"), menu=document.getElementById("shareMenu"), toast=document.getElementById("toast");
+  if(!btn||!menu) return;
   function say(t){toast.textContent=t;toast.classList.add("on");
     setTimeout(function(){toast.classList.remove("on");},2400);}
-  btn.addEventListener("click",function(){
-    var data={title:"L'Atelier 07",text:"Carnet de recettes chaudes & glacées",url:location.href};
-    if(navigator.share){navigator.share(data).catch(function(){});return;}
-    if(navigator.clipboard){navigator.clipboard.writeText(location.href)
-      .then(function(){say("Lien copié, à partager sans modération");})
-      .catch(function(){say(location.href);});
-      return;}
-    say(location.href);
+  function copy(then){
+    var url=location.href;
+    var fin=function(ok){ then(ok); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){fin(true);},function(){fin(false);}); return; }
+    var ta=document.createElement("textarea"); ta.value=url; ta.setAttribute("readonly",""); ta.style.cssText="position:fixed;opacity:0;top:0;left:0";
+    document.body.appendChild(ta); ta.select();
+    var ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(ta); fin(ok);
+  }
+  function go(url){ window.open(url,"_blank","noopener"); }
+  var mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var ACTIONS={
+    whatsapp:function(u,t){ go("https://wa.me/?text="+encodeURIComponent(t+" "+u)); },
+    facebook:function(u){ go("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(u)); },
+    messenger:function(u){
+      var fallback=function(){ copy(function(ok){ say(ok?"Lien copié, colle-le dans Messenger":location.href); go("https://www.messenger.com/"); }); };
+      if(!mobile){ fallback(); return; }
+      location.href="fb-messenger://share/?link="+encodeURIComponent(u);
+      setTimeout(function(){ if(!document.hidden) fallback(); },1500);
+    },
+    instagram:function(){ copy(function(ok){ say(ok?"Lien copié, colle-le dans Instagram":location.href); go("https://www.instagram.com/direct/inbox/"); }); },
+    copier:function(){ copy(function(ok){ say(ok?"Lien copié, à partager sans modération":location.href); }); }
+  };
+  function items(){ return Array.prototype.slice.call(menu.querySelectorAll("button")); }
+  function close(back){
+    if(menu.hidden) return;
+    menu.hidden=true; btn.setAttribute("aria-expanded","false");
+    if(back) btn.focus();
+  }
+  function open(){
+    menu.hidden=false; btn.setAttribute("aria-expanded","true");
+    var f=items()[0]; if(f) f.focus();
+  }
+  btn.addEventListener("click",function(){ if(menu.hidden) open(); else close(true); });
+  menu.addEventListener("click",function(e){
+    var b=e.target.closest?e.target.closest("button[data-share]"):null; if(!b) return;
+    var fn=ACTIONS[b.dataset.share]; close(true);
+    if(fn) fn(location.href,document.title||"L'Atelier 07");
+  });
+  document.addEventListener("click",function(e){ if(!menu.hidden&&!e.target.closest(".share-wrap")) close(false); });
+  document.addEventListener("keydown",function(e){
+    if(menu.hidden) return;
+    if(e.key==="Escape"){ e.preventDefault(); close(true); return; }
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+      var l=items(), i=l.indexOf(document.activeElement); if(i<0) i=e.key==="ArrowDown"?-1:0;
+      e.preventDefault(); l[(i+(e.key==="ArrowDown"?1:l.length-1))%l.length].focus();
+    }
+  });
+  menu.addEventListener("focusout",function(e){ if(!e.relatedTarget||(!menu.contains(e.relatedTarget)&&e.relatedTarget!==btn)) close(false); });
+  window.addEventListener("hashchange",function(){ close(false); });
+
+  /* mail : l'adresse n'est écrite nulle part dans la page, elle est assemblée seulement au clic */
+  var mb=document.querySelector("[data-mail]");
+  if(mb) mb.addEventListener("click",function(){
+    var u=["corentinadx","pro"].join(""), d=["gmail","com"].join(".");
+    location.href="mailto:"+u+String.fromCharCode(64)+d;
   });
 })();
 
