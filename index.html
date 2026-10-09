@@ -622,10 +622,17 @@ html[data-news="compact"] .news .nmsg:empty{display:none}
 .foot ul{list-style:none;margin:0;padding:0}
 .foot ul:not(.contact) a{display:inline-flex;align-items:center;min-height:44px;font-size:.9375rem;color:var(--ink2);text-decoration:none;transition:color var(--m150) var(--out)}
 .foot ul:not(.contact) a:hover{color:var(--ink)}
-.foot .soc{display:flex;gap:0;margin:var(--sp-6) 0 0 -14px;padding:0;list-style:none}   /* -14 px : le trait de l'icône s'aligne sur le texte au-dessus */
-.foot .soc .soc-b{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;background:none;border:0;cursor:pointer;color:var(--mute);text-decoration:none;transition:color var(--m150) var(--out)}
-.foot .soc .soc-b:hover,.foot .soc .soc-b:focus-visible{color:var(--acc)}
-.foot .soc .soc-b:focus-visible{outline:1px solid var(--acc);outline-offset:-4px}
+/* « Écris-moi » : doré, souligné d'un filet fin */
+.foot .f-mail{color:var(--acc);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px;transition:color var(--m200) var(--out)}
+.foot .f-mail:hover,.foot .f-mail:focus-visible{color:var(--ink)}
+/* réseaux : étiquette en petites capitales, puis le lien en serif italique ; la flèche reste dorée */
+.foot .f-soc{display:flex;flex-wrap:wrap;gap:var(--sp-4) var(--sp-10);margin:var(--sp-8) 0 0;padding:0;list-style:none}
+.foot .f-soc .f-soc-a{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-2);min-height:44px;font-size:1rem;color:var(--ink);text-decoration:none}
+.foot .f-soc-l{font:400 .75rem/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.foot .f-soc-v{font:italic 400 1.5rem/1.2 var(--serif);color:var(--ink);transition:color var(--m200) var(--out)}
+.foot .f-soc-v i{font-style:normal;color:var(--acc)}
+.foot .f-soc .f-soc-a:hover .f-soc-v,.foot .f-soc .f-soc-a:focus-visible .f-soc-v{color:var(--acc)}
+.foot .f-soc .f-soc-a:focus-visible,.foot .f-mail:focus-visible{outline:1px solid var(--acc);outline-offset:4px}
 .copy a{color:inherit;text-decoration:underline;text-decoration-color:var(--rule2);text-underline-offset:4px}
 .copy a:hover,.copy a:focus-visible{color:var(--ink)}
 .foot .contact{margin-top:var(--sp-6)}
@@ -1413,12 +1420,12 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
   </div>
   <div class="f-cols">
   <div>
-    <p class="msg">Des boissons faites maison avec amour, à partager.</p>
-    <p class="about">Un petit coin café créé pour ma famille, mes amis, et tous les bons moments autour d’un café.</p>
-    <p class="about">Une idée de recette, une suggestion ou une amélioration à proposer ? Écris-moi, je serai ravi de te lire.</p>
-    <ul class="soc" aria-label="Mes réseaux">
-      <li><a class="soc-b" href="https://instagram.com/corentinadx" target="_blank" rel="noopener" aria-label="Instagram : @corentinadx" title="Instagram"><svg class="ri" aria-hidden="true"><use href="#ri-instagram"/></svg></a></li>
-      <li><button class="soc-b" type="button" data-mail aria-label="Écrire un mail" title="Mail"><svg class="ri" aria-hidden="true"><use href="#ri-mail"/></svg></button></li>
+    <p class="msg">Des recettes faites maison avec amour, à partager.</p>
+    <p class="about">Un petit carnet créé pour ma famille, mes amis, et tous les bons moments autour d'une table.</p>
+    <p class="about">Une idée de recette, une suggestion ? <a class="f-mail" href="mailto:" data-mail>Écris-moi</a>, je serai ravi de te lire.</p>
+    <ul class="f-soc" aria-label="Mes réseaux">
+      <li><a class="f-soc-a" href="https://instagram.com/corentinadx" target="_blank" rel="noopener"><span class="f-soc-l">Instagram</span><span class="f-soc-v">@corentinadx <i aria-hidden="true">&#8599;&#xFE0E;</i></span></a></li>
+      <li><a class="f-soc-a" href="mailto:" data-mail><span class="f-soc-l">Écrire</span><span class="f-soc-v">Par mail <i aria-hidden="true">&#8599;&#xFE0E;</i></span></a></li>
     </ul>
   </div>
   <div>
@@ -4805,10 +4812,12 @@ window.addEventListener("afterprint",function(){zone.classList.remove("one");});
   window.addEventListener("hashchange",function(){ close(false); });
 
   /* mail : l'adresse n'est écrite nulle part dans la page, elle est assemblée seulement au clic */
-  var mb=document.querySelector("[data-mail]");
-  if(mb) mb.addEventListener("click",function(){
-    var u=["corentinadx","pro"].join(""), d=["gmail","com"].join(".");
-    location.href="mailto:"+u+String.fromCharCode(64)+d;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-mail]"),function(mb){
+    mb.addEventListener("click",function(e){
+      e.preventDefault();
+      var u=["corentinadx","pro"].join(""), d=["gmail","com"].join(".");
+      location.href="mailto:"+u+String.fromCharCode(64)+d;
+    });
   });
 })();
 
