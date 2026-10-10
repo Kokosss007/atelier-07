@@ -1,7 +1,7 @@
 LICENCES DES ICÔNES DU SITE L'ATELIER 07
 ========================================
 
-1) Reicon — https://github.com/dqev/reicon (https://reicon.dev)
+1) Reicon · https://github.com/dqev/reicon (https://reicon.dev)
    Licence MIT. Les icônes de base de Reicon reprennent des éléments de Solar Icons
    (voir 3) et de Zappicon.
 
@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-2) Tabler Icons — https://github.com/tabler/tabler-icons
+2) Tabler Icons · https://github.com/tabler/tabler-icons
    Utilisé pour les logos WhatsApp, Messenger et Facebook en trait fin (absents de Reicon sous cette forme).
 
 MIT License
@@ -53,6 +53,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-3) Solar Icons — https://solar-icons.vercel.app/ (480 Design)
+3) Solar Icons · https://solar-icons.vercel.app/ (480 Design)
    Licence Creative Commons Attribution 4.0 (CC BY 4.0) : https://creativecommons.org/licenses/by/4.0/
    Créateur : 480 Design. Les icônes ont été reprises et adaptées par Reicon.
