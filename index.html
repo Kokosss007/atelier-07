@@ -58,7 +58,7 @@
   --sp-16:64px;--sp-20:80px;--sp-24:96px;--sp-32:128px;--sp-40:160px;
   --pad:24px; --bar:72px;
   --m100:100ms;--m150:150ms;--m200:200ms;--m300:300ms;
-  --out:cubic-bezier(.16,1,.3,1); --in:cubic-bezier(.7,0,.84,0);
+  --out:cubic-bezier(.16,1,.3,1); --in:cubic-bezier(.7,0,.84,0); --io:cubic-bezier(.77,0,.175,1);   /* --io : pour ce qui se déplace à l'écran */
   color-scheme:dark;
 }
 /* Second accent : olive pour les thés et tisanes. Un seul accent par écran :
@@ -148,6 +148,8 @@ header.hero{position:sticky;top:0;z-index:40;background:var(--bg);margin:0 calc(
     border-bottom:1px solid transparent;transition:color var(--m150) var(--out),border-color var(--m150) var(--out)}
   #mainnav a:hover{color:var(--ink)}
   #mainnav a.act{color:var(--ink);border-bottom-color:var(--ink)}
+  #mainnav{position:relative}
+  #mainnav.has-ind a.act{border-bottom-color:transparent}
   .menu-b{display:none}
   .coords{display:inline}
 }
@@ -253,7 +255,8 @@ body[data-page="adresses"] #p-adresses,body[data-page="favoris"] #p-favoris,body
   color:var(--mute);cursor:pointer;transition:color var(--m150) var(--out)}
 .fav:hover{color:var(--ink)}
 .fav.on{color:var(--acc)}
-.fav svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4}
+.fav svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;transition:transform 120ms var(--out)}
+.fav:active svg{transform:scale(.92)}
 .fav.on svg{fill:currentColor}
 @media(min-width:900px){
   .card{grid-template-columns:72px minmax(0,1fr) 150px 88px 44px 24px;padding:var(--sp-6) 0}
@@ -319,7 +322,8 @@ body[data-page="adresses"] #p-adresses,body[data-page="favoris"] #p-favoris,body
 @media(min-width:1100px){.ust{grid-template-columns:repeat(3,1fr)}}
 .ucard{display:flex;flex-direction:column;border-top:1px solid var(--rule);padding-top:var(--sp-4)}
 .ucard .uph{aspect-ratio:4/3;overflow:hidden;background:var(--surf)}
-.ucard .uph img{width:100%;height:100%;object-fit:cover;display:block}
+.ucard .uph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--m300) var(--out)}
+@media(hover:hover) and (pointer:fine){.ucard:hover .uph img{transform:scale(1.03)}}
 .ucard .ub{display:flex;flex-direction:column;flex:1;padding-top:var(--sp-4)}
 .ucard .where{align-self:flex-start;display:inline-flex;align-items:center;gap:var(--sp-1);min-height:44px;margin-top:auto;padding-top:var(--sp-3);
   font:400 .75rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-decoration:none;
@@ -659,17 +663,17 @@ html[data-news="compact"] .news .nmsg:empty{display:none}
 .copy{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--sp-3);padding:var(--sp-6) 0 var(--sp-12);border-top:1px solid var(--rule);
   font:400 .75rem/1.4 var(--mono);letter-spacing:.14em;color:var(--mute)}
 
-.toast{position:fixed;left:50%;bottom:var(--sp-6);z-index:90;transform:translate(-50%,8px);opacity:0;pointer-events:none;
+.toast{position:fixed;left:50%;bottom:var(--sp-6);z-index:90;transform:translate(-50%,12px);opacity:0;pointer-events:none;
   padding:var(--sp-3) var(--sp-6);background:var(--ink);color:var(--bg);font:400 .875rem/1.4 var(--sans);
-  transition:opacity var(--m200) var(--out),transform var(--m200) var(--out)}
-.toast.on{opacity:1;transform:translate(-50%,0)}
+  transition:opacity var(--m150) var(--out),transform var(--m150) var(--out)}   /* sortie : 150 ms, par le bord d'où il est venu */
+.toast.on{opacity:1;transform:translate(-50%,0);transition-duration:220ms}
 
 /* ---------- fiche recette (plein écran) ---------- */
 .veil{position:fixed;inset:0;z-index:60;display:none}
 .veil.on{display:block}
+.veil.closing{display:block;pointer-events:none}   /* le temps de la fermeture animée */
 .veil .bg{position:absolute;inset:0;background:var(--bg)}
-.sheet{position:absolute;inset:0;overflow:auto;background:var(--bg);overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
-  animation:rise var(--m300) var(--out)}
+.sheet{position:absolute;inset:0;overflow:auto;background:var(--bg);overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .sheettop{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
   min-height:var(--bar);padding:0 var(--pad);background:var(--bg);border-bottom:1px solid var(--rule)}
 .sheettop .acts{display:flex;align-items:center;gap:var(--sp-2)}
@@ -822,6 +826,13 @@ html[data-news="compact"] .news .nmsg:empty{display:none}
 .carnets button:hover{color:var(--ink)}
 .carnets button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
 .carnets .ci{width:22px;height:22px;flex:0 0 22px}
+/* filet de l'onglet actif : un seul trait qui glisse (transform), au lieu d'un filet qui saute d'un onglet à l'autre */
+.carnets{position:relative}
+.ind{position:absolute;left:0;bottom:0;width:1px;height:1px;background:var(--ink);transform-origin:0 0;transform:translateX(0) scaleX(0);opacity:0;pointer-events:none}
+.ind.on{opacity:1}
+.ind.go{transition:transform var(--m200) var(--io)}   /* activé après la mise en place : pas de glissement à l'arrivée */
+.carnets.has-ind button[aria-pressed="true"]{border-bottom-color:transparent}
+@media(max-width:1099px){#mainnav .ind{display:none}}
 /* bulle discrète au survol et au clavier */
 .carnets .tip{position:absolute;top:calc(100% + 6px);left:50%;z-index:5;padding:var(--sp-1) var(--sp-2);white-space:nowrap;pointer-events:none;
   background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font:400 .75rem/1.4 var(--mono);letter-spacing:.08em;
@@ -858,9 +869,7 @@ body.manger ::selection{background:var(--acc);color:var(--bg)}
 /* fondu du fond entre les deux carnets (opacité seulement) */
 /* changement de carnet : page qui tourne (View Transitions API)
    l'ancienne vue reste en place, la nouvelle se révèle par un balayage net, sans fondu de couleur */
-::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
-::view-transition-old(root){z-index:1}
-::view-transition-new(root){z-index:2}
+::view-transition-old(root),::view-transition-new(root){animation-duration:200ms;animation-timing-function:cubic-bezier(.16,1,.3,1)}   /* fondu enchaîné, opacité seulement */
 /* pendant le balayage, la nouvelle page arrive vide : ses blocs apparaissent ensuite en décalé */
 body.carnet-entree .page.on .blk{opacity:0}
 
@@ -933,6 +942,7 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
 @media(max-width:599px){.gs-open{margin-left:-4px}.gs-open::before{left:-2px}}
 .gs{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;background:var(--bg);color:var(--ink)}
 .gs.on{display:flex}   /* ouverte au clavier (« / ») : pas d'animation, elle doit être là tout de suite */
+.gs.closing{display:flex;pointer-events:none}   /* le temps du fondu de fermeture au clic */
 .gs-top{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);min-height:var(--bar);padding:0 var(--pad);border-bottom:1px solid var(--rule)}
 .gs-top .lbl-m{margin:0}
 .gs-x{min-height:44px;padding:0 0 0 var(--sp-3);background:none;border:0;cursor:pointer;font:400 .75rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);transition:color var(--m150) var(--out)}
@@ -992,6 +1002,8 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
   .card .rw-t,.card .rw-a,.cta .btn.solid::after,a.ar-go,.btn,.bx::after{transform:none!important}
   .share .tip,.carnets .tip,.gs-open .tip,.toast{transform:translate(-50%,0)!important}
   .menu-b span{transition:none}
+  .ind.go{transition:none}
+  .fav svg,.ucard .uph img{transform:none!important}
 }
 
 /* ---------- impression ---------- */
@@ -1073,6 +1085,7 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
       <div class="carnets" role="group" aria-label="Choisir le carnet">
         <button type="button" data-carnet="boire" aria-pressed="true" aria-label="Boire"><svg class="ci" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><use href="#ri-tasse"/></svg><span class="tip" aria-hidden="true">Boire</span></button>
         <button type="button" data-carnet="manger" aria-pressed="false" aria-label="Manger"><svg class="ci" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><use href="#ri-couvert"/></svg><span class="tip" aria-hidden="true">Manger</span></button>
+        <span class="ind" aria-hidden="true"></span>
       </div>
       <!-- ===== FIN : sélecteur Boire / Manger ===== -->
       <button type="button" class="gs-open" id="gsOpen" aria-label="Rechercher" aria-keyshortcuts="/" aria-haspopup="dialog" aria-expanded="false"><svg class="ci" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><use href="#ri-loupe"/></svg><span class="tip" aria-hidden="true">Rechercher <kbd>/</kbd></span></button>
@@ -1084,6 +1097,7 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
       <a href="#adresses" data-page="adresses">Adresses</a>
       <a href="#favoris" data-page="favoris">Favoris</a>
       <a href="#conseils" data-page="conseils">Conseils &amp; Histoire</a>
+      <span class="ind" aria-hidden="true"></span>
     </nav>
     <div class="side">
       <span class="coords">MONTRÉAL · 45°30′ N</span>
@@ -1481,7 +1495,7 @@ kbd{font:inherit;padding:0 var(--sp-1);border:1px solid var(--rule2)}
 
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="veil" id="veil" role="dialog" aria-modal="true" aria-label="Fiche recette">
   <div class="bg" data-close></div>
@@ -3286,6 +3300,11 @@ document.addEventListener("click",function(e){
 });
 
 /* =================== FAVORIS =================== */
+/* confirmation du clic : le cœur grossit de .8 à 1 en 200 ms (rien si « réduire les animations ») */
+function popFav(el){
+  if(!el||!el.animate||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+  (el.querySelector("svg")||el).animate([{transform:"scale(.8)"},{transform:"none"}],{duration:200,easing:OUT});
+}
 function toggleFav(n){
   var i=FAVS.indexOf(n);
   if(i>-1)FAVS.splice(i,1); else FAVS.push(n);
@@ -3293,7 +3312,9 @@ function toggleFav(n){
   Array.prototype.forEach.call(document.querySelectorAll('[data-fav="'+n.replace(/"/g,'')+'"]'),function(b){
     b.classList.toggle("on",isFav(n));
     b.setAttribute("aria-label",(isFav(n)?"Retirer ":"Ajouter ")+n+(isFav(n)?" des favoris":" aux favoris"));
+    if(isFav(n)) popFav(b);
   });
+  toastSay(isFav(n)?"Ajouté aux favoris":"Retiré des favoris",1800);
   renderFavs();
   if(typeof paintStarFav==="function") paintStarFav();
   if(typeof paintMgFav==="function") paintMgFav();
@@ -3502,7 +3523,7 @@ function paintStarFav(){
     box.appendChild(t);
   });
   document.getElementById("vOpen").addEventListener("click",function(){ if(starCur) open(R.indexOf(starCur)); });
-  document.getElementById("vFav").addEventListener("click",function(){ if(starCur){ toggleFav(starCur.n); paintStarFav(); } });
+  document.getElementById("vFav").addEventListener("click",function(){ if(starCur){ toggleFav(starCur.n); paintStarFav(); if(isFav(starCur.n)) popFav(this); } });
   setStar(STARS[0]);
 })();
 
@@ -3788,7 +3809,7 @@ function paintMgFav(){
   document.getElementById("mgVDesc").textContent=r.story||r.sum;
   document.getElementById("mgVSpec").innerHTML=r.spec.map(function(x){return '<span><em class="sl">'+specIc(x[0])+x[0].charAt(0)+x[0].slice(1).toLowerCase()+'</em><b>'+x[1]+'</b></span>';}).join("");
   document.getElementById("mgVOpen").addEventListener("click",function(){ open(R.indexOf(r)); });
-  document.getElementById("mgVFav").addEventListener("click",function(){ toggleFav(r.n); paintMgFav(); });
+  document.getElementById("mgVFav").addEventListener("click",function(){ toggleFav(r.n); paintMgFav(); if(isFav(r.n)) popFav(this); });
   paintMgFav();
   sec.hidden=false;
   /* la page est peut-être déjà affichée : on ajuste les titres trop larges */
@@ -3977,6 +3998,16 @@ var adrMap=null, adrMapSt="idle", adrPop=null;
 var ADR_ACC={boire:"#C8915E",manger:"#D2694B"};
 function adrAcc(){ return document.body.classList.contains("manger")?ADR_ACC.manger:ADR_ACC.boire; }
 function adrRgba(hex,a){ var n=parseInt(hex.slice(1),16); return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"; }
+/* courbe cubic-bezier(.16,1,.3,1), la même que --out, pour les mouvements de la carte */
+function adrBezier(x1,y1,x2,y2){
+  return function(t){
+    if(t<=0||t>=1) return t;
+    var lo=0,hi=1,m=.5,k;
+    for(k=0;k<24;k++){ m=(lo+hi)/2; var x=3*(1-m)*(1-m)*m*x1+3*(1-m)*m*m*x2+m*m*m; if(x<t) lo=m; else hi=m; }
+    return 3*(1-m)*(1-m)*m*y1+3*(1-m)*m*m*y2+m*m*m;
+  };
+}
+var ADR_OUT=adrBezier(.16,1,.3,1);
 function adrMapTheme(){
   if(!adrMap||adrMapSt!=="ready") return;
   var c=adrAcc();
@@ -3985,6 +4016,8 @@ function adrMapTheme(){
   adrMap.setPaintProperty("adr-cluster","circle-stroke-color",c);
   adrMap.setPaintProperty("adr-count","text-color",c);
   adrMap.setPaintProperty("nom-miennes","text-color",c);
+  adrMap.setPaintProperty("adr-hover","circle-stroke-color",c);
+  adrMap.setPaintProperty("adr-hover","circle-color",adrRgba(c,.12));
   adrMap.setPaintProperty("adr-pt","circle-color",c);
 }
 document.addEventListener("carnetchange",adrMapTheme);
@@ -4088,6 +4121,10 @@ function adrStyle(base){
     {id:"adr-count",type:"symbol",source:"adresses",filter:["has","point_count"],
       layout:{"text-field":["get","point_count_abbreviated"],"text-font":["IBM Plex Mono Medium"],"text-size":12,"text-allow-overlap":true,"text-ignore-placement":false},
       paint:{"text-color":ACC}},
+    /* anneau au survol : il apparaît en fondu (opacité), 150 ms ; le point lui-même ne bouge pas */
+    {id:"adr-hover",type:"circle",source:"adresses",filter:["==",["get","i"],-1],
+      paint:{"circle-radius":10,"circle-color":adrRgba(ACC,.12),"circle-opacity":0,"circle-opacity-transition":{duration:adrCalm()?0:150,delay:0},
+        "circle-stroke-color":ACC,"circle-stroke-width":1.25,"circle-stroke-opacity":0,"circle-stroke-opacity-transition":{duration:adrCalm()?0:150,delay:0}}},
     {id:"adr-pt",type:"circle",source:"adresses",filter:["!",["has","point_count"]],
       paint:{"circle-radius":5,"circle-color":ACC,"circle-stroke-color":SEA,"circle-stroke-width":1.5}},
     {id:"adr-sel",type:"circle",source:"adresses",filter:["==",["get","i"],-1],
@@ -4204,9 +4241,23 @@ function adrMapBuild(){
   adrMap.on("click","adr-cluster",function(e){
     var f=adrMap.queryRenderedFeatures(e.point,{layers:["adr-cluster"]})[0]; if(!f) return;
     adrMap.getSource("adresses").getClusterExpansionZoom(f.properties.cluster_id).then(function(z){
-      adrMap.easeTo({center:f.geometry.coordinates,zoom:z+0.4,duration:adrCalm()?0:600,essential:false});
+      adrMap.easeTo({center:f.geometry.coordinates,zoom:z+0.4,duration:adrCalm()?0:420,easing:ADR_OUT,essential:false});
     });
   });
+  if(window.matchMedia&&matchMedia("(hover: hover) and (pointer: fine)").matches){
+    var hov=null, hovT=null;
+    adrMap.on("mousemove","adr-pt",function(e){
+      var f=e.features&&e.features[0]; if(!f) return; var i=+f.properties.i; if(i===hov) return;
+      clearTimeout(hovT); hov=i;
+      adrMap.setFilter("adr-hover",["==",["get","i"],i]);
+      adrMap.setPaintProperty("adr-hover","circle-opacity",1); adrMap.setPaintProperty("adr-hover","circle-stroke-opacity",1);
+    });
+    adrMap.on("mouseleave","adr-pt",function(){
+      hov=null;
+      adrMap.setPaintProperty("adr-hover","circle-opacity",0); adrMap.setPaintProperty("adr-hover","circle-stroke-opacity",0);
+      hovT=setTimeout(function(){ if(hov===null) adrMap.setFilter("adr-hover",["==",["get","i"],-1]); },adrCalm()?0:170);
+    });
+  }
   adrMap.on("click","adr-pt",function(e){ var f=e.features&&e.features[0]; if(f) adrSelect(+f.properties.i,"carte"); });
   ["adr-cluster","adr-pt"].forEach(function(id){
     adrMap.on("mouseenter",id,function(){ adrMap.getCanvas().style.cursor="pointer"; });
@@ -4268,8 +4319,26 @@ function adrMapSelect(a,src){
 var carnet="boire";
 /* garde-fou : signale dans la console si le sélecteur a été retiré du HTML */
 if(document.querySelectorAll(".carnets [data-carnet] svg").length!==2) console.error("Sélecteur Boire / Manger absent ou incomplet : deux boutons avec icône sont attendus dans .carnets.");
-var WIPE={duration:480,easing:"cubic-bezier(0.77, 0, 0.175, 1)"};
 var OUT="cubic-bezier(.16,1,.3,1)";     /* même courbe que --out */
+/* filets de l'onglet actif (menu, Boire / Manger) : un trait unique qui glisse en transform ;
+   il se place sans animation la première fois, puis glisse de 200 ms (rien du tout si « réduire les animations ») */
+var indReady=false;
+function moveInd(box,btn,animate){
+  var ind=box&&box.querySelector(":scope > .ind"); if(!ind) return;
+  if(!btn||!btn.offsetWidth){ ind.classList.remove("on"); box.classList.remove("has-ind"); return; }   /* menu masqué (mobile) : on garde le filet d'origine */
+  var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  ind.classList.toggle("go",!!animate&&!calm);
+  ind.style.transform="translateX("+btn.offsetLeft+"px) scaleX("+btn.offsetWidth+")";
+  ind.classList.add("on"); box.classList.add("has-ind");
+}
+function syncInds(){
+  var anim=indReady; indReady=true;
+  moveInd(document.getElementById("mainnav"),document.querySelector("#mainnav a.act"),anim);
+  moveInd(document.querySelector(".carnets"),document.querySelector('.carnets [aria-pressed="true"]'),anim);
+}
+window.addEventListener("resize",function(){ indReady=false; syncInds(); });
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ indReady=false; syncInds(); });
+document.addEventListener("carnetchange",syncInds);
 function blocs(){
   var page=document.querySelector(".page.on"); if(!page) return [];
   var out=[];
@@ -4297,23 +4366,24 @@ function setCarnet(c,instant,page){
     blocs().forEach(function(el){ el.animate([{opacity:0},{opacity:1}],{duration:calm?150:200,easing:OUT}); });
     return;
   }
-  /* page qui tourne : balayage de gauche à droite, puis les blocs en décalé (30 ms, huit au plus) */
-  var vt=document.startViewTransition(function(){ apply(true); });
-  vt.ready.then(function(){
-    document.documentElement.animate(
-      {clipPath:["inset(0 100% 0 0)","inset(0 0 0 0)"]},
-      {duration:WIPE.duration,easing:WIPE.easing,pseudoElement:"::view-transition-new(root)"});
-  }).catch(function(){});
+  /* fondu enchaîné de 200 ms (opacité seulement, voir ::view-transition), pendant que les blocs du nouveau carnet montent de 8 px en décalé (30 ms, six au plus) */
+  var applied=false;
+  var vt=document.startViewTransition(function(){ apply(true); applied=true; });
+  var shown=false;
   var reveal=function(){
+    if(shown) return;
+    if(!applied){ setTimeout(reveal,40); return; }      /* le nouveau carnet n'est pas encore en place : on attend */
+    shown=true;
     var list=blocs();
     document.body.classList.remove("carnet-entree");
     list.forEach(function(el,i){
       el.classList.remove("blk");
       el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],
-        {duration:240,delay:Math.min(i,8)*30,easing:OUT,fill:"backwards"});
+        {duration:220,delay:Math.min(i,6)*30,easing:OUT,fill:"backwards"});
     });
   };
-  vt.finished.then(reveal,reveal);
+  vt.ready.then(reveal,reveal);
+  setTimeout(reveal,800);      /* filet de sécurité : onglet masqué ou transition ignorée, le contenu ne reste jamais invisible */
 }
 document.addEventListener("click",function(e){
   var b=e.target.closest?e.target.closest("[data-carnet]"):null;
@@ -4463,18 +4533,33 @@ document.addEventListener("click",function(e){
   }
 
   /* ---- ouvrir / fermer ---- */
-  function show(){
+  function show(anim){
     if(box.classList.contains("on")) return;
     lastEl=document.activeElement; build();
+    box.getAnimations().forEach(function(a){a.cancel();}); box.classList.remove("closing");
     box.classList.add("on"); box.setAttribute("aria-hidden","false");
+    /* ouverte au clic (loupe) : fondu 180 ms et colonne qui descend de 8 px ; au clavier (« / ») : instantanée */
+    if(anim===true&&box.animate){
+      var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches, mn=document.getElementById("gsMain");
+      box.animate([{opacity:0},{opacity:1}],{duration:calm?150:180,easing:OUT});
+      if(!calm&&mn) mn.animate([{transform:"translateY(-8px)"},{transform:"none"}],{duration:180,easing:OUT});
+    }
     document.documentElement.style.overflow="hidden";
     if(shell) shell.inert=true;
     opener.setAttribute("aria-expanded","true");
     paint(); inp.focus(); inp.select();
   }
-  function hide(restore){
+  function hide(restore,anim){
     if(!box.classList.contains("on")) return;
     box.classList.remove("on"); box.setAttribute("aria-hidden","true");
+    /* fermée au clic (Fermer, clic dehors) : fondu de 130 ms ; au clavier (Échap) : instantanée */
+    if(anim===true&&box.animate){
+      box.classList.add("closing");
+      var f=box.animate([{opacity:1},{opacity:0}],{duration:130,easing:OUT,fill:"forwards"});
+      var done=function(){ box.classList.remove("closing"); box.getAnimations().forEach(function(a){a.cancel();}); };
+      f.onfinish=done; f.oncancel=done;
+      setTimeout(done,300);      /* filet de sécurité : onglet masqué, l'animation ne se termine pas */
+    }
     if(shell) shell.inert=false;
     opener.setAttribute("aria-expanded","false");
     document.documentElement.style.overflow=veil.classList.contains("on")?"hidden":"";
@@ -4492,8 +4577,8 @@ document.addEventListener("click",function(e){
     go("adresses",true); adrSelect(e.i,"liste");
   }
 
-  opener.addEventListener("click",show);
-  shut.addEventListener("click",function(){ hide(true); });
+  opener.addEventListener("click",function(e){ show(e.detail>0); });
+  shut.addEventListener("click",function(e){ hide(true,e.detail>0); });
   clr.addEventListener("click",function(){ inp.value=""; paint(); inp.focus(); });
   inp.addEventListener("input",paint);
   res.addEventListener("click",function(ev){
@@ -4505,7 +4590,7 @@ document.addEventListener("click",function(e){
   /* clic en dehors de la colonne de contenu */
   box.addEventListener("click",function(ev){
     if(ev.target.closest&&(ev.target.closest(".gs-wrap")||ev.target.closest("button"))) return;
-    hide(true);
+    hide(true,true);
   });
   /* clavier : « / » ouvre ; Échap ferme ; flèches dans les résultats ; Tab reste dans le panneau */
   document.addEventListener("keydown",function(ev){
@@ -4579,6 +4664,7 @@ function go(id,now){
   Array.prototype.forEach.call(document.querySelectorAll("#mainnav a"),function(a){
     a.classList.toggle("act", a.dataset.page===id);
   });
+  syncInds();
   if(id==="favoris") renderFavs();
   if(id==="recettes") render();
   if(id==="adresses") adrMapInit();      /* la carte ne se charge que sur cette page */
@@ -4719,6 +4805,28 @@ zone.innerHTML=R.map(function(r,i){
   return '<section class="pr" data-i="'+i+'">'+recipeHTML(r,i,true)+'</section>';
 }).join("");
 
+/* la fiche s'ouvre depuis la carte cliquée (transform-origin au centre de la carte) et se referme vers elle : scale .94 → 1 + fondu, 260 ms ;
+   fermeture 180 ms. Ouverte depuis la recherche, un lien ou l'adresse : pas de carte, l'origine est au centre. */
+var lastCard=null, sheetOrigin=null, sheetClosing=false;
+document.addEventListener("click",function(e){ lastCard=(e.target.closest&&e.target.closest(".card,[data-open]"))||null; },true);
+function originPx(el){
+  if(!el||!el.isConnected||!el.offsetParent) return "50% 40%";
+  var r=el.getBoundingClientRect(); return Math.round(r.left+r.width/2)+"px "+Math.round(r.top+r.height/2)+"px";
+}
+function clearSheetAnims(){
+  Array.prototype.forEach.call(veil.querySelectorAll(".sheet,.bg"),function(el){ el.getAnimations().forEach(function(a){a.cancel();}); });
+}
+function playSheet(dir){
+  var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var sh=veil.querySelector(".sheet"), bg=veil.querySelector(".bg"); if(!sh||!sh.animate) return null;
+  sh.style.transformOrigin=originPx(sheetOrigin);
+  var inn=dir==="in", d=inn?(calm?150:260):(calm?120:180);
+  var kf=inn?(calm?[{opacity:0},{opacity:1}]:[{opacity:0,transform:"scale(.94)"},{opacity:1,transform:"none"}])
+            :(calm?[{opacity:1},{opacity:0}]:[{opacity:1,transform:"none"},{opacity:0,transform:"scale(.97)"}]);
+  var o={duration:d,easing:OUT,fill:inn?"none":"forwards"};
+  if(bg) bg.animate(inn?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],o);
+  return sh.animate(kf,o);
+}
 function open(i){
   var wasOpen=veil.classList.contains("on");
   if(carnetOf(R[i])!==carnet) setCarnet(carnetOf(R[i]),true);   /* une recette de l'autre carnet ouvre son carnet */
@@ -4728,9 +4836,11 @@ function open(i){
   setTone(veil,toneOf(R[i].c));
   veil.classList.toggle("theme-manger",isManger(R[i]));      /* fiche Manger : papier crème, même ouverte depuis Boire */
   veil.classList.toggle("theme-boire",!isManger(R[i]));
+  if(sheetClosing){ clearSheetAnims(); veil.classList.remove("closing"); sheetClosing=false; }
   veil.classList.add("on");
   document.documentElement.style.overflow="hidden";
   var sh=veil.querySelector(".sheet"); if(sh) sh.scrollTop=0;
+  if(!wasOpen){ sheetOrigin=lastCard; lastCard=null; playSheet("in"); }
   if(!wasOpen) lastFocus=document.activeElement;
   fitTitle(document.getElementById("fTitle"));
   veil.querySelector(".rnd.icon").focus();
@@ -4750,7 +4860,17 @@ veil.addEventListener("keydown",function(e){
   else if(!e.shiftKey&&document.activeElement===f[f.length-1]){e.preventDefault();f[0].focus();}
 });
 function close(){
+  var wasOn=veil.classList.contains("on");
   veil.classList.remove("on");
+  if(wasOn){
+    var a=playSheet("out");
+    if(a){
+      sheetClosing=true; veil.classList.add("closing");
+      var end=function(){ if(!sheetClosing) return; sheetClosing=false; veil.classList.remove("closing"); clearSheetAnims(); };
+      a.onfinish=end; a.oncancel=end;
+      setTimeout(end,400);      /* filet de sécurité : onglet masqué, l'animation ne se termine pas */
+    }
+  }
   document.documentElement.style.overflow="";
   stopAll();
   zone.classList.remove("one");
@@ -4778,11 +4898,17 @@ window.addEventListener("afterprint",function(){zone.classList.remove("one");});
 /* =================== PARTAGER + RÉSEAUX ===================
    Le menu partage la page en cours (adresse complète, carnet et recette compris).
    Instagram et Messenger (ordinateur) n'ont pas d'adresse de partage pour un site : on copie le lien et on ouvre l'application. */
+/* toast : entrée 220 ms, sortie 150 ms par le même bord ; un nouveau message remplace le précédent et relance le délai */
+var toastTimer=null;
+function toastSay(t,ms){
+  var el=document.getElementById("toast"); if(!el) return;
+  el.textContent=t; el.classList.add("on");
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){ el.classList.remove("on"); },ms||2400);
+}
 (function(){
-  var btn=document.getElementById("shareBtn"), menu=document.getElementById("shareMenu"), toast=document.getElementById("toast");
+  var btn=document.getElementById("shareBtn"), menu=document.getElementById("shareMenu");
   if(!btn||!menu) return;
-  function say(t){toast.textContent=t;toast.classList.add("on");
-    setTimeout(function(){toast.classList.remove("on");},2400);}
+  function say(t){ toastSay(t,2400); }
   function copy(then){
     var url=location.href;
     var fin=function(ok){ then(ok); };
