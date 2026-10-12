@@ -8,6 +8,10 @@ Après chaque modification du site :
 2. Vérifie avec la CLI Vercel que le déploiement de production correspond au dernier commit et qu'il est en Ready. S'il échoue, lis les logs et corrige.
 3. Termine toujours par une ligne : « En ligne : [message du commit] · [lien du site] ».
 
+## Design et animations
+
+Pour les animations et transitions, suis les skills d'Emil Kowalski. Pour la critique, l'audit et les finitions de design, utilise Impeccable.
+
 ## Repères
 
 - Site en production : https://atelier-07.vercel.app (Vercel publie la branche `main`).
