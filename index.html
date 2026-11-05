@@ -521,6 +521,25 @@ body.manger.atlas .adr-pop .pt,body.atlas .adr-pop .pt{color:#C8915E}
 }
 @media(min-width:1600px){.at-grid{grid-template-columns:560px minmax(0,1fr)}}
 
+/* aperçu des DA : la carte claire (kraft, encre) a ses propres contrôles et bulles */
+.at-map[data-da="kraft"] .adr-map-canvas::before{background:#E4D6BF}
+.at-map[data-da="encre"] .adr-map-canvas::before{background:#F5F2EC}
+.at-map[data-da="laiton"] .adr-map-canvas::before{background:#0A0A0A}
+.at-map[data-da="kraft"],.at-map[data-da="encre"]{--mink:17,17,17}
+.at-map[data-da="kraft"] .maplibregl-ctrl-group button,.at-map[data-da="encre"] .maplibregl-ctrl-group button{border-color:rgba(17,17,17,.35);background-color:rgba(255,255,255,.35)}
+.at-map[data-da="kraft"] .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon,.at-map[data-da="encre"] .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23111111' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
+.at-map[data-da="kraft"] .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon,.at-map[data-da="encre"] .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23111111' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
+.at-map[data-da="kraft"] .maplibregl-ctrl.maplibregl-ctrl-attrib,.at-map[data-da="encre"] .maplibregl-ctrl.maplibregl-ctrl-attrib{color:#5A4F45}
+.at-map[data-da="kraft"] .adr-pop .maplibregl-popup-content,.at-map[data-da="encre"] .adr-pop .maplibregl-popup-content{background:#FBF8F2;border-color:rgba(17,17,17,.35);color:#111}
+.at-map[data-da="kraft"] .adr-pop .pt{color:#B23A1E!important}
+.at-map[data-da="encre"] .adr-pop .pt{color:#9A5228!important}
+.at-map[data-da="laiton"] .adr-pop .pt{color:#C9A45C!important}
+/* sélecteur d'aperçu (branche d'essai seulement) */
+.da-pick{position:absolute;left:20px;top:20px;z-index:5;display:flex;background:#0A0A0A;border:1px solid rgba(236,230,218,.3)}
+.da-pick a{display:flex;align-items:center;min-height:40px;padding:0 14px;font:400 .6875rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A89A8B;text-decoration:none}
+.da-pick a+a{border-left:1px solid rgba(236,230,218,.2)}
+.da-pick a[aria-current]{color:#0A0A0A;background:#ECE6DA}
+
 /* ---------- conseils & histoire ---------- */
 .story-sec{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--sp-6);row-gap:var(--sp-8);padding-top:var(--sp-16)}
 .story-sec > *{grid-column:1/-1;min-width:0;margin:0}
@@ -4168,7 +4187,7 @@ var adrMap=null, adrMapSt="idle", adrPop=null;
 /* couleur des points : l'accent du carnet actif (doré pour Boire, terracotta pour Manger) ; un seul accent par écran.
    Le terracotta de la page (#9A4029) est trop sombre sur la carte (2,4:1) : on utilise sa version éclaircie, même teinte. */
 var ADR_ACC={boire:"#C8915E",manger:"#D2694B"};
-function adrAcc(){ return ADR_ACC.boire; }   /* l'atlas reste sombre et ambre, quel que soit le carnet */
+function adrAcc(){ return adrDa().acc; }   /* l'atlas reste sombre et ambre, quel que soit le carnet */
 function adrRgba(hex,a){ var n=parseInt(hex.slice(1),16); return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"; }
 /* courbe cubic-bezier(.16,1,.3,1), la même que --out, pour les mouvements de la carte */
 function adrBezier(x1,y1,x2,y2){
@@ -4228,80 +4247,109 @@ function adrMapInit(){
   },{rootMargin:"200px 0px"});
   adrMapWatch.observe(box);
 }
+/* ---------- trois directions artistiques pour la carte (aperçu : ?da=laiton | kraft | encre) ----------
+   ink = couleur des traits et des noms (r,g,b) ; land / sea / park / bld = surfaces ; acc = pins */
+var ADR_DA={
+  laiton:{nom:"Noir & laiton",dark:true, land:"#151413",sea:"#0A0A0A",park:"#1A1D17",bld:"#1F1D1B",bldLine:"#2A2724",ink:"236,230,218",acc:"#C9A45C",
+    road:[.10,.15,.22,.30],lab:[.32,.55,.42],street:.5},
+  kraft:{nom:"Kraft de torréfacteur",dark:false, land:"#E4D6BF",sea:"#A9B6B8",park:"#CBCBA8",bld:"#D8C8AD",bldLine:"#C3B193",ink:"28,22,18",acc:"#B23A1E",
+    road:[.22,.32,.45,.6],lab:[.45,.78,.6],street:.7},
+  encre:{nom:"Encre & lait",dark:false, land:"#F5F2EC",sea:"#FFFFFF",park:"#EAE7DE",bld:"#E7E2D8",bldLine:"#B9B2A6",ink:"17,17,17",acc:"#B8693A",
+    road:[.28,.4,.55,.75],lab:[.5,.85,.65],street:.75,coast:true}
+};
+function adrDaKey(){ var m=location.search.match(/[?&]da=(laiton|kraft|encre)/); return m?m[1]:"laiton"; }
+function adrDa(){ return ADR_DA[adrDaKey()]; }
 function adrStyle(base){
-  var LAND="#241B18", SEA="#120F0E", CR="250,246,240", ACC=adrAcc();   /* terre : un seul brun très sombre ; océan : presque noir */
-  var cream=function(a){ return "rgba("+CR+","+a+")"; };
+  var D=adrDa(), LAND=D.land, SEA=D.sea, ACC=adrAcc();
+  var ink=function(a){ return "rgba("+D.ink+","+a+")"; };
   var is=function(k,vals){ return ["match",["get",k],vals,true,false]; };
   var road=function(id,classes,minz,alpha,w0,w1,z0,z1){
     return {id:id,type:"line",source:"om","source-layer":"transportation",minzoom:minz,filter:is("class",classes),
       layout:{"line-cap":"round","line-join":"round"},
-      paint:{"line-color":cream(alpha),"line-width":["interpolate",["linear"],["zoom"],z0,w0,z1,w1]}};
+      paint:{"line-color":ink(alpha),"line-width":["interpolate",["linear"],["zoom"],z0,w0,z1,w1]}};
   };
   var Z=function(a,b,c,d,e,f){ return ["interpolate",["linear"],["zoom"],a,b,c,d,e,f]; };
-  /* noms de lieux : IBM Plex Mono (celle des petites lignes du site), capitales espacées, très discrets */
   var nm=["coalesce",["get","name:fr"],["get","name:latin"],["get","name"]];
   var label=function(id,filter,o){
     var l={id:id,type:"symbol",source:"om","source-layer":"place",filter:filter,
       layout:{"text-field":nm,"text-font":["IBM Plex Mono Regular"],"text-size":o.size,"text-transform":"uppercase",
         "text-letter-spacing":o.ls,"text-max-width":o.mw||6,"text-padding":o.pad||6,"symbol-sort-key":["coalesce",["get","rank"],99]},
-      paint:{"text-color":o.color,"text-opacity":o.opacity,"text-halo-color":LAND,"text-halo-width":1.1}};
+      paint:{"text-color":o.color,"text-opacity":o.opacity,"text-halo-color":LAND,"text-halo-width":1.2}};
     if(o.min!==undefined) l.minzoom=o.min;
     if(o.max!==undefined) l.maxzoom=o.max;
     return l;
   };
   var layers=[
     {id:"terre",type:"background",paint:{"background-color":LAND}},
+    /* verdure : parcs et bois, très doux */
+    {id:"parcs",type:"fill",source:"om","source-layer":"park",paint:{"fill-color":D.park,"fill-opacity":Z(4,0,8,1,14,1)}},
+    {id:"verdure",type:"fill",source:"om","source-layer":"landcover",minzoom:9,filter:is("class",["grass","wood"]),paint:{"fill-color":D.park,"fill-opacity":.7}},
     {id:"eau",type:"fill",source:"om","source-layer":"water",paint:{"fill-color":SEA}},
-    {id:"cours-eau",type:"line",source:"om","source-layer":"waterway",minzoom:8,paint:{"line-color":SEA,"line-width":Z(8,.6,14,2.2,18,6)}},
-    {id:"batiments",type:"fill",source:"om","source-layer":"building",minzoom:15,paint:{"fill-color":"#211A16"}},
-    road("rues-petites",["minor","service","track","path"],13,.1,.3,.8,13,17),
-    road("rues-tertiaires",["tertiary","secondary"],11,.14,.3,1,11,16),
-    road("rues-principales",["primary","trunk"],9,.18,.4,1.2,9,16),
-    road("autoroutes",["motorway"],7,.24,.4,1.4,7,16),
-    /* frontières quasi invisibles */
+    {id:"cours-eau",type:"line",source:"om","source-layer":"waterway",minzoom:8,paint:{"line-color":SEA,"line-width":Z(8,.6,14,2.2,18,6)}}
+  ];
+  /* Encre & lait : un trait de côte à l'encre, comme un plan gravé */
+  if(D.coast) layers.push({id:"cote",type:"line",source:"om","source-layer":"water",paint:{"line-color":ink(.55),"line-width":Z(2,.4,10,.7,16,1)}});
+  layers=layers.concat([
+    {id:"batiments",type:"fill",source:"om","source-layer":"building",minzoom:14,paint:{"fill-color":D.bld,"fill-opacity":Z(14,0,15,1,18,1),"fill-outline-color":D.bldLine}},
+    road("rues-petites",["minor","service","track","path"],13,D.road[0],.3,1.6,13,18),
+    road("rues-tertiaires",["tertiary","secondary"],10,D.road[1],.3,2.2,10,18),
+    road("rues-principales",["primary","trunk"],7,D.road[2],.4,3,7,18),
+    road("autoroutes",["motorway"],5,D.road[3],.4,3.4,5,18),
+    /* métro et train : un trait fin pointillé */
+    {id:"rail",type:"line",source:"om","source-layer":"transportation",minzoom:11,filter:is("class",["rail","transit"]),
+      paint:{"line-color":ink(D.road[2]),"line-width":Z(11,.5,16,1.2,18,1.6),"line-dasharray":[3,2]}},
     {id:"frontiere-pays",type:"line",source:"om","source-layer":"boundary",
       filter:["all",["==",["get","admin_level"],2],["==",["get","maritime"],0]],
-      paint:{"line-color":cream(.06),"line-width":.5}},
-    /* halo doux : un cercle flou autour des points et des clusters */
-    /* noms de lieux, un niveau à la fois : pays (monde, continent) → grandes villes → mes villes → quartiers. Pas de rues, d'océans ni de lieux. */
+      paint:{"line-color":ink(.18),"line-width":.6,"line-dasharray":[2,2]}},
+    /* noms de rues : seulement de près */
+    {id:"noms-rues",type:"symbol",source:"om","source-layer":"transportation_name",minzoom:14,
+      filter:is("class",["primary","secondary","tertiary","minor","trunk"]),
+      layout:{"symbol-placement":"line","text-field":nm,"text-font":["IBM Plex Mono Regular"],"text-size":Z(14,9,18,11,22,12),
+        "text-letter-spacing":.06,"text-max-angle":30,"text-padding":4},
+      paint:{"text-color":ink(D.street),"text-halo-color":LAND,"text-halo-width":1.4}},
+    /* stations de métro : petit rond creux + nom */
+    {id:"stations",type:"circle",source:"om","source-layer":"poi",minzoom:13,filter:["all",is("class",["railway"]),is("subclass",["subway","station"])],
+      paint:{"circle-radius":3.2,"circle-color":LAND,"circle-stroke-color":ink(.8),"circle-stroke-width":1.2}},
+    {id:"noms-stations",type:"symbol",source:"om","source-layer":"poi",minzoom:14,filter:["all",is("class",["railway"]),is("subclass",["subway","station"])],
+      layout:{"text-field":nm,"text-font":["IBM Plex Mono Medium"],"text-size":10,"text-transform":"uppercase","text-letter-spacing":.1,
+        "text-anchor":"top","text-offset":[0,.7],"text-max-width":8,"text-optional":true},
+      paint:{"text-color":ink(.7),"text-halo-color":LAND,"text-halo-width":1.2}},
     label("nom-pays",["all",["==",["get","class"],"country"],[">",["get","rank"],2]],{min:1.8,max:6.5,size:Z(0,8.5,5,9.5,6,9.5),ls:.18,mw:7,pad:4,
-      color:cream(.34),opacity:["interpolate",["linear"],["zoom"],1.8,0,2.4,1,4.2,1,6.2,0]}),
+      color:ink(D.lab[0]),opacity:["interpolate",["linear"],["zoom"],1.8,0,2.4,1,4.2,1,6.2,0]}),
     label("nom-pays-majeurs",["all",["==",["get","class"],"country"],["<=",["get","rank"],2]],{max:6.5,size:Z(0,8.5,5,9.5,6,9.5),ls:.18,mw:7,pad:4,
-      color:cream(.34),opacity:["interpolate",["linear"],["zoom"],4.2,1,6.2,0]}),
+      color:ink(D.lab[0]),opacity:["interpolate",["linear"],["zoom"],4.2,1,6.2,0]}),
     label("nom-villes",["all",["==",["get","class"],"city"],["!",["in",nm,["literal",adrVillesNoms()]]]],{min:3,size:Z(3,10,9,11,13,12),ls:.12,
-      color:cream(.55),opacity:["interpolate",["linear"],["zoom"],3,0,3.8,1]}),
-    label("nom-quartiers",is("class",["suburb","quarter","neighbourhood"]),{min:12,size:9,ls:.14,mw:8,
-      color:cream(.4),opacity:["interpolate",["linear"],["zoom"],12,0,12.8,1]}),
+      color:ink(D.lab[1]),opacity:["interpolate",["linear"],["zoom"],3,0,3.8,1]}),
+    label("nom-quartiers",is("class",["suburb","quarter","neighbourhood"]),{min:12,size:9.5,ls:.14,mw:8,
+      color:ink(D.lab[2]),opacity:["interpolate",["linear"],["zoom"],12,0,12.8,1]}),
     {id:"nom-miennes",type:"symbol",source:"villes",minzoom:2,
       layout:{"text-field":["get","n"],"text-font":["IBM Plex Mono Medium"],"text-size":Z(2,10.5,9,12,13,13),"text-transform":"uppercase","text-letter-spacing":.16,
         "text-max-width":9,"text-padding":6,"text-variable-anchor":["left","right","top","bottom"],
         "text-radial-offset":["step",["zoom"],["case",[">=",["get","k"],2],3.2,1.6],13,1.6]},
-      paint:{"text-color":ACC,"text-opacity":["interpolate",["linear"],["zoom"],2,0,2.8,1],"text-halo-color":LAND,"text-halo-width":1.1}},
-    /* réserve la place des marqueurs et des clusters : aucun nom ne passe dessous (icône invisible, posée avant les textes) */
+      paint:{"text-color":ACC,"text-opacity":["interpolate",["linear"],["zoom"],2,0,2.8,1],"text-halo-color":LAND,"text-halo-width":1.2}},
     {id:"adr-boite",type:"symbol",source:"adresses",
       layout:{"icon-image":"vide","icon-allow-overlap":true,"icon-padding":3,
         "icon-size":["case",["has","point_count"],["step",["get","point_count"],40,8,46,25,56],22]}},
     {id:"ecran-boite",type:"symbol",source:"ecran",
       layout:{"icon-image":"vide","icon-allow-overlap":true,"icon-padding":2,"icon-size":["get","s"]}},
     {id:"adr-halo",type:"circle",source:"adresses",filter:["!",["has","point_count"]],
-      paint:{"circle-radius":17,"circle-blur":1,"circle-color":adrRgba(ACC,.3)}},
+      paint:{"circle-radius":17,"circle-blur":1,"circle-color":adrRgba(ACC,D.dark?.3:.22)}},
     {id:"adr-cluster-halo",type:"circle",source:"adresses",filter:["has","point_count"],
-      paint:{"circle-radius":["step",["get","point_count"],28,8,32,25,38],"circle-blur":1,"circle-color":adrRgba(ACC,.22)}},
+      paint:{"circle-radius":["step",["get","point_count"],28,8,32,25,38],"circle-blur":1,"circle-color":adrRgba(ACC,D.dark?.22:.16)}},
     {id:"adr-cluster",type:"circle",source:"adresses",filter:["has","point_count"],
-      paint:{"circle-radius":["step",["get","point_count"],15,8,19,25,25],"circle-color":"rgba(18,15,14,.3)",
-        "circle-stroke-color":ACC,"circle-stroke-width":1.25}},
+      paint:{"circle-radius":["step",["get","point_count"],15,8,19,25,25],"circle-color":adrRgba(LAND,.85),
+        "circle-stroke-color":ACC,"circle-stroke-width":1.4}},
     {id:"adr-count",type:"symbol",source:"adresses",filter:["has","point_count"],
       layout:{"text-field":["get","point_count_abbreviated"],"text-font":["IBM Plex Mono Medium"],"text-size":12,"text-allow-overlap":true,"text-ignore-placement":false},
       paint:{"text-color":ACC}},
-    /* anneau au survol : il apparaît en fondu (opacité), 150 ms ; le point lui-même ne bouge pas */
     {id:"adr-hover",type:"circle",source:"adresses",filter:["==",["get","i"],-1],
       paint:{"circle-radius":10,"circle-color":adrRgba(ACC,.12),"circle-opacity":0,"circle-opacity-transition":{duration:adrCalm()?0:150,delay:0},
         "circle-stroke-color":ACC,"circle-stroke-width":1.25,"circle-stroke-opacity":0,"circle-stroke-opacity-transition":{duration:adrCalm()?0:150,delay:0}}},
     {id:"adr-pt",type:"circle",source:"adresses",filter:["!",["has","point_count"]],
-      paint:{"circle-radius":5,"circle-color":ACC,"circle-stroke-color":SEA,"circle-stroke-width":1.5}},
+      paint:{"circle-radius":5.5,"circle-color":ACC,"circle-stroke-color":LAND,"circle-stroke-width":1.6}},
     {id:"adr-sel",type:"circle",source:"adresses",filter:["==",["get","i"],-1],
-      paint:{"circle-radius":12,"circle-color":"rgba(0,0,0,0)","circle-stroke-color":cream(.92),"circle-stroke-width":1.25}}
-  ];
+      paint:{"circle-radius":12,"circle-color":"rgba(0,0,0,0)","circle-stroke-color":ink(.92),"circle-stroke-width":1.25}}
+  ]);
   return {version:8,glyphs:base+"carte/fonts/{fontstack}/{range}.pbf",
     sources:{
       om:{type:"vector",url:"https://tiles.openfreemap.org/planet",
@@ -4377,7 +4425,18 @@ function adrMinZoom(){
   var c=adrMap.getContainer(), MC=maplibregl.MercatorCoordinate, f=MC.fromLngLat([0,-56]).y-MC.fromLngLat([0,81]).y;
   return Math.max(-1,Math.log2(Math.max(c.clientWidth,1)/512),Math.log2(Math.max(c.clientHeight,1)/(512*f)));
 }
+function adrDaPick(){
+  var box=document.getElementById("adrMapBox"); if(!box) return;
+  var k=adrDaKey(); box.setAttribute("data-da",k);
+  if(box.querySelector(".da-pick")) return;
+  var nav=document.createElement("nav"); nav.className="da-pick"; nav.setAttribute("aria-label","Aperçu des styles de carte");
+  nav.innerHTML=Object.keys(ADR_DA).map(function(x){
+    return '<a href="?da='+x+'#'+carnet+'/adresses"'+(x===k?' aria-current="true"':'')+'>'+ADR_DA[x].nom+'</a>';
+  }).join("");
+  box.appendChild(nav);
+}
 function adrMapBuild(){
+  adrDaPick();
   var base=location.href.replace(/[#?].*$/,"").replace(/[^\/]*$/,"");
   var bb=adrBounds();
   try{
