@@ -438,12 +438,8 @@ body.manger .adr-pop .pt{color:#D2694B}
    Bureau : panneau à gauche (Monde > Pays > Région > fiche), carte à droite.
    Téléphone : carte en haut, panneau dessous.
    ===================================================================== */
-body.atlas,body.manger.atlas{
-  --bg:#120F0E; --surf:#1A1412; --ink:#F3ECE2; --ink2:#CFC3B5; --ink3:#E4DACE; --mute:#A89A8B; --dim:#6E6258;
-  --rule:rgba(243,236,226,.14); --rule2:rgba(243,236,226,.3); --acc:#C8915E; --acc-soft:rgba(200,145,94,.5); --err:#E0907E;
-  background:var(--bg); color:var(--ink)}
 body.atlas .news,body.atlas .foot{display:none}
-body.manger.atlas .adr-pop .pt,body.atlas .adr-pop .pt{color:#C8915E}
+body.atlas:not(.manger){--acc:#C9A45C;--acc-soft:rgba(201,164,92,.5)}
 .at-grid{position:relative;display:flex;flex-direction:column;width:100vw;margin-left:calc(50% - 50vw)}
 .at-map{order:-1}   /* téléphone : la carte en haut, le panneau dessous */
 .at-map{margin:0}
@@ -521,24 +517,18 @@ body.manger.atlas .adr-pop .pt,body.atlas .adr-pop .pt{color:#C8915E}
 }
 @media(min-width:1600px){.at-grid{grid-template-columns:560px minmax(0,1fr)}}
 
-/* aperçu des DA : la carte claire (kraft, encre) a ses propres contrôles et bulles */
-.at-map[data-da="kraft"] .adr-map-canvas::before{background:#E4D6BF}
+/* carte de jour (Encre & lait, carnet Manger) : contrôles, crédits et bulles à l'encre */
 .at-map[data-da="encre"] .adr-map-canvas::before{background:#F5F2EC}
 .at-map[data-da="laiton"] .adr-map-canvas::before{background:#0A0A0A}
-.at-map[data-da="kraft"],.at-map[data-da="encre"]{--mink:17,17,17}
-.at-map[data-da="kraft"] .maplibregl-ctrl-group button,.at-map[data-da="encre"] .maplibregl-ctrl-group button{border-color:rgba(17,17,17,.35);background-color:rgba(255,255,255,.35)}
-.at-map[data-da="kraft"] .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon,.at-map[data-da="encre"] .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23111111' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
-.at-map[data-da="kraft"] .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon,.at-map[data-da="encre"] .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23111111' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
-.at-map[data-da="kraft"] .maplibregl-ctrl.maplibregl-ctrl-attrib,.at-map[data-da="encre"] .maplibregl-ctrl.maplibregl-ctrl-attrib{color:#5A4F45}
-.at-map[data-da="kraft"] .adr-pop .maplibregl-popup-content,.at-map[data-da="encre"] .adr-pop .maplibregl-popup-content{background:#FBF8F2;border-color:rgba(17,17,17,.35);color:#111}
-.at-map[data-da="kraft"] .adr-pop .pt{color:#B23A1E!important}
-.at-map[data-da="encre"] .adr-pop .pt{color:#9A5228!important}
+.at-map[data-da="encre"] .maplibregl-ctrl-group button{border-color:rgba(17,17,17,.35);background-color:rgba(255,255,255,.4)}
+.at-map[data-da="encre"] .maplibregl-ctrl-group button:not(:disabled):hover,.at-map[data-da="encre"] .maplibregl-ctrl-group button:focus-visible{border-color:rgba(17,17,17,.7);background-color:rgba(255,255,255,.7)}
+.at-map[data-da="encre"] .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23111111' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
+.at-map[data-da="encre"] .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23111111' stroke-width='1' fill='none'/%3E%3C/svg%3E")!important}
+.at-map[data-da="encre"] .maplibregl-ctrl.maplibregl-ctrl-attrib{color:#5A4F45}
+.at-map[data-da="encre"] .adr-pop .maplibregl-popup-content{background:#FBF8F2;border-color:rgba(17,17,17,.35);color:#111}
+.at-map[data-da="encre"] .adr-pop .pt{color:#9A4029!important}
 .at-map[data-da="laiton"] .adr-pop .pt{color:#C9A45C!important}
-/* sélecteur d'aperçu (branche d'essai seulement) */
-.da-pick{position:absolute;left:20px;top:20px;z-index:5;display:flex;background:#0A0A0A;border:1px solid rgba(236,230,218,.3)}
-.da-pick a{display:flex;align-items:center;min-height:40px;padding:0 14px;font:400 .6875rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#A89A8B;text-decoration:none}
-.da-pick a+a{border-left:1px solid rgba(236,230,218,.2)}
-.da-pick a[aria-current]{color:#0A0A0A;background:#ECE6DA}
+.at-map[data-da="encre"] .adr-map-canvas:has(.maplibregl-canvas:focus-visible)::after{outline-color:rgba(17,17,17,.7)}
 
 /* ---------- conseils & histoire ---------- */
 .story-sec{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--sp-6);row-gap:var(--sp-8);padding-top:var(--sp-16)}
@@ -4211,7 +4201,7 @@ function adrMapTheme(){
   adrMap.setPaintProperty("adr-hover","circle-color",adrRgba(c,.12));
   adrMap.setPaintProperty("adr-pt","circle-color",c);
 }
-document.addEventListener("carnetchange",adrMapTheme);
+document.addEventListener("carnetchange",function(){ if(curPage==="adresses") adrMapRestyle(); });
 var MAPLIBRE="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/";
 function adrMapMsg(t){
   var m=document.getElementById("adrMapMsg"); if(!m) return;
@@ -4247,17 +4237,15 @@ function adrMapInit(){
   },{rootMargin:"200px 0px"});
   adrMapWatch.observe(box);
 }
-/* ---------- trois directions artistiques pour la carte (aperçu : ?da=laiton | kraft | encre) ----------
+/* ---------- la carte suit le carnet : Boire = Noir & laiton (nuit), Manger = Encre & lait (jour) ----------
    ink = couleur des traits et des noms (r,g,b) ; land / sea / park / bld = surfaces ; acc = pins */
 var ADR_DA={
   laiton:{nom:"Noir & laiton",dark:true, land:"#151413",sea:"#0A0A0A",park:"#1A1D17",bld:"#1F1D1B",bldLine:"#2A2724",ink:"236,230,218",acc:"#C9A45C",
     road:[.10,.15,.22,.30],lab:[.32,.55,.42],street:.5},
-  kraft:{nom:"Kraft de torréfacteur",dark:false, land:"#E4D6BF",sea:"#A9B6B8",park:"#CBCBA8",bld:"#D8C8AD",bldLine:"#C3B193",ink:"28,22,18",acc:"#B23A1E",
-    road:[.22,.32,.45,.6],lab:[.45,.78,.6],street:.7},
-  encre:{nom:"Encre & lait",dark:false, land:"#F5F2EC",sea:"#FFFFFF",park:"#EAE7DE",bld:"#E7E2D8",bldLine:"#B9B2A6",ink:"17,17,17",acc:"#B8693A",
+  encre:{nom:"Encre & lait",dark:false, land:"#F5F2EC",sea:"#FFFFFF",park:"#EAE7DE",bld:"#E7E2D8",bldLine:"#B9B2A6",ink:"17,17,17",acc:"#9A4029",
     road:[.28,.4,.55,.75],lab:[.5,.85,.65],street:.75,coast:true}
 };
-function adrDaKey(){ var m=location.search.match(/[?&]da=(laiton|kraft|encre)/); return m?m[1]:"laiton"; }
+function adrDaKey(){ return carnet==="manger"?"encre":"laiton"; }
 function adrDa(){ return ADR_DA[adrDaKey()]; }
 function adrStyle(base){
   var D=adrDa(), LAND=D.land, SEA=D.sea, ACC=adrAcc();
@@ -4425,18 +4413,22 @@ function adrMinZoom(){
   var c=adrMap.getContainer(), MC=maplibregl.MercatorCoordinate, f=MC.fromLngLat([0,-56]).y-MC.fromLngLat([0,81]).y;
   return Math.max(-1,Math.log2(Math.max(c.clientWidth,1)/512),Math.log2(Math.max(c.clientHeight,1)/(512*f)));
 }
-function adrDaPick(){
-  var box=document.getElementById("adrMapBox"); if(!box) return;
-  var k=adrDaKey(); box.setAttribute("data-da",k);
-  if(box.querySelector(".da-pick")) return;
-  var nav=document.createElement("nav"); nav.className="da-pick"; nav.setAttribute("aria-label","Aperçu des styles de carte");
-  nav.innerHTML=Object.keys(ADR_DA).map(function(x){
-    return '<a href="?da='+x+'#'+carnet+'/adresses"'+(x===k?' aria-current="true"':'')+'>'+ADR_DA[x].nom+'</a>';
-  }).join("");
-  box.appendChild(nav);
+function adrDaMark(){ var box=document.getElementById("adrMapBox"); if(box) box.setAttribute("data-da",adrDaKey()); }
+var adrStyleKey=null;
+/* changement de carnet : la carte change de style (nuit / jour) au prochain passage sur l'atlas */
+function adrMapRestyle(){
+  adrDaMark();
+  if(!adrMap||adrMapSt!=="ready"||adrStyleKey===adrDaKey()) return;
+  adrStyleKey=adrDaKey();
+  var base=location.href.replace(/[#?].*$/,"").replace(/[^\/]*$/,"");
+  adrMap.once("style.load",function(){
+    adrEcran();
+    adrMap.setFilter("adr-sel",["==",["get","i"],adrLit!==null&&adrPos(ADRESSES[adrLit])?adrLit:-1]);
+  });
+  adrMap.setStyle(adrStyle(base),{diff:false});
 }
 function adrMapBuild(){
-  adrDaPick();
+  adrDaMark(); adrStyleKey=adrDaKey();
   var base=location.href.replace(/[#?].*$/,"").replace(/[^\/]*$/,"");
   var bb=adrBounds();
   try{
@@ -4927,7 +4919,7 @@ function go(id,now){
   syncInds();
   if(id==="favoris") renderFavs();
   if(id==="recettes") render();
-  if(id==="adresses") adrMapInit();      /* la carte ne se charge que sur cette page */
+  if(id==="adresses"){ adrMapInit(); adrMapRestyle(); }      /* la carte ne se charge que sur cette page ; son style suit le carnet */
   pageTone();
   var tb=document.querySelector(".topbar"), mb=document.getElementById("menuBtn");
   if(tb) tb.classList.remove("open"); if(mb){mb.setAttribute("aria-expanded","false");mb.setAttribute("aria-label","Ouvrir le menu");}
